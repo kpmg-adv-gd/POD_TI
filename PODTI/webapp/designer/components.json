@@ -1,0 +1,15 @@
+{
+	"components": [
+		{
+			"id": "PODTI",
+			"type": "VIEW_PLUGIN",
+			"allowMultipleInstances": false,
+			"name": "kpmg.custom.pod.PODTI.PODTI",
+			"propertyEditor": "kpmg.custom.pod.PODTI.PODTI.builder.PropertyEditor",
+			"i18n": "kpmg.custom.pod.PODTI.PODTI.i18n.i18n",
+            "productionProcessEnabled": true,
+           "productionProcessTitle": "PODTI",
+			"supportedPodTypes": ["WORK_CENTER","OPERATION","ORDER","OTHER"]
+		}   
+	]
+}

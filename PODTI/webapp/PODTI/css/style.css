@@ -1,0 +1,465 @@
+/* .kpmgGDPage {
+
+} */
+
+
+ /* CSS TABELLA (SAPUI TABLE) */
+
+/* sapUiTableTr classe che ha ogni riga delle sapui table - colore rosso trasprarente */
+.kpmgGDTable .sapUiTableTr:hover {
+    background-color: rgba(255, 100, 100, 0.2);
+}
+
+/* Quando clicco sulla riga della tabella (active) - rosso trasparente dell' hov er con meno opacità */
+.kpmgGDTable .sapUiTableTr:active {
+    background-color: rgba(255, 100, 100, 0.5);
+}
+
+/* .sapUiTableContentRow.sapUiTableRowSel classe contenuto riga e classe riga selezionato per le sapui table - rosso trasparente del click con meno opacità '*/
+.kpmgGDTable .sapUiTableContentRow.sapUiTableRowSel{
+    background-color: rgba(255, 100, 100, 0.65);
+}
+
+/* sapMLabel classe sap di tutte le label - sapMText classe sap di tutte le label - sapUiTableCell classe di tutti gli elementi delle celle della tabella - aumento la grandezza in quanto impostata la height delle row a 50px '*/
+.kpmgTreeTable .sapUiTableCell .sapMLabel,
+.kpmgTreeTable .sapUiTableCell .sapMText,
+.kpmgGDTable .sapUiTableCell .sapMLabel,
+.kpmgGDTable .sapUiTableCell .sapMText {
+  font-size: 104%;
+  user-select: text;
+}
+/* sapUiIcon classe sap di tutte le icone - setto la grandezza di tutte le icone nelle tabelle '*/
+.kpmgGDTable .sapUiTableCell .sapUiIcon {
+    font-size: xx-large;
+}
+/* Non voglio tagliare le icone in tabella - Parto dalla cella (sapUiTableDataCell) -> Applico al figlio sapUiTableCellInner le modifiche solo se ha sapUiIcon come figlio '*/
+.kpmgGDTable .sapUiTableDataCell>.sapUiTableCellInner:has(.sapUiIcon) {
+    overflow: visible;
+}
+/* Rendo l'header della tabella più alto rispetto alle altre righe (di 8 bx) e impsoto il colore di backgorund grigio chiaro */
+.kpmgGDTable .sapUiTableHeaderRow {
+    height: 52px;
+    background-color: rgba(211, 211, 211, 0.75);
+}
+/* Rendo le LABEL dell'header in grassetto */
+.kpmgGDTable .sapUiTableHeaderCell .sapMLabel {
+    font-weight: bold;
+}
+/* Elimino il bordo a tutte le celle e lo setto solo sotto grigio chairo per separare le righe */
+.kpmgGDTable .sapUiTableCell{
+    border: none !important;
+    border-right: none !important;
+    border-bottom: 1.7px solid rgba(200, 200, 200, 0.5) !important;
+}
+.kpmgTreeTable .sapUiTableHeaderRow {
+    height: 52px;
+}
+
+
+/* FILTRI - HEADER INFO */
+
+.headerContainer {
+    padding: 0.5%;
+    background-color: white;
+}
+.filterBox{
+    justify-content: center;
+    align-items: center;
+    padding-right: 0.5%;
+}
+.lastFilterBox{
+    justify-content: center;
+    align-items: center;
+}
+.buttonsFilterBox{
+    justify-content: end;
+    align-items: center;
+}
+.headerBox{
+    justify-content: space-around;
+    align-items: center;
+}
+.headerContainerMainPod{
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 0.5%;
+}
+
+
+.headerBox .sapMLabel:not(.sapMLabelWrapped) .sapMLabelTextWrapper {
+    display: inline-block;
+    vertical-align: top;
+    max-width: none !important;
+}
+
+
+/* FASCIA BOTTONI START E COMPLETE */
+.headerOperations{
+    width: 100%;
+    height: 100px;
+    background-color: rgba(211, 211, 211, 0.75);
+}
+
+.startOpButton {
+    width: 8rem;
+    height: 100%;
+}
+.completeOpButton{
+    height: 100%;
+    width: 8rem;
+    margin-left: 0.5rem;
+}
+.nonConformancesButton{
+    height: 100%;
+    width: 12rem;
+    margin-left: 0.5rem;
+}
+.sinotticoButton{
+    height: 100%;
+    width: 9rem;
+    margin-left: 0.5rem;
+}
+.sapMBtn.sapMBtnBase.startOpButton,
+.sapMBtn.sapMBtnBase.completeOpButton,
+.sapMBtn.sapMBtnBase.nonConformancesButton, 
+.sapMBtn.sapMBtnBase.sinotticoButton {
+    height: 100% !important;
+}
+
+/* Allineo la scritta adentro al bottone al centro vicino all'icona */
+.startOpButton .sapMBtnContent,
+.completeOpButton .sapMBtnContent,
+.nonConformancesButton .sapMBtnContent,
+.sinotticoButton .sapMBtnContent {
+    padding-top: 0.65rem;
+    padding-left: 0.5rem;
+    font-size: larger;
+}
+
+.completeOpButton .sapUiIcon.sapMBtnIcon,
+.startOpButton .sapUiIcon.sapMBtnIcon,
+.nonConformancesButton .sapUiIcon.sapMBtnIcon, 
+.sinotticoButton .sapUiIcon.sapMBtnIcon {
+    padding-top: 0.65rem;
+    font-size: x-large;
+}
+
+/* tutti i colori bottone start */
+.startOpButton .sapMBtnInner.sapMBtnEmphasized {
+    height: 3rem;
+    background-color: rgb(0,128,0,1) !important;
+    border-color: #006400 !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.startOpButton .sapMBtnInner.sapMBtnEmphasized:hover{
+    background-color: rgb(0,128,0,0.6) !important;
+    border-color: white !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.completeOpButton .sapMBtnInner.sapMBtnEmphasized {
+    height: 3rem;
+    background-color: rgb(0, 51, 153,1) !important;
+    border-color: rgb(0, 14, 41) !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.completeOpButton .sapMBtnInner.sapMBtnEmphasized:hover{
+    background-color: rgb(0, 51, 153,0.7) !important;
+    border-color: white !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.nonConformancesButton .sapMBtnInner.sapMBtnEmphasized {
+    height: 3rem;
+    background-color: rgb(231, 25, 25) !important;
+}
+.sinotticoButton .sapMBtnInner.sapMBtnEmphasized {
+    height: 3rem;
+    background-color: rgb(88, 48, 130) !important;
+    border-color: rgb(0, 14, 41) !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.nonConformancesButton .sapMBtnInner.sapMBtnEmphasized:hover{
+    background-color: rgb(231, 25, 25) !important;
+    border-color: white !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.sinotticoButton .sapMBtnInner.sapMBtnEmphasized:hover{
+    background-color: rgba(88, 48, 130, 0.75) !important;
+    border-color: rgb(179, 136, 255) !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+
+
+.leftButtonsPODOperation{
+    padding-left: 1.25rem;
+    align-items: center;
+    justify-content: start;
+}
+.collapseExpandIcon{
+    height: 30% !important;
+    padding: 0 !important;
+}
+/* GRANDEZZA ICONE EXPAND/COLLPASE CONTAINER */
+.collapseExpandIcon .sapMBtnIcon.sapMBtnIconLeft{
+    font-size: xx-large;
+}
+.collapseExpandIcon .sapMBtnHoverable:not(.sapMBtnDisabled):hover {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+.rightIconsBox{
+    width: 10%;
+    padding-right: 1.5rem;
+    align-items: center;
+    justify-content: end;
+}
+
+/* BOTTONI */
+.searchButton .sapMBtnInner,
+.clearButton .sapMBtnInner {
+    width: 100%;
+    font-weight: bold;
+}
+.searchButton {
+    width: 50%;
+    padding-right: 0.5% !important;
+}
+.clearButton {
+    width: 46%;
+}
+
+.kpmgGDIconTabBar .sapMITBFilter .sapMITBText .sapMITHTextContent{
+    overflow: visible !important;
+}
+
+/* LABEL */
+
+.kpmgGDSmallLabel {
+    font-size: 0.875rem;
+    color: #3c3b39;
+    font-weight: normal;
+}
+
+.kpmgGDMediumlLabel {
+    font-size: 1.2rem;
+    color: #3c3b39;
+    font-weight: normal;
+}
+
+.kpmgGDMediumlLabelInfo {
+    font-size: 1.2rem;
+    color: rgb(202, 11, 48);
+    font-weight: normal;
+}
+
+.paddingLeft{
+    padding-left: 0.5%;
+}
+
+.mediumPaddingTable{
+    padding-right: 1.25rem;
+    padding-top: 1.25rem;
+    padding-left: 1.25rem;
+}
+/* per campo obbligatorio */
+.requiredLabel::after {
+    content: " *";
+    color: rgb(202, 11, 48);
+    font-weight: bold;
+}
+
+
+
+/* TAB CONTAINER */
+
+/* altezza header (fascia dei tabs) IMPROVEMENT */     
+.kpmgGDIconTabBar .sapMITH{
+    height: 100px;
+    background-color: rgba(211, 211, 211, 0.75)
+}
+
+/* CONTENUTO TABS (XML VIEW)  */
+.kpmgGDIconTabBar .sapMITB,
+.kpmgGDIconTabBar .sapMITBContainerContent{
+    height: 100%;
+}
+
+
+.markingHeaderLabel {
+    font-size: 1rem;
+    color: #ca0b30;
+}
+
+/* Input e Label */
+.markingInputContainer {
+    margin-left: 1rem;
+    margin-right: 4rem;
+}
+
+.markingInputRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Sezione Ore */
+.markingHoursContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 0.3rem;
+    margin-left: 2rem;
+}
+
+.markingHoursRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.markingReasonDesc {
+    border: solid 1px grey;
+    background-color: white;
+    padding: 0.3rem;
+    margin-top: 0.2rem;
+    margin-right: 0.3rem;
+    width: 12.7rem;
+    height: 1.6rem;
+}
+
+
+.markingSmallLabel,
+.markingMediumLabel {
+    font-weight: bold;
+}
+
+.markingMediumLabelValue.sapMLabel,
+.markingMediumLabel.sapMLabel{
+    font-size: 1.1rem;
+}
+.inputWidth2Percentage{
+    width: 2% !important;
+}
+.markingSmallLabelValue.sapMLabel,
+.markingSmallLabel.sapMLabel{
+    font-size: 1rem;
+}
+.markingSmallLabelWidth9Rem {
+    width: 9rem;
+}
+
+.markingSmallLabelWidth13Rem {
+    width: 13rem;
+}
+
+.markingMediumLabelWidth9Rem {
+    width: 9rem;
+}
+
+.markingMediumLabelWidth13Rem {
+    width: 13rem;
+}
+
+.markingMediumLabelWidth2Rem{
+    width: 2rem;
+}
+
+.boldClass{
+    font-weight: bold;
+}
+
+[data-opacityExternalOp=Mismatch] {
+    opacity: 0.5 !important;
+}
+
+.highlightRow{
+    opacity: 0.9 !important;
+    background-color: yellow !important;
+}
+
+.smallMarginTop{
+    margin-top: 1.5%;
+}
+
+.toolbarTable{
+    background-color: antiquewhite;
+}
+
+/* Filtri per popup allegati */
+.uploadDialog .sapMDialogScroll {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.uploadContent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.btnUploadStyled {
+    color: white !important;
+    border-radius: 8px;
+    font-weight: bold;
+}
+.fileUploaderStyled .sapMBtn {
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding-left: 1.5rem;
+    display: inline-flex;
+    padding-top: 1rem;
+}
+.fileUploaderStyled .sapMInputBaseContentWrapper {
+    height: 2.5rem;
+}
+.fileUploaderStyled .sapMInputBaseInner {
+    height: 100%;
+    line-height: 2.5rem;
+    background-color: white;
+    color: #ca0b30;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 0 16px;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.uploadDialogVBox {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.fileUploaderContaienr {
+    /* padding-top: 8px; */
+    /* padding-bottom: 8px; */
+    width: 100%;
+    height: 10%;
+}
+.uploadedTable {
+    flex-grow: 1;
+    min-height: 0;
+}
+.largeIcon{
+    font-size: x-large;
+}
+
+/* Disabilita la transizione per la barra di progresso */
+.sapMPIBar {
+    transition: none !important;
+}
