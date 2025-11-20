@@ -38,8 +38,14 @@
 
                 <!-- 2) TreeTable defects -->
                 <VBox width="95%" height="78%" renderType="Bare" alignItems="Center" justifyContent="Center" class="mainContainer containerAddOpts">
-                    <t:TreeTable width="100%" busy="{/BusyLoadingOpTable}" selectionMode="Single" class="kpmgGDTable" rows="{/defects}" enableColumnReordering="true" 
-                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCountMode="Auto" visibleRowCount="10" rowHeight="45px" >
+                    <Toolbar style="Clear">
+                        <HBox width="70%" height="100%" renderType="Bare" class="leftButtonsPODOperation"></HBox>       
+                        <ToolbarSpacer/> 
+                        <Button text="Expand all" press="onExpandAll" icon="sap-icon://expand-group" />
+                        <Button text="Collapse all" press="onCollapseAll" icon="sap-icon://collapse-group" />
+                    </Toolbar>
+                    <t:TreeTable id="treeTableDefectPopup" width="100%" busy="{/BusyLoadingOpTable}" selectionMode="Single" class="kpmgGDTable" rows="{/defects}" enableColumnReordering="true" 
+                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="8" rowHeight="45px" >
                         <t:layoutData>
                             <FlexItemData growFactor="1" baseSize="0%"/>
                         </t:layoutData>
@@ -47,43 +53,43 @@
                             <t:Column width="12%" hAlign="Left">
                                 <Label text="{i18n>defect.treeTable.groupOrCode}"/>
                                 <t:template>
-                                    <Text text="{groupOrCode}"/>
+                                    <Text text="{groupOrCode}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.material}"/>
                                 <t:template>
-                                    <Text text="{material}"/>
+                                    <Text text="{material}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.priority}"/>
                                 <t:template>
-                                    <Text text="{priority_description}"/>
+                                    <Text text="{priority_description}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.user}"/>
                                 <t:template>
-                                    <Text text="{user}"/>
+                                    <Text text="{user}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.phase}"/>
                                 <t:template>
-                                    <Text text="{phase}"/>
+                                    <Text text="{phase}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
                             <t:Column width="12%" hAlign="Center">
-                                <Label text="{i18n>defect.treeTable.status}"/>
+                                <Label text="{i18n>defect.treeTable.status}" />
                                 <t:template>
-                                    <Text text="{status}"/>
+                                    <Text text="{status}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
                             <t:Column width="10%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.qn}"/>
                                 <t:template>
-                                    <Text text="{qn_code}"/>
+                                    <Text text="{qn_code}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
                             <t:Column width="10%" hAlign="Center">

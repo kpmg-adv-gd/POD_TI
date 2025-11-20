@@ -10,8 +10,7 @@
                     </t:layoutData>
                     <t:extension>
                     <OverflowToolbar style="Clear">    
-                        <HBox width="70%" height="100%" renderType="Bare" class="leftButtonsPODOperation" >
-                        </HBox>       
+                        <HBox width="70%" height="100%" renderType="Bare" class="leftButtonsPODOperation"></HBox>       
                         <ToolbarSpacer/>     
                         <ComboBox id="machineTypeId" placeholder="{i18n>SecondoLivello.treeTable.placeholder.insertMachineType}" class="GDComboBoxField" items="{MachineTypeModel>/machineTypes}" showSecondaryValues="true" change="onChangeMachineType">
                             <core:ListItem key="{MachineTypeModel>machine_type}" text="{MachineTypeModel>machine_type}" />

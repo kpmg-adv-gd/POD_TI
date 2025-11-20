@@ -13,8 +13,14 @@
             <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
 
                 <VBox width="95%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" class="mainContainer containerAddOpts">
-                    <t:TreeTable width="100%" busy="{/BusyLoadingOpTable}"  selectionMode="Single" class="kpmgGDTable" rows="{/results}" enableColumnReordering="true" 
-                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCountMode="Auto" visibleRowCount="10" rowHeight="45px" >
+                    <Toolbar style="Clear">
+                        <HBox width="70%" height="100%" renderType="Bare" class="leftButtonsPODOperation"></HBox>       
+                        <ToolbarSpacer/> 
+                        <Button text="Expand all" press="onExpandAll" icon="sap-icon://expand-group" />
+                        <Button text="Collapse all" press="onCollapseAll" icon="sap-icon://collapse-group" />
+                    </Toolbar>
+                    <t:TreeTable id="treeTableEngChangesPopup" width="100%" busy="{/BusyLoadingOpTable}"  selectionMode="Single" class="kpmgGDTable" rows="{/results}" enableColumnReordering="true" 
+                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="10" rowHeight="45px" >
                         <t:layoutData>
                             <FlexItemData growFactor="1" baseSize="0%"/>
                         </t:layoutData>
@@ -22,55 +28,55 @@
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.type}"/>
                                 <t:template>
-                                    <Text text="{type}"/>
+                                    <Text text="{type}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.progrEco}"/>
                                 <t:template>
-                                    <Text text="{progEco}"/>
+                                    <Text text="{progEco}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.processId}"/>
                                 <t:template>
-                                    <Text text="{processId}"/>
+                                    <Text text="{processId}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.material}"/>
                                 <t:template>
-                                    <Text text="{material}"/>
+                                    <Text text="{material}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.materialDescription}"/>
                                 <t:template>
-                                    <Text text="{materialDescription}"/>
+                                    <Text text="{materialDescription}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.childMaterial}"/>
                                 <t:template>
-                                    <Text text="{childMaterial}"/>
+                                    <Text text="{childMaterial}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.childMaterialDescription}"/>
                                 <t:template>
-                                    <Text text="{childMaterialDescription}"/>
+                                    <Text text="{childMaterialDescription}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.qty}"/>
                                 <t:template>
-                                    <Text text="{qty}"/>
+                                    <Text text="{qty}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.fluxType}"/>
                                 <t:template>
-                                    <Text text="{fluxType}"/>
+                                    <Text text="{fluxType}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
@@ -86,13 +92,13 @@
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.resolution}"/>
                                 <t:template>
-                                    <Text text="{resolution}"/>
+                                    <Text text="{resolution}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.note}"/>
                                 <t:template>
-                                    <Text text="{note}"/>
+                                    <Text text="{note}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="10%" hAlign="Center">

@@ -223,6 +223,15 @@ sap.ui.define([
             }
         },
 
+        onExpandAll: function () {
+            const oTable = this.MainPODcontroller.byId("treeTableEngChangesPopup");
+            oTable.expandToLevel(99);   // livello alto per essere sicuri
+        },
+        onCollapseAll: function () {
+            const oTable = this.MainPODcontroller.byId("treeTableEngChangesPopup");
+            oTable.collapseAll();
+        },
+
         onClosePopup: function () {
             var that = this;
             that.closeDialog();

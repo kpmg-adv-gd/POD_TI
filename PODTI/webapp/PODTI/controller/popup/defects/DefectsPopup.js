@@ -157,6 +157,14 @@ sap.ui.define([
             let defect = oEvent.getSource().getParent().getBindingContext().getObject();
             that.ViewDefectPopup.open(that.MainPODview, that.MainPODcontroller, defect);
         },
+        onExpandAll: function () {
+            const oTable = this.MainPODcontroller.byId("treeTableDefectPopup");
+            oTable.expandToLevel(99);   // livello alto per essere sicuri
+        },
+        onCollapseAll: function () {
+            const oTable = this.MainPODcontroller.byId("treeTableDefectPopup");
+            oTable.collapseAll();
+        },
         onClosePopup: function () {
             var that = this;
             that.closeDialog();
