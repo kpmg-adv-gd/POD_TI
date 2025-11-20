@@ -1,0 +1,114 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form" xmlns:t="sap.ui.table"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.EngChangesPopup"
+    width="100%"
+    height="100%">
+    <Dialog title="Eng. Changes" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="true" horizontalScrolling="true"> 
+        <content>
+            <!-- Container principale -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
+
+                <VBox width="95%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" class="mainContainer containerAddOpts">
+                    <t:TreeTable width="100%" busy="{/BusyLoadingOpTable}"  selectionMode="Single" class="kpmgGDTable" rows="{/results}" enableColumnReordering="true" 
+                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCountMode="Auto" visibleRowCount="10" rowHeight="45px" >
+                        <t:layoutData>
+                            <FlexItemData growFactor="1" baseSize="0%"/>
+                        </t:layoutData>
+                        <t:columns>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.type}"/>
+                                <t:template>
+                                    <Text text="{type}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.progrEco}"/>
+                                <t:template>
+                                    <Text text="{progEco}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.processId}"/>
+                                <t:template>
+                                    <Text text="{processId}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.material}"/>
+                                <t:template>
+                                    <Text text="{material}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.materialDescription}"/>
+                                <t:template>
+                                    <Text text="{materialDescription}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.childMaterial}"/>
+                                <t:template>
+                                    <Text text="{childMaterial}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.childMaterialDescription}"/>
+                                <t:template>
+                                    <Text text="{childMaterialDescription}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.qty}"/>
+                                <t:template>
+                                    <Text text="{qty}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.fluxType}"/>
+                                <t:template>
+                                    <Text text="{fluxType}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.status}"/>
+                                <t:template>
+                                    <Select selectedKey="{status}" change="onStatusChange" items="{path: '/statusCollection', sorter: { path: 'key' } }" visible="{= ${level} === 2 }">
+                                        <core:Item key="{key}" text="{text}" />
+                                    </Select>
+                                </t:template>
+                                <t:template>
+                            </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.resolution}"/>
+                                <t:template>
+                                    <Text text="{resolution}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.note}"/>
+                                <t:template>
+                                    <Text text="{note}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="10%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.mark}"/>
+                                <t:template>
+                                    <Button text="{i18n>engChanges.treeTable.mark}" width="100%" press="onMarkPress" visible="{mark}" />
+                                </t:template>
+                            </t:Column>
+                        </t:columns>
+                    </t:TreeTable>
+                </VBox>
+
+            </VBox>
+        </content>
+        <endButton>
+            <Button text="{i18n>engChanges.button.close}" press="onClosePopup"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

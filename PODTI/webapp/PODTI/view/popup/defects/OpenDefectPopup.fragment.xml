@@ -1,0 +1,209 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.defects.OpenDefectPopup"
+    width="100%"
+    height="100%">
+    <Dialog title="Open Defect" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="false" horizontalScrolling="false"> 
+        <content>
+
+            <!-- Dialog per allegare file -->
+            <Dialog id="uploadDialog" showHeader="true" class="uploadDialog" title="Attach files" contentWidth="850px" contentHeight="450px">
+                <content>
+                    <VBox class="uploadDialogVBox">
+                        <HBox justifyContent="Center" class="fileUploaderContainer">
+                            <unified:FileUploader id="attachID" name="fileUploader" uploadUrl="upload/service/endpoint" change="uploadDocument" buttonText="Search" uploadOnChange="false" class="fileUploaderStyled"/>
+                        </HBox>
+                        <Table items="{/defect/attachments}" class="uploadedTable" growing="true" growingScrollToLoad="true" inset="false" popinLayout="GridSmall">
+                            <columns>
+                                <Column width="75%" minScreenWidth="Tablet" demandPopin="true">
+                                    <Text text="File name"></Text>
+                                </Column>
+                                <Column width="25%" minScreenWidth="Tablet" demandPopin="true">
+                                    <Text text="Delete"></Text>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{FILE_NAME}"></Text>
+                                        <Button icon="sap-icon://delete" press="deleteAttachment"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </VBox>
+                </content>
+                <beginButton>
+                    <Button text="Confirm" class="btnUploadStyled" press="handleUploadPress"/>
+                </beginButton>
+            </Dialog>
+
+            <!-- Container principale -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="SpaceBetween">
+                <!-- Testata principale -->
+                <VBox renderType="Bare" width="90%" height="20%">
+                    <HBox width="100%" height="50%" renderType="Bare" justifyContent="SpaceAround">
+                        <HBox renderType="Bare" alignItems="Center" width="auto">
+                            <Label text="WBE" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/wbe}" width="auto" class="markingSmallLabel"/>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" width="auto">
+                            <Label text="SFC" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/sfc}" width="auto" class="markingSmallLabel"/>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" justifyContent="End" width="auto">
+                            <Label text="WORKCENTER" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/wc}" width="auto" class="markingSmallLabel"/>
+                        </HBox>
+                    </HBox>
+                    <HBox width="100%" height="50%" renderType="Bare" justifyContent="SpaceBetween">
+                        <HBox renderType="Bare" alignItems="Center" width="20%">
+                            <Label text="Material" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <Select selectedKey="{/defect/material}" width="70%" items="{/materials}" showSecondaryValues="true" change="getOrdersByMaterial">
+                                <core:ListItem key="{material}" text="{material}" />
+                            </Select>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" width="24%">
+                            <Label text="{/defect/typeOrderDesc}" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <Select selectedKey="{/defect/prodOrder}" width="auto" items="{/ordersByMaterial}" showSecondaryValues="true" change="changeOrder">
+                                <core:ListItem key="{order}" text="{order}" />
+                            </Select>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" width="40%">
+                            <Label text="Assembly" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <Select selectedKey="{/defect/assembly}" width="70%" items="{/assemblies}" showSecondaryValues="true">
+                                <core:ListItem key="{material}" text="{material}" additionalText="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" width="15%">
+                            <Label text="N° of Def." width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input width="20%" type="Number" value="{/defect/numDefect}" class="markingMediumLabelValue"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <HBox width="90%" height="50%" renderType="Bare" justifyContent="SpaceBetween">
+                    <VBox width="45%" height="100%" renderType="Bare" justifyContent="SpaceBetween">
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Title" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Input width="50%" value="{/defect/title}" showValueHelp="false" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Description" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <TextArea width="50%" value="{/defect/description}" rows="3" class="markingMediumLabelValue" />
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Code Group" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/codeGroup}" width="50%" items="{/codeGroups}" change="onChangeCodeGroup">
+                                <core:Item key="{group}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Defect Type" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/defectType}" width="50%" items="{/defectTypes}" >
+                                <core:Item key="{code}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Priority" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/priority}" width="50%" items="{/priorities}">
+                                <core:Item key="{priority}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Variance" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/variance}" width="50%" items="{/variances}">
+                                <core:Item key="{cause}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Attachment" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" />
+                            <Button text="Attach files" width="50%" press="popAllegaPress"/>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Blocking" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" />
+                            <CheckBox text="" width="50%" selected="{/defect/blocking}"/>  
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Cause" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/cause}" width="50%" items="{/causes}">
+                                <core:Item key="{key}" text="{description}" />
+                            </Select>
+                        </HBox>
+                    </VBox>
+                    <VBox width="45%" height="100%" renderType="Bare" justifyContent="SpaceBetween">
+                        <HBox width="100%" renderType="Bare" alignItems="Center">
+                            <Label text="Create QN" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <CheckBox text="" width="50%" selected="{/defect/createQN}"  />  
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Notification Type" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/notificationType}" width="50%" items="{/notificationTypies}">
+                                <core:Item key="{notification_type}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Coding Group" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/coding_group}" width="50%" items="{/codingGroups}" change="onChangeCoding">
+                                <core:Item key="{coding_group}" text="{coding_group_description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Coding" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select selectedKey="{/defect/coding_id}" width="50%" items="{/codings}" >
+                                <core:Item key="{coding_id}" text="{coding_description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Replaced in Assembly" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <RadioButtonGroup selectedIndex="{/defect/replaceInAssembly}" width="50%">
+                                <buttons>
+                                    <RadioButton text="YES" groupName="group1" selected="{= ${/defect/replaceInAssembly} === 'YES' }" />
+                                    <RadioButton text="NO" groupName="group1" selected="{= ${/defect/replaceInAssembly} === 'NO' }" />
+                                </buttons>
+                            </RadioButtonGroup>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Defect Note" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                            <TextArea width="50%" value="{/defect/defectNote}" rows="3" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
+                            <Label text="Responsible 1" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select change="changeResponsible1" selectedKey="{/defect/responsible1}" width="50%" items="{/responsibles1}" >
+                                <core:Item key="{id}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{= ${/defect/createQN} === true &amp;&amp; ${/responsiblesVis2} === true }">
+                            <Label text="Responsible 2" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select change="changeResponsible2" selectedKey="{/defect/responsible2}" width="50%" items="{/responsibles2}" >
+                                <core:Item key="{id}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{= ${/defect/createQN} === true &amp;&amp; ${/responsiblesVis3} === true }">
+                            <Label text="Responsible 3" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select change="changeResponsible3" selectedKey="{/defect/responsible3}" width="50%" items="{/responsibles3}">
+                                <core:Item key="{id}" text="{description}" />
+                            </Select>
+                        </HBox>
+                        <HBox width="100%" renderType="Bare" alignItems="Center" visible="{= ${/defect/createQN} === true &amp;&amp; ${/responsiblesVis4} === true }">
+                            <Label text="Responsible 4" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
+                            <Select change="changeResponsible4" selectedKey="{/defect/responsible4}" width="50%" items="{/responsibles4}" >
+                                <core:Item key="{id}" text="{description}" />
+                            </Select>
+                        </HBox>
+                    </VBox>
+                </HBox>
+                
+                <HBox width="90%" height="10%"  renderType="Bare" alignItems="Center" justifyContent="End">
+                    <Button text="Cancel" type="Emphasized" press="onClosePopup" class="sapUiSmallMarginEnd" />
+                    <Button text="Confirm" type="Emphasized" press="onConfirm" />
+                </HBox> 
+            </VBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

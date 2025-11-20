@@ -1,0 +1,26 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.OrderProgressPopup"
+    width="100%"
+    height="100%"
+>
+    <Dialog id="orderProgressDialog" title="Order Progress" showHeader="true" contentHeight="60%"  contentWidth="70%" verticalScrolling="false" horizontalScrolling="false"> 
+        <content>
+            <!-- Container principale -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="SpaceBetween">
+                <!-- Main Content -->
+                <VBox width="90%" height="90%" renderType="Bare" alignItems="Center" justifyContent="Center">
+                    <Text text="Let's see the progress status of the selected order!" class="sapUiSmallMarginBottom" />
+                    <ProgressIndicator id="ProgIndicatorID" class="sapUiSmallMarginBottom" displayValue="0%" state="Success" displayOnly="true"/>
+                </VBox>
+                <HBox width="90%" height="10%"  renderType="Bare" alignItems="Center" justifyContent="End">
+                    <Button text="Close" type="Emphasized" press="onClosePopup" class="" />
+                </HBox> 
+            </VBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

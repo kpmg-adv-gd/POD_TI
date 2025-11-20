@@ -1,0 +1,110 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.InfoTerzoLivelloPopup"
+    width="100%"
+    height="100%">
+    <Dialog id="infoTerzoLivelloPopup" title="Details" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="true" horizontalScrolling="false"> 
+        <content>
+            <!-- Container principale: 4 sezioni verticali -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
+
+                <!-- 1) Details -->
+                <VBox id="detailsSection" width="95%" height="17%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod">
+                    <HBox width="100%" height="50%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod paddingTopTestataSmall">
+                        <HBox renderType="Bare" alignItems="Center" width="35%">
+                            <Label text="FASE:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/phase}" width="auto" class="markingSmallLabel"/>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center" width="65%">
+                            <Label text="MACRO-ATTIVITA':" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/macroActivity}" width="auto" class="markingSmallLabel"/>
+                        </HBox>
+                    </HBox>
+                    <HBox width="100%" height="50%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod paddingTopTestata">
+                        <HBox renderType="Bare" alignItems="Center" width="100%">
+                            <Label text="CHECKLIST:" width="15%" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                            <Label text="{/checklist}" width="auto" class="infoPopupSmallLabel"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- 2) History: table a 3 colonne -->
+                <VBox id="historySection" width="95%" height="27%" renderType="Bare" alignItems="Center" justifyContent="Center" class="sapUiSmallMargin">
+                    <Toolbar>
+                        <Title text="History" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                    </Toolbar>
+                    <Table id="historyTable" inset="false" width="100%" items="{/infoTerzoLivello/history}">
+                        <columns>
+                            <Column>
+                                <Text text="ACTION" />
+                            </Column>
+                            <Column>
+                                <Text text="DATE" />
+                            </Column>
+                            <Column>
+                                <Text text="USER" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{action}" />
+                                    <Text text="{datetime}" />
+                                    <Text text="{user}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+                <!-- 3) Comment: TextArea + Save -->
+                <VBox id="commentSection" width="95%" height="27%" renderType="Bare" alignItems="Center" justifyContent="Center" class="sapUiSmallMargin">
+                    <Toolbar>
+                        <Title text="Insert a comment" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                    </Toolbar>
+                    <TextArea id="commentArea" width="100%" rows="4" placeholder="Write your comment..." value="{/newComment}" />
+                    <HBox width="100%" renderType="Bare" justifyContent="End" class="sapUiSmallMarginTop">
+                        <Button text="Salva" type="Emphasized" press="onSaveComment" />
+                    </HBox>
+                </VBox>
+
+                <!-- 4) Comments: table a 3 colonne -->
+                <VBox id="commentsSection" width="95%" height="27%" renderType="Bare" alignItems="Center" justifyContent="Center" class="sapUiSmallMargin">
+                    <Toolbar>
+                        <Title text="Comments" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                    </Toolbar>
+                    <Table id="commentsTable" inset="false" width="100%" items="{/infoTerzoLivello/comments}">
+                        <columns>
+                            <Column>
+                                <Text text="DATA" />
+                            </Column>
+                            <Column>
+                                <Text text="USER" />
+                            </Column>
+                            <Column>
+                                <Text text="COMMENTO" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{datetime}" />
+                                    <Text text="{user}" />
+                                    <Text text="{comment}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+            </VBox>
+        </content>
+        <endButton>
+            <Button text="{i18n>SinotticoBomMultilivello.button.close}" press="onClosePopup"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

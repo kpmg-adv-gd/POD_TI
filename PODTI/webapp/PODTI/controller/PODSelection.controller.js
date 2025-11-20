@@ -57,7 +57,6 @@ sap.ui.define([
                     that.getView().getModel("PODSelectionModel").setProperty("/SFCs",undefined);
                     return
                 }
-
                 that.getIfUserCertificatedForWorkcenter(workcenter);
             } else{
                 that.firstTimeEnterPodSelection=false;
@@ -108,7 +107,7 @@ sap.ui.define([
 
             // Callback di successo
             var successCallback = function(response) {
-                that.getView().getModel("PODSelectionModel").setProperty("/SFCs",response.result);
+                that.getView().getModel("PODSelectionModel").setProperty("/SFCs",response);
                 that.getView().getModel("PODSelectionModel").setProperty("/BusyLoadingOpTable",false);
             };
             // Callback di errore
@@ -160,11 +159,11 @@ sap.ui.define([
         },
         getStatusColor: function (code) {
             switch (code) {
-                case "401":
+                case "401": // new
                     return "grey";
-                case "402":
+                case "402": // in work
                     return "blue"; // Blu
-                case "403":
+                case "403": // done
                     return "green"; // Verde
                 default:
                     return "Default"; // Colore di default

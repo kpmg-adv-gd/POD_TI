@@ -1,0 +1,108 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:t="sap.ui.table" 
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.SinotticoPopup"
+    width="100%"
+    height="100%"
+>
+    <Dialog title="{i18n>SinotticoBomMultilivello.title}" showHeader="true" contentHeight="90%"  contentWidth="90%" verticalScrolling="false" horizontalScrolling="false"> 
+        <content>
+            <VBox width="100%" height="100%" renderType="Bare">
+                <!-- Filtri e header tabella -->
+                <HBox width="100%" height="10%" class="smallPadding" renderType="Bare">
+                    <HBox width="70%" justifyContent="Start" height="100%" alignItems="Center" renderType="Bare" class="headerContainer">
+                        <HBox width="30%" height="100%" alignItems="Center" renderType="Bare" class="filterBox">
+                            <Label text="{i18n>SinotticoBomMultilivello.label.project}" width="100%" required="true" textAlign="Left" class="kpmgGDMediumlLabelInfo autoWidth" />
+                            <Input id="projectInputSinotticoId" placeholder="Enter Project ..." showSuggestion="true" showValueHelp="false" suggestionItems="{/filters/Project}" class="width70Percentage padding1PercentageLeft">
+                                <suggestionItems>
+                                    <core:Item text="{DATA_FIELD_VALUE}" />
+                                </suggestionItems>
+                            </Input>
+                        </HBox>
+                        <HBox width="30%" height="100%" alignItems="Center" renderType="Bare" class="filterBox">
+                            <Label text="{i18n>SinotticoBomMultilivello.label.machineMaterial}" required="true"  width="100%" textAlign="Left" class="kpmgGDMediumlLabelInfo autoWidth" />
+                            <Input id="machineMaterialInputId" placeholder="Enter Material ..." showSuggestion="true" showValueHelp="false" suggestionItems="{/filters/MACH_MATERIALS}" class="width45Percentage padding1PercentageLeft">
+                                <suggestionItems>
+                                    <core:Item text="{child_material}" />
+                                </suggestionItems>
+                            </Input>
+                        </HBox>
+                    </HBox>
+                    <HBox width="30%" justifyContent="End" height="100%" alignItems="Center" renderType="Bare">
+                        <Button text="{i18n>SinotticoBomMultilivello.button.search}" icon="sap-icon://search" type="Emphasized" class="buttonClassMedium marginRight1Percentage" press="onGoPress" />
+                        <Button visible="false" icon="sap-icon://excel-attachment" type="Transparent" class="buttonClassSmall marginRight1Percentage" press="onExportExcel" />
+                    </HBox>
+                </HBox>
+                <VBox width="100%" height="92%" renderType="Bare" class="">
+                    <t:TreeTable id="SinotticoTreeTable" class="kpmgTreeTable" rows="{/MaterialList}" rowSelectionChange="rowSelectionChange" selectionMode="Single" selectionBehavior="RowOnly" enableColumnReordering="true" enableGrouping="true" visibleRowCountMode="Auto"  rowHeight="45px">
+                        <t:layoutData>
+                            <FlexItemData growFactor="1" baseSize="100%"/>
+                        </t:layoutData>
+                        <t:extension>
+                            <OverflowToolbar style="Clear" height="auto">
+                                <!-- <Title text="{i18n>SinotticoBomMultilivello.title}" class="boldClass" /> -->
+                                <ToolbarSpacer/>
+                                <Button text="{i18n>SinotticoBomMultilivello.treeTable.button.collpaseAll}" press="onCollapseAll"/>
+                                <Button text="{i18n>SinotticoBomMultilivello.treeTable.button.expandAll}" press="onExpandAll"/>
+                            </OverflowToolbar>
+                        </t:extension>
+                        <t:rowSettingsTemplate>
+                            <t:RowSettings highlight="{= ${isHighlighted} ? 'Success' : 'None' }" />
+                        </t:rowSettingsTemplate>
+                        <t:columns>
+                            <t:Column width="30%" sortProperty="Material" filterProperty="Material" showFilterMenuEntry="true">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.material}"/>
+                                <t:template>
+                                    <Text text="{Material}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="28%" sortProperty="SFC" filterProperty="SFC" showFilterMenuEntry="true">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.sfc}"/>
+                                <t:template>
+                                    <Text text="{SFC}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="7%" sortProperty="OrderType" filterProperty="OrderType" showFilterMenuEntry="true" hAlign="Center" >
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.orderType}"/>
+                                <t:template>
+                                    <Text text="{OrderType}"/>
+                                </t:template>
+                            </t:Column>     
+                            <t:Column width="7%" sortProperty="MissingParts" hAlign="Center">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.missingComponents}"/>
+                                <t:template>
+                                    <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{= (${MissingParts} === 'true') ? true:false}" class="largeIcon" />
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="7%" sortProperty="EngChanges" hAlign="Center">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.engChanges}"/>
+                                <t:template>
+                                    <Text text="{EngChanges}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="7%" sortProperty="hasDefects"  hAlign="Center">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.defects}"/>
+                                <t:template>
+                                    <Text text="{hasDefects}"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="15%" hAlign="Center">
+                                <Label text="{i18n>SinotticoBomMultilivello.treeTable.progressStatus}"/>
+                                <t:template>
+                                    <ProgressIndicator percentValue="{ProgressStatus}" displayValue="{= ${ProgressStatus} + '%'}" state="Success" showValue="true" visible="{= (${OrderType} !== 'COMP' &amp;&amp; ${ParentAssembly} !== true ) ? true:false}" width="100%"/>
+                                </t:template>
+                            </t:Column>
+                        </t:columns>
+                    </t:TreeTable>
+                </VBox>
+            </VBox>
+        </content>
+        <endButton>
+            <Button text="{i18n>SinotticoBomMultilivello.button.close}" press="onClosePopup"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

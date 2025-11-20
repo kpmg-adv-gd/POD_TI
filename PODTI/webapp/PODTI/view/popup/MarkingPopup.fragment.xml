@@ -1,0 +1,115 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.MarkingPopup"
+    width="100%"
+    height="100%"
+>
+    <Dialog id="markingDialog" title="Marking" showHeader="true" contentHeight="550px"  contentWidth="1100px" verticalScrolling="false" horizontalScrolling="false"> 
+        <content>
+            <!-- Container principale -->
+            <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="SpaceBetween">
+                <!-- Header -->
+                <HBox width="90%" height="15%" renderType="Bare" justifyContent="SpaceAround">
+                    <HBox renderType="Bare" alignItems="Center">
+                        <Label text="WBS Element" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                        <Label text="{/wbe}" class="markingSmallLabel"/>
+                    </HBox>
+                    <HBox renderType="Bare" alignItems="Center" >
+                        <Label text="SFC" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                        <Label text="{/sfc}" class="markingSmallLabel"/>
+                    </HBox>
+                    <HBox renderType="Bare" alignItems="Center" justifyContent="End">
+                        <Label text="Order" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
+                        <Label text="{/order}" class="markingSmallLabel"/>
+                    </HBox>
+                </HBox>
+
+                <!-- Operazione e Numero Conferma -->
+                <VBox width="90%" height="18%" renderType="Bare" justifyContent="SpaceBetween">
+                    <HBox width="100%" renderType="Bare" alignItems="Center">
+                        <Label text="Operation" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                        <Label text="{/operation}" class="markingMediumLabelValue" />
+                    </HBox>
+                    <HBox width="100%" renderType="Bare" alignItems="Center">
+                        <Label text="Confirmation Number" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                        <Label text="{/confirmNumber}" class="markingMediumLabelValue"/>
+                    </HBox>
+                    <HBox width="100%" renderType="Bare" alignItems="Center">
+                        <Label text="Personnel Number" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
+                        <Label text="{/personnelNumber}" class="markingMediumLabelValue"/>
+                    </HBox>
+                </VBox>
+                <!-- hh e mm -->
+                <HBox width="90%" height="12%" renderType="Bare">
+                    <HBox width="15%" renderType="Bare" alignItems="Center">
+                        <Label text="HH" class="markingMediumLabel markingMediumLabelWidth2Rem sapUiSmallMarginEnd"/>
+                        <Input id="hhInputId" type="Number" showSuggestion="true" showValueHelp="false" liveChange="onHHInputChange"  class="inputWidth2Percentage markingMediumLabelValue" />
+                    </HBox>
+                    <HBox width="15%" renderType="Bare" alignItems="Center">
+                        <Label text="MM" class="markingMediumLabel markingMediumLabelWidth2Rem sapUiSmallMarginEnd"/>
+                        <Input id="mmInputId" type="Number" showValueHelp="false" liveChange="onMMInputChange" class="inputWidth2Percentage markingMediumLabelValue" />
+                    </HBox>
+                </HBox>
+                <HBox width="90%" height="35%" renderType="Bare" justifyContent="SpaceBetween">
+                    <!-- Input principale -->
+                    <VBox width="50%"  renderType="Bare">
+                        <HBox renderType="Bare" alignItems="Center">
+                            <Label text="Marking Date" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
+                            <DateTimePicker 
+                                id="markingDatePicker" 
+                                valueFormat="dd/MM/yyyy"
+                                displayFormat="dd/MM/yyyy"
+                                enabled="{/isMarkingEnabled}"
+                                width="15rem"/>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center">
+                            <Label text="Variance" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
+                            <Label id="selectedVarianceText" class="markingReasonDesc"/>
+                            <Button id="varianceButton" enabled="{/isMarkingEnabled}" press="onVarianceButtonPressed" icon="sap-icon://arrow-down" />
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center">
+                            <Label text="Eng.Changes " class="markingMediumLabel markingMediumLabelWidth9Rem"/>
+                            <Label id="selectedUpdateText" class="markingReasonDesc"/>
+                            <Button id="updateButton" enabled="{/isMarkingEnabled}" press="onUpdateButtonPressed" icon="sap-icon://arrow-down" />
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center">
+                            <Label text="Defects" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
+                            <Select id="defectsID" selectedKey="{/defectSelected}" width="50%" items="{/defects}" change="onChangeDefect">
+                                <core:Item key="{id}" text="{title}" />
+                            </Select>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Ore previste/consuntivate/rimanenti -->
+                    <VBox width="30%" class="markingHoursContainer" renderType="Bare">
+                        <HBox class="markingHoursRow">
+                            <Label text="Planned Labor" class="markingMediumLabel"/>
+                            <Label text="{/plannedLabor}" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox class="markingHoursRow">
+                            <Label text="Marked Labor" class="markingMediumLabel"/>
+                            <Label text="{/markedLabor}" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox class="markingHoursRow">
+                            <Label text="Remaining Labor" class="markingMediumLabel"/>
+                            <Label text="{/remainingLabor}" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox class="markingHoursRow">
+                            <Label text="Variance Labor" class="markingMediumLabel"/>
+                            <Label text="{/varianceLabor}" class="markingMediumLabelValue"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+                
+                <HBox width="90%" height="10%"  renderType="Bare" alignItems="Center" justifyContent="End">
+                    <Button text="Cancel" type="Emphasized" press="onClosePopup" class="sapUiSmallMarginEnd" />
+                    <Button text="Confirm" type="Emphasized" enabled="{/isMarkingEnabled}" press="onConfirm" />
+                </HBox> 
+            </VBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

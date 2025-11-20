@@ -54,7 +54,9 @@
 .kpmgTreeTable .sapUiTableHeaderRow {
     height: 52px;
 }
-
+.kpmgTreeTable .sapUiTableHeaderCell .sapMLabel {
+    font-weight: bold;
+}
 
 /* FILTRI - HEADER INFO */
 
@@ -76,11 +78,12 @@
     align-items: center;
 }
 .headerBox{
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
+    padding-right: 3rem;
 }
 .headerContainerMainPod{
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding-right: 0.5%;
 }
@@ -103,6 +106,12 @@
 .startOpButton {
     width: 8rem;
     height: 100%;
+    margin-left: 0.5rem;
+}
+.startOpButtonAddOpts {
+    width: 8rem;
+    height: 100%;
+    margin-left: 4rem;
 }
 .completeOpButton{
     height: 100%;
@@ -116,10 +125,11 @@
 }
 .sinotticoButton{
     height: 100%;
-    width: 9rem;
+    width: 12rem;
     margin-left: 0.5rem;
 }
 .sapMBtn.sapMBtnBase.startOpButton,
+.sapMBtn.sapMBtnBase.startOpButtonAddOpts,
 .sapMBtn.sapMBtnBase.completeOpButton,
 .sapMBtn.sapMBtnBase.nonConformancesButton, 
 .sapMBtn.sapMBtnBase.sinotticoButton {
@@ -128,6 +138,7 @@
 
 /* Allineo la scritta adentro al bottone al centro vicino all'icona */
 .startOpButton .sapMBtnContent,
+.startOpButtonAddOpts .sapMBtnContent,
 .completeOpButton .sapMBtnContent,
 .nonConformancesButton .sapMBtnContent,
 .sinotticoButton .sapMBtnContent {
@@ -138,6 +149,7 @@
 
 .completeOpButton .sapUiIcon.sapMBtnIcon,
 .startOpButton .sapUiIcon.sapMBtnIcon,
+.startOpButtonAddOpts .sapUiIcon.sapMBtnIcon,
 .nonConformancesButton .sapUiIcon.sapMBtnIcon, 
 .sinotticoButton .sapUiIcon.sapMBtnIcon {
     padding-top: 0.65rem;
@@ -153,6 +165,19 @@
     text-shadow: 0 0 .125rem transparent;
 }
 .startOpButton .sapMBtnInner.sapMBtnEmphasized:hover{
+    background-color: rgb(0,128,0,0.6) !important;
+    border-color: white !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.startOpButtonAddOpts .sapMBtnInner.sapMBtnEmphasized {
+    height: 3rem;
+    background-color: rgb(0,128,0,1) !important;
+    border-color: #006400 !important;
+    color: #fff !important;
+    text-shadow: 0 0 .125rem transparent;
+}
+.startOpButtonAddOpts .sapMBtnInner.sapMBtnEmphasized:hover{
     background-color: rgb(0,128,0,0.6) !important;
     border-color: white !important;
     color: #fff !important;
@@ -195,9 +220,7 @@
     text-shadow: 0 0 .125rem transparent;
 }
 
-
 .leftButtonsPODOperation{
-    padding-left: 1.25rem;
     align-items: center;
     justify-content: start;
 }
@@ -219,6 +242,7 @@
 .rightIconsBox{
     width: 10%;
     padding-right: 1.5rem;
+    padding-left: 1.5rem;
     align-items: center;
     justify-content: end;
 }
@@ -262,7 +286,7 @@
 }
 
 .paddingLeft{
-    padding-left: 0.5%;
+    padding-left: 3%;
 }
 
 .mediumPaddingTable{
@@ -360,6 +384,14 @@
 
 .markingSmallLabelWidth13Rem {
     width: 13rem;
+}
+
+.infoPopupSmallLabel {
+    font-weight: bold;
+    white-space: normal;
+}
+.infoPopupSmallLabel.sapMLabel{
+    font-size: 1rem;
 }
 
 .markingMediumLabelWidth9Rem {
@@ -462,4 +494,100 @@
 /* Disabilita la transizione per la barra di progresso */
 .sapMPIBar {
     transition: none !important;
+}
+.sapMTBClear {
+    border-bottom: none;
+    height: auto !important;
+}
+
+.buttonTabPod {
+    width: 4rem !important;
+    height: 4rem !important;
+    border-radius: 50%;
+    background-color: var(--sapButton_Background);
+    border: 1px solid var(--sapButton_BorderColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0rem !important;
+    cursor: pointer !important;
+    transition: background 0.2s;
+    margin-top: 0.2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+/* Centra e ingrandisce l'icona */
+.buttonTabPod .sapUiIcon {
+   font-size: 1.6rem;
+  line-height: 1;
+  margin-right: 0.5rem;
+}
+
+/* Testo sotto */
+.buttonTabLabel {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;           /* simile ai TabFilter */
+  color: var(--sapContent_LabelColor);
+  text-align: center;
+}
+
+/* Volendo: effetto hover del "blocco intero" come nei tab */
+.roundedButtonWithText:hover .buttonTabPod {
+  background-color: var(--sapButton_Hover_Background);
+}
+
+.iconSecondoLivello {
+  font-size: 1.5rem;     /* ingrandisce l’icona */
+  line-height: 1;        /* evita che si allunghi verticalmente */
+  cursor: pointer;       /* se vuoi renderlo cliccabile */
+  color: var(--sapContent_IconColor); /* usa il colore del tema */
+  padding: 0.2rem;
+}
+
+/* Permette alle celle di andare a capo */
+.sapUiTableCell {
+  white-space: normal !important;
+}
+
+/* Se vuoi margine interno per non far attaccare il testo al bordo */
+.sapUiTableCell .sapMText {
+  padding: 0.3rem 0.4rem;
+}
+
+.textMacroAttivita {
+    padding: 0px !important;
+    font-size: 85% !important;
+    margin: 2px !important;
+}
+
+.paddingTopTestata {
+    padding-top: 1rem;
+}
+.paddingTopTestataSmall {
+    padding-top: 0.5rem;
+}
+
+.treeTextClickable {
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer !important;
+}
+.treeTextClickable:hover {
+  text-decoration: underline !important; /* Effetto "è cliccabile" */
+}
+.popoverText {
+  display: block;
+  padding: 0.75rem 1rem;   /* margine interno dalla cornice */
+  white-space: normal;     /* assicura il wrap */
+}
+
+.sapMPopoverHorScrollDisabled .sapMPopoverScroll {
+    display: block;
+    padding: 1rem;
+}
+
+.containerAddOpts {
+    margin-top:1rem
 }
