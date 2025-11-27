@@ -37,6 +37,7 @@ sap.ui.define([
             let params = {
                 "plant": plant,
 				"sfc": rowSelected.sfc,
+                "id_lev_1": that.MainPODcontroller.getInfoModel().getProperty("/selectedPrimoLivello").id,
                 "id_lev_2": rowSelected.parent_id_lev_2,
 				"id_lev_3": rowSelected.id_lev_3,
 				"machine_type": rowSelected.machine_type

@@ -824,6 +824,7 @@ sap.ui.define([
             let params = {
                 plant: plant,
                 sfc: sfc,
+                id_lev_1: infoModel.getProperty("/selectedPrimoLivello").id,
                 id_lev_2: that.selectedObject.parent_id_lev_2,
                 id_lev_3: that.selectedObject.id_lev_3,
                 machine_type: that.selectedObject.machine_type
