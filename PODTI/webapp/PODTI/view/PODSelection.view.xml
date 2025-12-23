@@ -50,7 +50,7 @@ xmlns:html="http://www.w3.org/1101010/xhtml" controllerName="kpmg.custom.pod.POD
                         <FlexItemData growFactor="1" baseSize="0%"/>
                     </t:layoutData>
                         <t:columns> 
-                            <t:Column sortProperty="COMMESSA" filterProperty="COMMESSA" width="8%">
+                            <t:Column sortProperty="project" filterProperty="project" width="8%">
                                 <Label text="{i18n>podSelection.table.project}"  />
                                 <t:template>
                                     <Text wrapping="false" text="{PODSelectionModel>project}"  />
@@ -62,7 +62,7 @@ xmlns:html="http://www.w3.org/1101010/xhtml" controllerName="kpmg.custom.pod.POD
                                     <Text wrapping="false" text="{PODSelectionModel>sfc}"  />
                                 </t:template>
                             </t:Column>
-                            <t:Column sortProperty="CO-PREV" filterProperty="CO-PREV" width="18%">
+                            <t:Column sortProperty="co" filterProperty="co" width="18%">
                                 <Label wrapping="false" text="{i18n>podSelection.table.coPrev}"  />
                                 <t:template>
                                     <Text wrapping="false" text="{PODSelectionModel>co}"  />

@@ -30,7 +30,6 @@ sap.ui.define([
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "onCompleteOperationPress", this.onCompleteOperationPress, this);
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "onNonconformancePress", this.onNonconformancePress, this);
 
-            this.getAllMachineType();
         },
         onNavigateTo: function(){
             var that = this;
@@ -41,13 +40,12 @@ sap.ui.define([
                 that.loadSecondoLivelloModel(undefined, undefined, {collapse: true});
             }else{
                 that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
-            }        
-			that.getView().byId("machineTypeId").setValue("");
-            that.getAllMachineType();
+            }
+			that.getView().byId("machineTypeId").setSelectedKey("");
         },
 
         // Ottengo lista Machine Type
-        getAllMachineType: function () {
+        getAllMachineType: function (idLev1) {
             var that=this;
             let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
             let pathOrderBomApi = "/db/getAllMachineType";
@@ -57,6 +55,7 @@ sap.ui.define([
 
             let params={
                 plant: plant,
+                idLev1: idLev1
             };
 
             // Callback di successo
@@ -84,14 +83,23 @@ sap.ui.define([
             var that=this;
             
             var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello");
-            var machineType = that.getView().byId("machineTypeId").getValue();
+            if (primoLivello == undefined) {
+			    that.getView().byId("machineTypeId").setSelectedKey("");
+                that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
+                return;
+            }
+            var wbe = that.getView().byId("machineTypeId").getValue();
+
+            // Aggiornamento menu a tendina machine type
+            that.getAllMachineType(that.getInfoModel().getProperty("/selectedPrimoLivello").id);
+			that.getView().byId("machineTypeId").setSelectedKey("");
 
             var SecondoLivelloList = [];
             primoLivello.SecondoLivello.forEach(item => {
                 try {
                     // Valorizzare "child" con i soli campi che voglio vedere nel terzo livello
                     var childFilter = false;
-                    if (item.id_lev_3 && (!machineType || item.machine_type_3 == machineType)) {
+                    if (item.id_lev_3 && (!wbe || item.wbe == wbe)) {
                         var child = {
                             level: 3, 
                             sfc: item.sfc,
@@ -112,7 +120,7 @@ sap.ui.define([
                     }
                     if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length > 0 && childFilter) {
                         SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2)[0].Children.push(child);
-                    } else if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length == 0 && (!machineType || item.machine_type_2 == machineType)) {
+                    } else if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length == 0 && (!wbe || item.wbe == wbe)) {
                         // Valorizzare fuori da "Children" i soli campi che voglio vedere nel secondo livello
                         SecondoLivelloList.push({
                                 level: 2,
@@ -121,6 +129,7 @@ sap.ui.define([
                                 macroAttivita: item.lev_2,
                                 workcenter: item.workcenter_lev_2,
                                 status: item.status,
+                                wbe: item.wbe,
                                 machine_type: item.machine_type_2,
                                 safety: item.safety ? "Yes" : "No",
                                 nonconformances: false,
@@ -242,13 +251,13 @@ sap.ui.define([
                 return;
             }
 
-            // Devo controllare se la riga di secondo livello precedente è Safety
+            // Devo controllare se la riga di secondo livello precedente con stesso machine type è Safety
             for (var index = 0; index < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").length; index++) {
                 var row = that.getView().getModel("SecondoLivelloModel").getProperty("/operations")[index];
                 if (row.level == 2 && row.id_lev_2 == selectedObject.parent_id_lev_2) {
                     break
                 }
-                if (row.level == 2) {
+                if (row.level == 2 && row.machine_type == selectedObject.machineType) {
                     lastLev2 = row;
                 }
             }
@@ -364,6 +373,10 @@ sap.ui.define([
         onCompleteOperationPress: function (oEvent) {
             var that = this;
             var selectedObject = that.getInfoModel().getProperty("/selectedSecondoOrTerzoLivello");
+            if (!selectedObject || selectedObject.level != 3) {
+                that.showErrorMessageBox("No operation has been selected.");
+                return;
+            }
             that.getIfUserCertificatedForWorkcenter(selectedObject, "complete", false);
         },
         completeOperation: function (selectedObject) {
@@ -375,11 +388,6 @@ sap.ui.define([
             var plant = that.getInfoModel().getProperty("/plant");
             var order = that.getInfoModel().getProperty("/selectedSFC/order");
             var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello")
-
-            if (!selectedObject || selectedObject.level != 3) {
-                that.showErrorMessageBox("No operation has been selected.");
-                return;
-            }
 
             let params = {
                 "plant": plant,

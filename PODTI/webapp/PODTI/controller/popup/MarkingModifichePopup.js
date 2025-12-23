@@ -33,10 +33,40 @@ sap.ui.define([
             that.onRetrievePersonnelNumber(); // PersonnelNumber
 
             let infoModel = that.MainPODcontroller.getInfoModel();
-            that.MarkingPopupModel.setProperty("/project", infoModel.getProperty("/selectedSFC/project"));
-            that.MarkingPopupModel.setProperty("/wbe", infoModel.getProperty("/selectedSFC/WBE"));
+            let plant = infoModel.getProperty("/plant") || "";
+            that.MarkingPopupModel.setProperty("/project", that.selectedLevel1.project);
+            that.MarkingPopupModel.setProperty("/wbe", that.selectedLevel1.wbe);
+            that.MarkingPopupModel.setProperty("/machineSection", that.selectedLevel1.machineSection);
             that.MarkingPopupModel.setProperty("/selectedLevel1", that.selectedLevel1);
             that.MarkingPopupModel.setProperty("/selectedLevel2", that.selectedLevel2);
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathPersonnelNumberApi = "/db/getMarkingTesting";
+            let url = BaseProxyURL + pathPersonnelNumberApi;
+
+            let params = {
+                plant: plant,
+                project: that.selectedLevel1.project,
+                type: "M"
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response.length > 0) {
+                    that.MarkingPopupModel.setProperty("/confirmNumber", response[0].confirmation_number);
+                    that.MarkingPopupModel.setProperty("/network", response[0].network);
+                    that.MarkingPopupModel.setProperty("/activity", response[0].activity_id);
+                    that.MarkingPopupModel.setProperty("/activityID", response[0].id_lev_1);
+                }
+            };
+
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata POST fallita: ", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+
+
         },
 
         onRetrievePersonnelNumber: function () {
@@ -106,7 +136,7 @@ sap.ui.define([
 
         onConfirmPress: function () {
             var that = this;
-
+ 
             if (that.validate()) {
                 const today = new Date();
                 const today00 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -135,6 +165,7 @@ sap.ui.define([
             var infoModel = that.MainPODcontroller.getInfoModel();
             var plant = infoModel.getProperty("/plant");
             let user = infoModel.getProperty("/user_id");
+            var dataModel = that.MainPODcontroller.getView().getModel("PODSfcModel").getProperty("/")
             
             var personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
             let network = that.MarkingPopupModel.getProperty("/network");
@@ -165,11 +196,13 @@ sap.ui.define([
                 unCancellation: "",
                 unConfirmation: "X",
                 rowSelectedWBS: rowSelectedWBS,
-                userId: user
+                userId: user,
+                sfc: dataModel.sfc,
+                order: dataModel.order
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
-            let pathSendMarkingApi = "/api/sendZDMConfirmations";
+            let pathSendMarkingApi = "/api/sendZDMConfirmationsTesting";
             let url = BaseProxyURL + pathSendMarkingApi;
 
             // Callback di successo

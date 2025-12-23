@@ -7,7 +7,7 @@
     controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.EngChangesPopup"
     width="100%"
     height="100%">
-    <Dialog title="Eng. Changes" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="true" horizontalScrolling="true"> 
+    <Dialog title="Eng. Changes" showHeader="true" contentHeight="90%"  contentWidth="90%" verticalScrolling="true" horizontalScrolling="true"> 
         <content>
             <!-- Container principale -->
             <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
@@ -20,7 +20,7 @@
                         <Button text="Collapse all" press="onCollapseAll" icon="sap-icon://collapse-group" />
                     </Toolbar>
                     <t:TreeTable id="treeTableEngChangesPopup" width="100%" busy="{/BusyLoadingOpTable}"  selectionMode="Single" class="kpmgGDTable" rows="{/results}" enableColumnReordering="true" 
-                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="10" rowHeight="45px" >
+                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="12" rowHeight="45px" >
                         <t:layoutData>
                             <FlexItemData growFactor="1" baseSize="0%"/>
                         </t:layoutData>
@@ -50,21 +50,15 @@
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
-                                <Label text="{i18n>engChanges.treeTable.materialDescription}"/>
+                                <Label text="{i18n>engChanges.treeTable.order}"/>
                                 <t:template>
-                                    <Text text="{materialDescription}" wrapping="false"/>
+                                    <Text text="{order}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.childMaterial}"/>
                                 <t:template>
                                     <Text text="{childMaterial}" wrapping="false"/>
-                                </t:template>
-                            </t:Column>
-                            <t:Column width="12%" hAlign="Center">
-                                <Label text="{i18n>engChanges.treeTable.childMaterialDescription}"/>
-                                <t:template>
-                                    <Text text="{childMaterialDescription}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">

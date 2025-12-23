@@ -7,7 +7,7 @@
     controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.AdditionalOperationsPopup"
     width="100%"
     height="100%">
-    <Dialog id="AdditionalOperationsDialog" title="Additional Operations" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="true" horizontalScrolling="true"> 
+    <Dialog id="AdditionalOperationsDialog" title="Additional Operations" showHeader="true" contentHeight="90%"  contentWidth="90%" verticalScrolling="true" horizontalScrolling="true"> 
         <content>
             <!-- Container principale -->
             <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
@@ -15,22 +15,25 @@
                 <!-- 1) Filters -->
                 <VBox width="100%" height="10%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod containerAddOpts">
                     <HBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod paddingTopTestataSmall">
-                        <HBox renderType="Bare" alignItems="Center" width="45%">
+                        <HBox renderType="Bare" alignItems="Center" width="40%">
                             <Label text="Section:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
                             <MultiComboBox 
                                 width="70%" 
                                 items="{/filters/section}" 
-                                selectionChange="changeFilter"
                                 selectedKeys="{/filterValue/sections}">
                                 <core:ListItem key="{section}" text="{section}" />
                             </MultiComboBox>
                         </HBox>
-                        <HBox renderType="Bare" alignItems="Center" width="45%">
+                        <HBox renderType="Bare" alignItems="Center" width="40%">
                             <Label text="Material:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
-                            <Select selectedKey="{/filterValue/material}" width="70%" items="{/filters/material}" showSecondaryValues="true" change="changeFilter">
+                            <ComboBox 
+                                width="70%" 
+                                items="{/filters/material}" 
+                                selectedKey="{/filterValue/material}">
                                 <core:ListItem key="{material}" text="{material}" />
-                            </Select>
+                            </ComboBox>
                         </HBox>
+                        <Button text="{i18n>podSelection.button.search}" width="15%" icon="sap-icon://search" type="Emphasized" class="searchButton" press="onSearchOpts" />
                     </HBox>
                 </VBox>
 
@@ -46,49 +49,61 @@
                 <VBox width="100%" height="40%" renderType="Bare" alignItems="Center" justifyContent="Center" class="mainContainer containerAddOpts">
                     <Panel expandable="true" expanded="true" headerText="Assembly">
                         <t:Table id="assemblyOperationsTable" rowSelectionChange="onSelectionAssemblyOperations" busy="{/BusyLoadingOpTable}" 
-                            class="kpmgGDTable mediumPaddingTable" rows="{/assemblyOperations}" selectionMode="Single" 
-                            selectionBehavior="RowOnly" visibleRowCountMode="Auto" rowHeight="45px" >
+                            class="kpmgGDTable mediumPaddingTable" rows="{/assemblyOperations}" selectionMode="Single" visibleRowCount="10" 
+                            selectionBehavior="RowOnly" rowHeight="45px" >
                             <t:layoutData>
                                 <FlexItemData growFactor="1" baseSize="0%"/>
                             </t:layoutData>
                             <t:columns>
-                                <t:Column sortProperty="section" width="16%"  hAlign="Center">
-                                    <Label text="{i18n>additionalOperations.table.machine}"  />
+                                <t:Column sortProperty="section" filterProperty="section" width="16%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.section}"  />
                                     <t:template>
                                         <Text text="{section}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="material" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="material" filterProperty="material"  width="16%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.material}"  />
                                     <t:template>
                                         <Text text="{material}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="group_code" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="order" filterProperty="order" width="16%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.order}"  />
+                                    <t:template>
+                                        <Text text="{order}"></Text>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column sortProperty="group_code" filterProperty="group_code" width="16%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.groupCode}"  />
                                     <t:template>
                                         <Text text="{group_code}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="operation" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="group_description" filterProperty="group_description" width="16%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.groupCodeDesc}"  />
+                                    <t:template>
+                                        <Text text="{group_description}"></Text>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column sortProperty="operation" filterProperty="operation" width="16%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.operation}"  />
                                     <t:template>
                                         <Text text="{operation}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="operation_description" width="20%"  hAlign="Center">
+                                <t:Column sortProperty="operation_description" filterProperty="operation_description"  width="20%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.description}"  />
                                     <t:template>
                                         <Text text="{operation_description}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column width="8%" hAlign="Center">
+                                <t:Column width="8%" hAlign="Center" sortProperty="nonconformances">
                                     <Label text="{i18n>additionalOperations.treeTable.nc}"  />
                                     <t:template>
-                                        <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{nonconformances}" class="iconSecondoLivello" />
+                                        <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{nonconformances}" class="iconSecondoLivello" press="viewDefects" />
                                     </t:template>
                                 </t:Column>
-                                <t:Column width="8%" hAlign="Center">
+                                <t:Column width="8%" hAlign="Center" sortProperty="status">
                                     <Label text="{i18n>additionalOperations.table.status}"/>
                                     <t:template>
                                         <core:Icon src="{path: 'status',formatter: '.getStatusIcon'}" color="{path: 'status', formatter: '.getStatusColor' }" class="iconSecondoLivello" />
@@ -109,44 +124,62 @@
                 <VBox width="100%" height="40%" renderType="Bare" alignItems="Center" justifyContent="Center" class="mainContainer containerAddOpts">
                     <Panel expandable="true" expanded="true" headerText="Testing">
                         <t:Table id="testingOperationsTable" rowSelectionChange="onSelectionTestingOperations" busy="{/BusyLoadingOpTable}" 
-                            class="kpmgGDTable mediumPaddingTable" rows="{/testingOperations}" selectionMode="Single" 
-                            selectionBehavior="RowOnly" visibleRowCountMode="Auto" rowHeight="45px" >
+                            class="kpmgGDTable mediumPaddingTable" rows="{/testingOperations}" selectionMode="Single"  visibleRowCount="10" 
+                            selectionBehavior="RowOnly" rowHeight="45px" >
                             <t:layoutData>
                                 <FlexItemData growFactor="1" baseSize="0%"/>
                             </t:layoutData>
                             <t:columns>
-                                <t:Column sortProperty="section" width="16%"  hAlign="Center">
-                                    <Label text="{i18n>additionalOperations.table.machine}"  />
+                                <t:Column sortProperty="section" filterProperty="section" width="19%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.section}"  />
                                     <t:template>
                                         <Text text="{section}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="material" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="material" filterProperty="material" width="18%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.material}"  />
                                     <t:template>
                                         <Text text="{material}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="group_code" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="order" filterProperty="order" width="17%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.order}"  />
+                                    <t:template>
+                                        <Text text="{order}"></Text>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column sortProperty="group_code" filterProperty="group_code" width="17%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.groupCode}"  />
                                     <t:template>
                                         <Text text="{group_code}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="operation" width="16%"  hAlign="Center">
+                                <t:Column sortProperty="group_description" filterProperty="group_description" width="18%"  hAlign="Center">
+                                    <Label text="{i18n>additionalOperations.table.groupCodeDesc}"  />
+                                    <t:template>
+                                        <Text text="{group_description}"></Text>
+                                    </t:template>
+                                </t:Column>
+                                <t:Column sortProperty="operation" filterProperty="operation" width="16%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.operation}"  />
                                     <t:template>
                                         <Text text="{operation}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column sortProperty="operation_description" width="20%"  hAlign="Center">
+                                <t:Column sortProperty="operation_description" filterProperty="operation_description" width="20%"  hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.description}"  />
                                     <t:template>
                                         <Text text="{operation_description}"></Text>
                                     </t:template>
                                 </t:Column>
-                                <t:Column width="8%" hAlign="Center">
-                                    <Label text="{i18n>additionalOperations.table.status}"/>
+                                <t:Column width="8%" hAlign="Center" sortProperty="nonconformances">
+                                    <Label text="{i18n>additionalOperations.treeTable.nc}"  />
+                                    <t:template>
+                                        <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{nonconformances}" class="iconSecondoLivello" press="viewDefects" />
+                                    </t:template>
+                                </t:Column>
+                                <t:Column width="8%" hAlign="Center" sortProperty="status">
+                                    <Label text="{i18n>additionalOperations.table.status}" />
                                     <t:template>
                                         <core:Icon src="{path: 'status',formatter: '.getStatusIcon'}" color="{path: 'status', formatter: '.getStatusColor' }" class="iconSecondoLivello" />
                                     </t:template>

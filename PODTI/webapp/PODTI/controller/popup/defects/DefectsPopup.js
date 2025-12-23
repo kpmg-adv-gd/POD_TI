@@ -10,7 +10,7 @@ sap.ui.define([
     return Dialog.extend("kpmg.custom.pod.PODTI.PODTI.controller.popup.defects.DefectsPopup", {
         ViewDefectPopup: new ViewDefectPopup(),
 
-        open: function (oView, oController) {
+        open: function (oView, oController, fromTabAdditionalOperations, selectedObject) {
             var that = this;
             that.DefectsModel = new JSONModel();
             that.MainPODview = oView;
@@ -19,7 +19,7 @@ sap.ui.define([
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.defects.DefectsPopup", oView, that.DefectsModel);
 
             that.loadFilters();
-            that.loadDefects();
+            fromTabAdditionalOperations ? that.loadDefectsFromAdditionalOperations(selectedObject) : that.loadDefects();
             that.openDialog();
         },
         loadFilters: function(){
@@ -101,6 +101,38 @@ sap.ui.define([
             that.DefectsModel.setProperty("/BusyLoadingOpTable", true);
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,false,true);
 		},
+        loadDefectsFromAdditionalOperations: function(selectedObject){
+			var that=this;
+
+            let infoModel = that.MainPODcontroller.getInfoModel();
+            let BaseProxyURL = that.MainPODcontroller.getInfoModel().getProperty("/BaseProxyURL");
+            let pathApi = "/db/getDefectsFromAdditionalOperationsTI";
+            let url = BaseProxyURL+pathApi;
+
+            var plant = infoModel.getProperty("/plant");
+
+            let params = {
+                "plant": plant,
+                "project": selectedObject.project,
+                "operation": selectedObject.operation,
+                "sfc": selectedObject.sfc
+            }
+            // Callback di successo
+            var successCallback = function(response) {
+                that.DefectsModel.setProperty("/defectsNoFilter", response);
+                that.DefectsModel.setProperty("/defects", response);
+                that.DefectsModel.setProperty("/BusyLoadingOpTable", false);
+            };
+
+            // Callback di errore
+            var errorCallback = function(error) {
+                console.log("Chiamata POST fallita:", error);
+                that.DefectsModel.setProperty("/BusyLoadingOpTable", false);
+            };
+            
+            that.DefectsModel.setProperty("/BusyLoadingOpTable", true);
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,false,true);
+		},
         onClosePress: function(oEvent) {
             var that = this;
             sap.m.MessageBox.show(
@@ -123,8 +155,8 @@ sap.ui.define([
             let infoModel = that.MainPODcontroller.getInfoModel();
 
             var plant = infoModel.getProperty("/plant");
-            var sfc = infoModel.getProperty("/selectedSFC/sfc");
-            var order = infoModel.getProperty("/selectedSFC/order");
+            var sfc = defect.sfc;
+            var order = defect.dm_order;
 
             let params = {
                 id: defect.id,
@@ -147,7 +179,7 @@ sap.ui.define([
             // Callback di errore
             var errorCallback = function(error) {
                 console.log("Chiamata POST fallita:", error);
-                that.showErrorMessageBox(that.MainPODcontroller.getI18n("defect.close.error.message"));
+                that.MainPODcontroller.showErrorMessageBox(that.MainPODcontroller.getI18n("defect.close.error.message"));
             };
             
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that, true, true);

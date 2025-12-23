@@ -140,6 +140,7 @@ sap.ui.define([
             var wbe = objStatusModified.wbe;
             let process_id = parent.processId;
             let prog_eco = parent.progEco;
+            let order = objStatusModified.order;
             var material = parent.material;
             var child_material = objStatusModified.childMaterial;
             var type = parent.type;
@@ -154,6 +155,7 @@ sap.ui.define([
                 prog_eco: prog_eco,
                 newStatus: status,
                 material: material,
+                order: order,
                 child_material: child_material,
                 type: type,
                 order: objStatusModified.order,

@@ -17,12 +17,12 @@ sap.ui.define([
 
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.MarkingPopup", oView, that.MarkingPopupModel);
             that.loadHeaderData();
-            that.loadMarkingData();
             that.onRetrievePersonnelNumber();
             that.setMarkingEnabled(isMarkingEnabled);
             that.openDialog();
             that.clearData();
             that.searchDefects();
+            that.getOrder(that.MarkingPopupModel.getProperty("/order"));
         },
 
         clearData: function () {
@@ -45,21 +45,50 @@ sap.ui.define([
             var modelSFC = that.MainPODcontroller.getView().getModel("PODSfcModel").getProperty("/")
 
             if (!that.isAdditionalOperation) var primoLivello = infoModel.getProperty("/selectedPrimoLivello")
+            if (!that.isAdditionalOperation) var sfc = modelSFC.sfc || ""; else var sfc = that.markOperation.sfc; 
+            if (!that.isAdditionalOperation) var order = modelSFC.order || ""; else var order = that.markOperation.order;
 
-            const wbe = modelSFC.WBE || "";
-            const sfc = modelSFC.sfc|| "";
-            const order = modelSFC.order || "";
             const operation = (that.isAdditionalOperation ? that.markOperation.operation : primoLivello.operation) || "";
             const operationDescription = (that.isAdditionalOperation ? that.markOperation.description : primoLivello.description) || "";
 
-            that.MarkingPopupModel.setProperty("/wbe", wbe);
             that.MarkingPopupModel.setProperty("/sfc", sfc);
             that.MarkingPopupModel.setProperty("/order", order);
             that.MarkingPopupModel.setProperty("/operation", operation);
             that.MarkingPopupModel.setProperty("/operationDescription", operationDescription);
 
         },
+        
+        getOrder: function (order) {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
 
+            var plant = infoModel.getProperty("/plant");
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/api/order/v1/orders";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+            url += "?plant=" + plant;
+            url += "&order=" + order;
+
+            let params = {
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response.orderResponse.customValues.filter(custom => custom.attribute == "WBE").length > 0)
+                    that.MarkingPopupModel.setProperty("/wbe", response.orderResponse.customValues.filter(custom => custom.attribute == "WBE")[0].value);
+                if (that.isAdditionalOperation) that.loadMarkingData();
+                else that.loadMarkingDataTesting();
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata GET fallita: ", error);
+            };
+            CommonCallManager.callProxy("GET", url, params, true, successCallback, errorCallback, that);
+
+        },
+
+        // Recupero dati per additional operations
         loadMarkingData: function () {
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
@@ -68,9 +97,10 @@ sap.ui.define([
             let pathGetMarkingDataApi = "/db/getMarkingData";
             let url = BaseProxyURL + pathGetMarkingDataApi;
 
-            let wbe_machine = infoModel.getProperty("/selectedSFC/WBE") || "";
-            let mes_order = infoModel.getProperty("/selectedSFC/order") || "";
-            let operation = that.isAdditionalOperation ? that.markOperation.operation : infoModel.getProperty("/selectedPrimoLivello").operation;
+            let wbe_machine = that.MarkingPopupModel.getProperty("/wbe");
+            
+            var mes_order = that.markOperation.order;
+            let operation = that.markOperation.operation;
 
             let params = {
                 wbe_machine: wbe_machine,
@@ -95,6 +125,51 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
                     that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
+                }
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata POST fallita: ", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+        },
+        
+        // Recupero dati per tab operazioni
+        loadMarkingDataTesting: function () {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+
+            var plant = infoModel.getProperty("/plant");
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/db/getMarkingDataTesting";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+
+            var project = infoModel.getProperty("/selectedSFC/project");
+            
+            let params = {
+                plant: plant,
+                wbs: project,
+                id_lev_1: infoModel.getProperty("/selectedPrimoLivello").id
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response.length > 0) {
+                    that.MarkingPopupModel.setProperty("/confirmNumber", response[0].confirmation_number || "");
+                    const plannedLabor = response[0]?.planned_labor ?? 0;
+                    const markedLabor = response[0]?.marked_labor ?? 0;
+                    const remainingLabor = response[0]?.remaining_labor ?? 0;
+                    const varianceLabor = response[0]?.variance_labor ?? 0;
+
+                    that.MarkingPopupModel.setProperty("/plannedLabor", Math.round(plannedLabor));
+                    that.MarkingPopupModel.setProperty("/uom_planned_labor", response[0].uom_planned_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/markedLabor", Math.round(markedLabor));
+                    that.MarkingPopupModel.setProperty("/uom_marked_labor", response[0].uom_marked_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/remainingLabor", Math.round(remainingLabor));
+                    that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
+                    that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
+                    that.MarkingPopupModel.setProperty("/selectedMarkingTesting", response[0]);
                 }
             };
             // Callback di errore
@@ -390,8 +465,9 @@ sap.ui.define([
             var that = this;
 
             var infoModel = that.MainPODcontroller.getInfoModel();
-            var sfc = infoModel.getProperty("/selectedSFC/sfc");
-            var order = infoModel.getProperty("/selectedSFC/order");
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.markOperation.sfc; 
+
+            if (!that.isAdditionalOperation) var order = infoModel.getProperty("/selectedSFC/order") || ""; else var order = that.markOperation.order;
             var plant = infoModel.getProperty("/plant");
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathModificationApi = "/db/getModificationsBySfc";
@@ -432,7 +508,7 @@ sap.ui.define([
         sendToSapAndInsertIntoZTable: function () {
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
-            var sfc = infoModel.getProperty("/selectedSFC/sfc");
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.markOperation.sfc; 
             var workCenter = infoModel.getProperty("/selectedSFC/workcenter_lev_2");
             var plant = infoModel.getProperty("/plant");
             var project = infoModel.getProperty("/selectedSFC/COMMESSA");
@@ -508,6 +584,72 @@ sap.ui.define([
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,true,true);
         },
 
+        sendToSapTestingAndInsertIntoZTable: function () {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+            var plant = infoModel.getProperty("/plant");
+            let user = infoModel.getProperty("/user_id");
+            var selectedMarkingTesting = that.MarkingPopupModel.getProperty("/selectedMarkingTesting")
+            
+            var personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
+            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmNumber");
+
+            var hh = parseInt(that.getView().byId("hhInputId").getValue(),10);
+            var mm = parseInt(that.getView().byId("mmInputId").getValue(),10);
+            if(!hh) hh=0;
+            if(!mm) mm=0;
+            var duration = Math.round( (hh + (mm/60)) * 100);
+
+            let modification = that.getView().byId("selectedUpdateText").getText() || "";
+            let variance = that.getView().byId("selectedVarianceText").getText() || "";
+            var defect = that.MarkingPopupModel.getProperty("/defectSelected") || "";
+
+            let params = {
+                plant: plant,
+                activityNumber: selectedMarkingTesting.network,
+                activityNumberId: selectedMarkingTesting.activity_id,
+                cancellation: "",
+                confirmation: "",
+                confirmationCounter: "",
+                confirmationNumber: confirmation_number,
+                date: that.getView().byId("markingDatePicker").getValue(),
+                duration: "" + duration,
+                durationUom: "HCN",
+                sfc: that.MarkingPopupModel.getProperty("/sfc"),
+                order: that.MarkingPopupModel.getProperty("/order"),
+                personalNumber: personnelNumber,
+                unCancellation: "",
+                unConfirmation: "X",
+                rowSelectedWBS: {
+                    wbs: selectedMarkingTesting.wbs,
+                    wbs_description:  that.MarkingPopupModel.getProperty("/operation"),
+                    wbe: selectedMarkingTesting.wbs,
+                    wbe_description: null,
+                },
+                userId: user,
+                modification: modification == "" ? null : modification,
+                reasonForVariance: variance == "" ? null : that._selectedCause,
+                defect: defect == "" ? null : defect
+            }
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathSendMarkingApi = "/api/sendZDMConfirmationsTesting";
+            let url = BaseProxyURL + pathSendMarkingApi;
+
+            // Callback di successo
+            var successCallback = function (response) {
+                that.MainPODcontroller.showToast(that.MainPODcontroller.getI18n("marking.success.message"));
+                that.onClosePopup();
+            };
+
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata POST fallita: ", error);
+                that.MainPODcontroller.showErrorMessageBox(that.MainPODcontroller.getI18n("marking.saveData.error.message"));
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,true,true);
+        },
+
         validate: function () {
             var that = this;
             var sMarkingDate = that.getView().byId("markingDatePicker").getValue();
@@ -552,7 +694,7 @@ sap.ui.define([
             let url = BaseProxyURL + pathGetMarkingDataApi;
 
             var routing = "";
-            var sfc = infoModel.getProperty("/selectedSFC/sfc");
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.markOperation.sfc; 
             var plant = infoModel.getProperty("/plant");
             let routingStepId = that.isAdditionalOperation ? that.markOperation.step_id : infoModel.getProperty("/selectedPrimoLivello").id;
 
@@ -621,7 +763,7 @@ sap.ui.define([
             var that = this;
 
             if (that.validate()) {
-                that.sendToSapAndInsertIntoZTable();
+                that.isAdditionalOperation ? that.sendToSapAndInsertIntoZTable() : that.sendToSapTestingAndInsertIntoZTable();
             } else {
                 that.MainPODcontroller.showErrorMessageBox(that.MainPODcontroller.getI18n("marking.error.message"));
             }

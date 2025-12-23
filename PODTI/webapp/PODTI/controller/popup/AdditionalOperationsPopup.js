@@ -5,14 +5,16 @@ sap.ui.define([
     "../../utilities/GenericDialog",
     "./defects/OpenDefectPopup",
     "./MarkingPopup",
-    "./SinotticoPopup"
-], function (JSONModel, BaseController, CommonCallManager, Dialog, OpenDefectPopup, MarkingPopup, SinotticoPopup) {
+    "./SinotticoPopup",
+    "./defects/DefectsPopup",
+], function (JSONModel, BaseController, CommonCallManager, Dialog, OpenDefectPopup, MarkingPopup, SinotticoPopup,DefectsPopup) {
     "use strict";
 
     return Dialog.extend("kpmg.custom.pod.PODTI.PODTI.controller.popup.AdditionalOperationsPopup", {
         OpenDefectPopup: new OpenDefectPopup(),
         MarkingPopup: new MarkingPopup(),
         SinotticoPopup: new SinotticoPopup(),
+        DefectsPopup: new DefectsPopup(),
 
         open: function (oView, oController) {
             var that = this;
@@ -32,8 +34,8 @@ sap.ui.define([
 
             var sections = [], materials = [{material: ""}];
             operations.forEach(item => {
-                if (!sections.includes(item.section)) sections.push({section: item.section});
-                if (!materials.includes(item.material)) materials.push({material: item.material});
+                if (sections.filter(section => section.section == item.section).length == 0) sections.push({section: item.section});
+                if (materials.filter(material => material.material == item.material).length == 0) materials.push({material: item.material});
             });
             
             that.AdditionalOperationsModel.setProperty("/filters", {
@@ -41,8 +43,9 @@ sap.ui.define([
                 material: materials
             });
             that.AdditionalOperationsModel.setProperty("/filterValue", {sections: [], material: ""});
+            that.onSearchOpts();
 		},
-        changeFilter: function () {
+        onSearchOpts: function () {
             var that = this;
             var filters = that.AdditionalOperationsModel.getProperty("/filterValue");
             var assemblyOperations = that.AdditionalOperationsModel.getProperty("/assemblyOperationsAll");
@@ -80,21 +83,25 @@ sap.ui.define([
                 that.AdditionalOperationsModel.setProperty("/assemblyOperationsAll", response.filter(item => item.phase == "Assembly"));
                 that.AdditionalOperationsModel.setProperty("/testingOperationsAll", response.filter(item => item.phase == "Testing"));
 
-                that.AdditionalOperationsModel.setProperty("/assemblyOperations", response.filter(item => item.phase == "Assembly"));
-                that.AdditionalOperationsModel.setProperty("/testingOperations", response.filter(item => item.phase == "Testing"));
-            that.AdditionalOperationsModel.setProperty("/BusyLoadingOpTable", false);
+                that.AdditionalOperationsModel.setProperty("/BusyLoadingOpTable", false);
                 that.loadFilters(response);
             };
 
             // Callback di errore
             var errorCallback = function(error) {
                 console.log("Chiamata POST fallita:", error);
-            that.AdditionalOperationsModel.setProperty("/BusyLoadingOpTable", false);
+                that.AdditionalOperationsModel.setProperty("/BusyLoadingOpTable", false);
             };
             
             that.AdditionalOperationsModel.setProperty("/BusyLoadingOpTable", true);
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that,false,true);
 		},
+
+        viewDefects: function (oEvent) {
+            var that = this;
+            var selectedObject = oEvent.getSource().getBindingContext().getObject();
+            that.DefectsPopup.open(that.MainPODview, that.MainPODcontroller, true, selectedObject);
+        },
 
         onStartOperationPress: function (oEvent) {
             var that = this;
@@ -104,7 +111,7 @@ sap.ui.define([
                 that.MainPODcontroller.showErrorMessageBox("No operation has been selected.");
                 return;
             }
-            that.getIfUserCertificatedForWorkcenter(selectedObject, "start")
+           that.startOperation(selectedObject)
         },
 
         onCompleteOperationPress: function (oEvent) {
@@ -115,35 +122,38 @@ sap.ui.define([
                 that.MainPODcontroller.showErrorMessageBox("No operation has been selected.");
                 return;
             }
-            that.getIfUserCertificatedForWorkcenter(selectedObject, "complete")
+            that.getOrderComplete(selectedObject);
         },
 
-        // check certification
-        getIfUserCertificatedForWorkcenter: function (selectedObject, typeOperation){
-            var that=this;
-            let BaseProxyURL = that.MainPODcontroller.getInfoModel().getProperty("/BaseProxyURL");
-            let pathAPIUserCertificatedWorkcenter = "/api/checkUserWorkCenterCertification";
-            let url = BaseProxyURL+pathAPIUserCertificatedWorkcenter
-            
-            let params={
-                plant: that.MainPODcontroller.getInfoModel().getProperty("/plant"),
-                userId: that.MainPODcontroller.getInfoModel().getProperty("/user_id"),
-                workCenter: selectedObject.workcenter
+        getOrderComplete: function (selectedObject) {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+            var plant = infoModel.getProperty("/plant");
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/api/order/v1/orders";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+            url += "?plant=" + plant;
+            url += "&order=" + selectedObject.order;
+
+            let params = {
             };
 
             // Callback di successo
-            var successCallback = function(response) {
-                if(response){
-                    typeOperation == "start" ? that.startOperation(selectedObject) : that.completeOperation(selectedObject)
-                } else {
-                    that.MainPODcontroller.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
-                }
+            var successCallback = function (response) {
+                if (response.orderResponse.customValues.filter(custom => custom.attribute == "ECO_TYPE").length > 0)
+                    var ecoType = response.orderResponse.customValues.filter(custom => custom.attribute == "ECO_TYPE")[0].value || "";
+                // Check su complete dell'operazione
+                //Controllo se l'operazione che sto completando è l'ultima operazione dell'sfc da completare
+                let checkModificheLastOperation = false;
+                if(ecoType && ecoType != "") checkModificheLastOperation = true;
+                that.completeOperation(selectedObject, checkModificheLastOperation, ecoType)
             };
             // Callback di errore
-            var errorCallback = function(error) {
-                console.log("Chiamata POST fallita:", error);
+            var errorCallback = function (error) {
+                console.log("Chiamata GET fallita: ", error);
             };
-            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+            CommonCallManager.callProxy("GET", url, params, true, successCallback, errorCallback, that);
 
         },
 
@@ -178,7 +188,7 @@ sap.ui.define([
         },
 
         // COMPLETE operation
-        completeOperation: function (selectedObject) {
+        completeOperation: function (selectedObject, checkModificheLastOperation, ecoType) {
             var that = this;
             let BaseProxyURL = that.MainPODcontroller.getInfoModel().getProperty("/BaseProxyURL");
             let pathOrderBomApi = "/db/completeAdditionalOperation";
@@ -190,7 +200,11 @@ sap.ui.define([
                 "plant": plant,
                 "sfc": selectedObject.sfc,
                 "operation": selectedObject.operation,
+                "project": selectedObject.project,
                 "phase": selectedObject.phase,
+                "order": selectedObject.order,
+                "checkModificheLastOperation": checkModificheLastOperation,
+                "valueModifica": ecoType
             };
 
             // Callback di successo
@@ -240,6 +254,10 @@ sap.ui.define([
             var selectedObject = that.AdditionalOperationsModel.getProperty("/selectedOperations");
             if (!selectedObject) {
                 that.MainPODcontroller.showErrorMessageBox("No operation has been selected.");
+                return;
+            }
+            if (selectedObject.status == "Done") {
+                that.MainPODcontroller.showErrorMessageBox("The operation is completed, cannot open defect.");
                 return;
             }
             that.OpenDefectPopup.open(that.MainPODview, that.MainPODcontroller, selectedObject, true);
@@ -319,28 +337,24 @@ sap.ui.define([
         //formatter per collonna status (ICONA) front-end
         getStatusIcon: function (code) {
             switch (code) {
-                case "New":
+                case "In Queue":
                     return "sap-icon://rhombus-milestone-2";
                 case "In Work":
                     return "sap-icon://circle-task-2";
                 case "Done":
                     return "sap-icon://complete";
-                case "In Queue":
-                    return "sap-icon://color-fill";
                 default:
                     return "";
             }
         },
         getStatusColor: function (code) {
             switch (code) {
-                case "New": // new
+                case "In Queue": // new
                     return "grey";
                 case "In Work": // in work
-                    return "green"; // Blu
+                    return "green";
                 case "Done": // done
                     return "green"; // Verde
-                case "In Queue":
-                    return "blue"
                 default:
                     return "Default"; // Colore di default
             }

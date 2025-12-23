@@ -7,7 +7,7 @@
     controllerName="kpmg.custom.pod.PODTI.PODTI.controller.popup.WorkInstructionsPopup"
     width="100%"
     height="100%">
-    <Dialog title="Work Instructions" showHeader="true" contentHeight="700px"  contentWidth="1500px" verticalScrolling="true" horizontalScrolling="true"> 
+    <Dialog title="Work Instructions" showHeader="true" contentHeight="90%"  contentWidth="90%" verticalScrolling="true" horizontalScrolling="true"> 
         <content>
             <!-- Container principale -->
             <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">

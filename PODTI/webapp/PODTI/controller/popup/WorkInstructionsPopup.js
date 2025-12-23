@@ -35,7 +35,9 @@ sap.ui.define([
             let params = {
                 plant: plant, 
                 sfc: sfc,
-                operation: that.primoLivello.operation ,
+                operation: that.primoLivello.operation,
+                idLev1: that.primoLivello.id,
+                idLev2: that.terzoLivello.parent_id_lev_2,
                 idLev3: that.terzoLivello.id_lev_3
             }
 

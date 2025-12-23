@@ -17,19 +17,19 @@
                     <HBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod paddingTopTestataSmall">
                         <HBox renderType="Bare" alignItems="Center" width="30%">
                             <Label text="Phase:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
-                            <Select id="phaseId" selectedKey="{/filterValue/phase}" width="70%" items="{/filters/phase}" showSecondaryValues="true" change="changeFilter">
+                            <Select selectedKey="{/filterValue/phase}" width="70%" items="{/filters/phase}" showSecondaryValues="true" change="changeFilter">
                                 <core:ListItem key="{phase}" text="{phase}" />
                             </Select>
                         </HBox>
                         <HBox renderType="Bare" alignItems="Center" width="30%">
                             <Label text="Priority:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
-                            <Select id="priorityId" selectedKey="{/filterValue/priority}" width="70%" items="{/filters/priority}" showSecondaryValues="true" change="changeFilter">
+                            <Select  selectedKey="{/filterValue/priority}" width="70%" items="{/filters/priority}" showSecondaryValues="true" change="changeFilter">
                                 <core:ListItem key="{priority}" text="{description}" />
                             </Select>
                         </HBox>
                         <HBox renderType="Bare" alignItems="Center" width="30%">
                             <Label text="Status:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
-                            <Select id="statusId" selectedKey="{/filterValue/status}" width="70%" items="{/filters/status}" showSecondaryValues="true" change="changeFilter">
+                            <Select selectedKey="{/filterValue/status}" width="70%" items="{/filters/status}" showSecondaryValues="true" change="changeFilter">
                                 <core:ListItem key="{status}" text="{status}" />
                             </Select>
                         </HBox>
@@ -45,7 +45,7 @@
                         <Button text="Collapse all" press="onCollapseAll" icon="sap-icon://collapse-group" />
                     </Toolbar>
                     <t:TreeTable id="treeTableDefectPopup" width="100%" busy="{/BusyLoadingOpTable}" selectionMode="Single" class="kpmgGDTable" rows="{/defects}" enableColumnReordering="true" 
-                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="8" rowHeight="45px" >
+                        enableGrouping="true" selectionBehavior="RowOnly" visibleRowCount="10" rowHeight="45px" >
                         <t:layoutData>
                             <FlexItemData growFactor="1" baseSize="0%"/>
                         </t:layoutData>

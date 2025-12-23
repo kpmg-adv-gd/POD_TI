@@ -25,7 +25,7 @@ sap.ui.define([
             that.getNotificationType();
             that.getResponsible();
             that.getVariance();
-            that.getMaterials();
+            if (!isAdditionalOperation) that.getMaterials();
             that.getCauses();
 
             that.openDialog();
@@ -65,13 +65,65 @@ sap.ui.define([
             var infoModel = that.MainPODcontroller.getInfoModel();
 
             const wbe = infoModel.getProperty("/selectedSFC/WBE") || "";
-            const sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
             const wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
 
             that.OpenDefectModel.setProperty("/wbe", wbe);
             that.OpenDefectModel.setProperty("/sfc", sfc);
             that.OpenDefectModel.setProperty("/wc", wc);
+            that.OpenDefectModel.setProperty("/isAdditionalOperation", that.isAdditionalOperation);
+            if (that.isAdditionalOperation) {
+                that.OpenDefectModel.setProperty("/defect/material", that.selectedObject.group_code)
+                try {
+                    var order = that.selectedObject.mes_order;
+                    that.getOrderAddOpts(order);
+                } catch (e) {
+                    console.log("Materiale o Ordine non trovato");
+                }
+            }
 
+        },
+
+        getOrderAddOpts: function (order) {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+
+            var plant = infoModel.getProperty("/plant");
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/api/order/v1/orders";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+            url += "?plant=" + plant;
+            url += "&order=" + order;
+
+            let params = {
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response.orderResponse && response.orderResponse.bom) {
+                    if (response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE").length > 0
+                        && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "GRPF") {
+                            that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Purchase Doc.");
+                            that.OpenDefectModel.setProperty("/defect/prodOrder", response.orderResponse.customValues.filter(custom => custom.attribute == "PURCHASE_ORDER")[0].value);
+                    } else if (response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE").length > 0
+                            && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "ZMGF") {
+                        that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Prod. Order");
+                        that.OpenDefectModel.setProperty("/defect/prodOrder", "");
+                    } else{
+                        that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Prod. Order");
+                        that.OpenDefectModel.setProperty("/defect/prodOrder", order);
+                    }
+                    that.OpenDefectModel.setProperty("/defect/typeOrder", response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value);
+                }
+                that.getAssemblies(response.orderResponse.bom.bom, response.orderResponse.bom.type);
+                that.OpenDefectModel.setProperty("/wbe", response.orderResponse.customValues.filter(custom => custom.attribute == "WBE")[0].value);
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata GET fallita: ", error);
+            };
+            CommonCallManager.callProxy("GET", url, params, true, successCallback, errorCallback, that);
 
         },
 
@@ -228,43 +280,6 @@ sap.ui.define([
                 console.log("Chiamata GET fallita: ", error);
             };
             CommonCallManager.callProxy("GET", url, params, true, successCallback, errorCallback, that);
-        },
-        getAssemblies: function (bom, type) {
-            var that = this;
-
-            var infoModel = that.MainPODcontroller.getInfoModel();
-
-            var plant = infoModel.getProperty("/plant");
-
-            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
-            let pathGetMarkingDataApi = "/api/bom/v1/boms";
-            let url = BaseProxyURL + pathGetMarkingDataApi;
-            url += "?plant=" + plant;
-            url += "&bom=" + bom;
-            url += "&type=" + type;
-
-            // Callback di successo
-            var successCallback = function (response) {
-                var assemblies = [];
-                response.bomResponse[0].components.forEach(item => {
-                    var material = item.material.material;
-                    if (item.customValues.filter(cf => cf.attribute == "DESCRIZIONE COMPONENTE").length > 0) {
-                        var description = item.customValues.filter(cf => cf.attribute == "DESCRIZIONE COMPONENTE")[0].value;
-                    }else{
-                        var description = "";
-                    }
-                    assemblies.push({
-                        material: material,
-                        description: description
-                    })
-                });
-                this.OpenDefectModel.setProperty("/assemblies", [...[ { material: "", description: "" }], ...assemblies]);
-            };
-            // Callback di errore
-            var errorCallback = function (error) {
-                console.log("Chiamata GET fallita: ", error);
-            };
-            CommonCallManager.callProxy("GET", url, {}, true, successCallback, errorCallback, that);
         },
         getPriority: function () {
             var that = this;
@@ -686,8 +701,8 @@ sap.ui.define([
             var defect = that.OpenDefectModel.getProperty("/defect");
 
             var plant = infoModel.getProperty("/plant");
-            var sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
-            var order = infoModel.getProperty("/selectedSFC/order");
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
+            if (!that.isAdditionalOperation) var order = infoModel.getProperty("/selectedSFC/order"); else var order = that.selectedObject.order;
             var wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
             var stepId = that.isAdditionalOperation ? that.selectedObject.step_id : infoModel.getProperty("/selectedPrimoLivello").id;
 
@@ -725,8 +740,6 @@ sap.ui.define([
                 // Procedo ad aggiornare il campo nonconformances sul task selezionato
                 if (!that.isAdditionalOperation && that.selectedObject.nonconformances != undefined && that.selectedObject.nonconformances == false)
                     that.updateNonConformanceLevel3();
-                else if (that.isAdditionalOperation && that.selectedObject.nonconformances != undefined && that.selectedObject.nonconformances == false)
-                    that.updateNonConformanceAdditionalOperation();
 
             };
 
@@ -744,10 +757,10 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             var defect = that.OpenDefectModel.getProperty("/defect");
-            var sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
             var user = infoModel.getProperty("/user_id");
             var plant = infoModel.getProperty("/plant");
-            var order = infoModel.getProperty("/selectedSFC/order");
+            if (!that.isAdditionalOperation) var order = infoModel.getProperty("/selectedSFC/order"); else var order = that.selectedObject.order;
 
             if (that.isAdditionalOperation) {
                 var operation = that.selectedObject.operation
@@ -774,7 +787,7 @@ sap.ui.define([
                 plant: plant,
                 group: defect.codeGroup,
                 code: defect.defectType,
-                wbe: infoModel.getProperty("/selectedSFC/WBE"),
+                wbe: that.OpenDefectModel.getProperty("/wbe"),
                 typeOrder: defect.typeOrder,
                 project: infoModel.getProperty("/selectedSFC/project"),
                 phase: "Testing",
@@ -797,6 +810,7 @@ sap.ui.define([
             // Callback di successo
             var successCallback = function (response) {
                 // publish difetti
+                if (this.isAdditionalOperation) sap.ui.getCore().getEventBus().publish("AdditionalOperations", "loadAdditionalOperations", null);
                 sap.m.MessageBox.show(that.MainPODcontroller.getI18n("defect.success.message"));
                 that.onClosePopup();
                 sap.ui.core.BusyIndicator.hide();
@@ -815,7 +829,7 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             var plant = infoModel.getProperty("/plant");
-            var sfc = infoModel.getProperty("/selectedSFC/sfc");
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathReasonForVarianceApi = "/db/updateNonConformanceLevel3";
@@ -833,33 +847,6 @@ sap.ui.define([
             // Callback di successo
             var successCallback = function (response) {
                 sap.ui.getCore().getEventBus().publish("PrimoLivello", "loadPODOperationsModel", {collapse: false});
-            };
-
-            // Callback di errore
-            var errorCallback = function (error) {
-                console.log("Chiamata POST fallita: ", error);
-            };
-            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
-        },
-
-        updateNonConformanceAdditionalOperation: function () {
-            var that = this;
-            var infoModel = that.MainPODcontroller.getInfoModel();
-            var plant = infoModel.getProperty("/plant");
-
-            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
-            let pathReasonForVarianceApi = "/db/updateNonConformanceAdditionalOperation";
-            let url = BaseProxyURL + pathReasonForVarianceApi;
-
-            let params = {
-                plant: plant,
-                sfc: that.selectedObject.sfc,
-                operation: that.selectedObject.operation
-            };
-
-            // Callback di successo
-            var successCallback = function (response) {
-                sap.ui.getCore().getEventBus().publish("AdditionalOperations", "loadAdditionalOperations", null);
             };
 
             // Callback di errore

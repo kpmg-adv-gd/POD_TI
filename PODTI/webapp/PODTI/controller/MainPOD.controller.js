@@ -24,7 +24,6 @@ sap.ui.define([
             this.getView().setModel(this.oPODSfcModel, "PODSfcModel");
             this.getView().setModel(this.oPODOperationModel, "PODOperationModel");
             this.getInfoModel().setProperty("/selectedPrimoLivello", undefined);
-
             
             // Aggiornamento operazioni
             sap.ui.getCore().getEventBus().subscribe("PrimoLivello", "loadPODOperationsModel", this.loadPODOperationsModelAndLev2, this);
@@ -119,6 +118,8 @@ sap.ui.define([
                     oEvent ? {collapse: true} : jsonCollapse);
             } else {
                 that.getInfoModel().setProperty("/selectedPrimoLivello",undefined);
+                sap.ui.getCore().getEventBus().publish("SecondoLivello", "loadSecondoLivelloModel", 
+                    oEvent ? {collapse: true} : jsonCollapse);
             }
         },
         
@@ -205,7 +206,7 @@ sap.ui.define([
         // Gestione pressione sui tab
         OnNonconformancesTabPress: function () {
             var that=this;
-            that.DefectsPopup.open(that.getView(), that);
+            that.DefectsPopup.open(that.getView(), that, false);
         },
         OnAdditionalOperationsTabPress: function () {
             var that=this;
