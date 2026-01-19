@@ -15,6 +15,8 @@ sap.ui.define([
             that.DefectsModel = new JSONModel();
             that.MainPODview = oView;
             that.MainPODcontroller = oController;
+            that.fromTabAdditionalOperations = fromTabAdditionalOperations;
+            that.selectedObject = selectedObject;
             
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.defects.DefectsPopup", oView, that.DefectsModel);
 
@@ -174,7 +176,10 @@ sap.ui.define([
             // Callback di successo
             var successCallback = function(response) {
                 that.MainPODcontroller.showToast(that.MainPODcontroller.getI18n("defect.close.success.message"));
-                that.loadDefects();
+                if (that.fromTabAdditionalOperations) {
+                    that.loadDefectsFromAdditionalOperations(that.selectedObject);
+                    sap.ui.getCore().getEventBus().publish("AdditionalOperations", "loadAdditionalOperations", null);
+                } else that.loadDefects();
             };
             // Callback di errore
             var errorCallback = function(error) {

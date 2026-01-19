@@ -41,11 +41,13 @@ sap.ui.define([
             }else{
                 that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
             }
+            // Aggiornamento menu a tendina machine type
+            that.getAllMachineType();
 			that.getView().byId("machineTypeId").setSelectedKey("");
         },
 
         // Ottengo lista Machine Type
-        getAllMachineType: function (idLev1) {
+        getAllMachineType: function () {
             var that=this;
             let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
             let pathOrderBomApi = "/db/getAllMachineType";
@@ -55,7 +57,7 @@ sap.ui.define([
 
             let params={
                 plant: plant,
-                idLev1: idLev1
+                sfc: that.getInfoModel().getProperty("/selectedSFC/sfc")
             };
 
             // Callback di successo
@@ -90,10 +92,6 @@ sap.ui.define([
             }
             var wbe = that.getView().byId("machineTypeId").getValue();
 
-            // Aggiornamento menu a tendina machine type
-            that.getAllMachineType(that.getInfoModel().getProperty("/selectedPrimoLivello").id);
-			that.getView().byId("machineTypeId").setSelectedKey("");
-
             var SecondoLivelloList = [];
             primoLivello.SecondoLivello.forEach(item => {
                 try {
@@ -104,6 +102,7 @@ sap.ui.define([
                             level: 3, 
                             sfc: item.sfc,
                             parent_id_lev_2: item.id_lev_2,
+                            wbe: item.wbe,
                             parent_lev_2: item.lev_2,
                             id_lev_3: item.id_lev_3,
                             macroAttivita: item.lev_3,
@@ -276,10 +275,12 @@ sap.ui.define([
             let url = BaseProxyURL+pathApi;
 
             let plant = that.getInfoModel().getProperty("/plant");
+            var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello")
 
             let params = {
                 "plant": plant,
                 "sfc": selectedObject.sfc,
+                "id_lev_1": primoLivello.id,
                 "id_lev_2": selectedObject.parent_id_lev_2,
                 "id_lev_3": selectedObject.id_lev_3,
                 "machine_type": selectedObject.machine_type
@@ -310,16 +311,20 @@ sap.ui.define([
             let url = BaseProxyURL+pathApi;
 
             let plant = that.getInfoModel().getProperty("/plant");
+            var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello")
 
             let params = {
                 "plant": plant,
                 "sfc": selectedObject.sfc,
+                "wbe": selectedObject.wbe,
+                "id_lev_1": primoLivello.id,
                 "id_lev_2": selectedObject.parent_id_lev_2,
                 "id_lev_3": selectedObject.id_lev_3,
                 "machine_type": selectedObject.machine_type,
                 "user": that.getInfoModel().getProperty("/user_id"),
                 "comment": comment,
-                "comment_type": "M"
+                "comment_type": "M",
+                "status": "Waiting"
             };
 
             // Callback di successo

@@ -122,7 +122,22 @@ sap.ui.define([
                 that.MainPODcontroller.showErrorMessageBox("No operation has been selected.");
                 return;
             }
-            that.getOrderComplete(selectedObject);
+
+            sap.m.MessageBox.show(
+                that.MainPODcontroller.getI18n("mainPOD.warningMessage.completeOperationInternal"),  // Messaggio da visualizzare
+                sap.m.MessageBox.Icon.WARNING,      // Tipo di icona: warning
+                "Warning",                       // Titolo della MessageBox
+                [sap.m.MessageBox.Action.OK,sap.m.MessageBox.Action.CANCEL],
+                function(oAction) { // Funzione di callback
+                    if (oAction === sap.m.MessageBox.Action.OK) {
+                        // Se l'utente preme OK
+                        that.getOrderComplete(selectedObject);
+                    } else if (oAction === sap.m.MessageBox.Action.CANCEL) {
+                        //Se preme cancel
+                    }
+                }
+            );     
+        
         },
 
         getOrderComplete: function (selectedObject) {
@@ -285,12 +300,7 @@ sap.ui.define([
             if(!activeWCsArray.includes(actualWC)){
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
             } else{
-                if(actualWC !== markOperation.workcenter){
-                    that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
-                    that.MainPODcontroller.showToast(that.getI18n("mainPOD.errorMessage.noWorkCenter.markingPopup"));
-                } else{
-                    that.checkCertificationMarker(markOperation);
-                }
+                that.checkCertificationMarker(markOperation);
             }
         },
         checkCertificationMarker: function(markOperation){

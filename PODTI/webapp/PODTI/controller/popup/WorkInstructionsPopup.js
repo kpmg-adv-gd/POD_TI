@@ -74,9 +74,9 @@ sap.ui.define([
             if(workInstructionObj.type==="URL"){
                 window.open(workInstructionObj.url, "_blank");
             } else if(workInstructionObj.type==="TEXT"){
-                that.showDialogHTML(workInstructionObj.text, workInstructionObj.description);
+                that.MainPODcontroller.showDialogHTML(workInstructionObj.text, workInstructionObj.description);
             } else if(workInstructionObj.type==="HEADER_TEXT"){
-                that.showDialogString(workInstructionObj.text, workInstructionObj.description);
+                that.MainPODcontroller.showDialogString(workInstructionObj.text, workInstructionObj.description);
             } else if(workInstructionObj.type==="FILE"){
                 sap.ui.core.BusyIndicator.show(0);
                 that.loadWorkInstructionFile(workInstructionObj);
@@ -112,10 +112,10 @@ sap.ui.define([
                         window.open(fileUrl, "_blank");
                     } else if (response.contentType.includes("image")) {
                         // Mostra un'immagine in una nuova finestra o elemento img
-                        that.showDialogImage(fileUrl,fileName);
+                        that.MainPODcontroller.showDialogImage(fileUrl,fileName);
                     } else if (response.contentType.includes("video")) {
                         // Mostra un video su dialog
-                        that.showDialogVideo(fileUrl, fileName, response.contentType);
+                        that.MainPODcontroller.showDialogVideo(fileUrl, fileName, response.contentType);
                     } else {
                         //Provo il Download
                         var a = document.createElement("a");

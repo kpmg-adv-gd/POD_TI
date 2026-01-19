@@ -68,12 +68,15 @@ sap.ui.define([
                 let params = {
                     "plant": plant,
                     "sfc": rowSelected.sfc,
+                    "wbe": rowSelected.wbe,
+                    "id_lev_1": that.MainPODcontroller.getInfoModel().getProperty("/selectedPrimoLivello").id,
                     "id_lev_2": rowSelected.parent_id_lev_2,
                     "id_lev_3": rowSelected.id_lev_3,
                     "machine_type": rowSelected.machine_type,
                     "user": that.MainPODcontroller.getInfoModel().getProperty("/user_id"),
                     "comment": newComment,
-                    "comment_type": "C"
+                    "comment_type": "C",
+                    "status": null
                 };
 
                 // Callback di successo
