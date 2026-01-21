@@ -294,54 +294,13 @@ sap.ui.define([
         },
         getMarkingEnabled: function(markOperation){
             var that=this;
-            var actualWC = that.MainPODcontroller.getInfoModel().getProperty("/selectedSFC/workcenter_lev_2");
-            var activeWCsString = that.MainPODcontroller.getInfoModel().getProperty("/MarkingWorkCentersListEnabled");
-            var activeWCsArray = activeWCsString.split(";");
-            if(!activeWCsArray.includes(actualWC)){
+            let markOperation=that.MainPODcontroller.getInfoModel().getProperty("/selectedOpMark");
+            if (markOperation.status == "In Queue"){
+                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
+                that.MainPODcontroller.showToast(that.getI18n("mainPOD.errorMessage.operationNoMarking"));
+            } else {
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
-            } else{
-                that.checkCertificationMarker(markOperation);
             }
-        },
-        checkCertificationMarker: function(markOperation){
-            var that=this;
-
-            let BaseProxyURL = that.MainPODcontroller.getInfoModel().getProperty("/BaseProxyURL");
-            let pathAPICheckCertification = "/api/certification/v1/certifications/check";
-            let url = BaseProxyURL+pathAPICheckCertification;
-            
-            let operation = markOperation.operation;
-            let plant = that.MainPODcontroller.getInfoModel().getProperty("/plant");
-            let userId = that.MainPODcontroller.getInfoModel().getProperty("/user_id");
-
-            let params = {
-                plant: plant,
-                operation: operation,
-                userId: userId
-            }   
-
-            // Callback di successo
-            var successCallback = function(response) {
-                if (response?.isCertificationForbidden !== undefined && response?.isCertificationForbidden) {
-                    that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
-                    that.MainPODcontroller.showToast(response?.errorMessage || "Certification Error");
-                } else {
-                    let markOperation=that.MainPODcontroller.getInfoModel().getProperty("/selectedOpMark");
-                    if(markOperation.status == "Done" || markOperation.status == "In Work" ){
-                        that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
-                    } else {
-                        that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
-                        that.MainPODcontroller.showToast(that.getI18n("mainPOD.errorMessage.operationNoMarking"));
-                    }
-                }
-                that.MainPODcontroller.getInfoModel().setProperty("/selectedOpMark",undefined);
-            };
-            // Callback di errore
-            var errorCallback = function(error) {
-                that.MainPODcontroller.getInfoModel().setProperty("/selectedOpMark",undefined);
-                console.log("Chiamata POST fallita:", error);
-            };
-            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
 
         //formatter per collonna status (ICONA) front-end

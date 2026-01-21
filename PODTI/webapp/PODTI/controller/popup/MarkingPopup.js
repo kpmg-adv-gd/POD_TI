@@ -125,6 +125,8 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
                     that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
+
+                    
                 }
             };
             // Callback di errore
