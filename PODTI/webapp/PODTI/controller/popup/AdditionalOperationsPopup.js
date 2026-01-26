@@ -294,10 +294,9 @@ sap.ui.define([
         },
         getMarkingEnabled: function(markOperation){
             var that=this;
-            let markOperation=that.MainPODcontroller.getInfoModel().getProperty("/selectedOpMark");
             if (markOperation.status == "In Queue"){
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
-                that.MainPODcontroller.showToast(that.getI18n("mainPOD.errorMessage.operationNoMarking"));
+                that.MainPODcontroller.showToast("The selected Operation Activity is not currently Completed or In Work. Please check the operations status before marking.");
             } else {
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
             }
