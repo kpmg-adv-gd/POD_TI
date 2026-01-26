@@ -13,7 +13,7 @@
             <VBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" fitContainer="true">
 
                 <!-- 1) Filters -->
-                <VBox width="95%" height="20%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod containerAddOpts">
+                <VBox width="95%" height="20%" visible="{/visibleFilters}" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod containerAddOpts">
                     <HBox width="100%" height="100%" renderType="Bare" alignItems="Center" justifyContent="Center" class="headerContainerMainPod paddingTopTestataSmall">
                         <HBox renderType="Bare" alignItems="Center" width="30%">
                             <Label text="Phase:" width="auto" class="markingHeaderLabel markingSmallLabel sapUiSmallMarginEnd"/>
@@ -50,7 +50,7 @@
                             <FlexItemData growFactor="1" baseSize="0%"/>
                         </t:layoutData>
                         <t:columns>
-                            <t:Column width="12%" hAlign="Left">
+                            <t:Column width="18%" hAlign="Left">
                                 <Label text="{i18n>defect.treeTable.groupOrCode}"/>
                                 <t:template>
                                     <Text text="{groupOrCode}" wrapping="false"/>
@@ -74,7 +74,7 @@
                                     <Text text="{user}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
-                            <t:Column width="12%" hAlign="Center">
+                            <t:Column width="9%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.phase}"/>
                                 <t:template>
                                     <Text text="{phase}" wrapping="false"/>
@@ -92,7 +92,7 @@
                                     <Text text="{qn_code}" wrapping="false"/>
                                 </t:template>
                             </t:Column>  
-                            <t:Column width="10%" hAlign="Center">
+                            <t:Column width="7%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.close}"/>
                                 <t:template>
                                     <Button text="{i18n>defect.treeTable.close}" width="100%" press="onClosePress" visible="{= ${level} === 2 &amp;&amp; ${okClose} }" />

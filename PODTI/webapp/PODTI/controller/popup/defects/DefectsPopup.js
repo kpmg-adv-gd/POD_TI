@@ -17,6 +17,8 @@ sap.ui.define([
             that.MainPODcontroller = oController;
             that.fromTabAdditionalOperations = fromTabAdditionalOperations;
             that.selectedObject = selectedObject;
+
+            that.DefectsModel.setProperty("/visibleFilters", !fromTabAdditionalOperations)
             
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.defects.DefectsPopup", oView, that.DefectsModel);
 
@@ -192,7 +194,7 @@ sap.ui.define([
         onInfoDefectPress: function (oEvent) {
             var that = this;
             let defect = oEvent.getSource().getParent().getBindingContext().getObject();
-            that.ViewDefectPopup.open(that.MainPODview, that.MainPODcontroller, defect);
+            that.ViewDefectPopup.open(that.MainPODview, that.MainPODcontroller, defect, that.fromTabAdditionalOperations, that.selectedObject);
         },
         onExpandAll: function () {
             const oTable = this.MainPODcontroller.byId("treeTableDefectPopup");

@@ -8,11 +8,12 @@ sap.ui.define([
 
     return Dialog.extend("kpmg.custom.pod.PODTI.PODTI.controller.popup.defects.ViewDefectPopup", {
 
-        open: function (oView, oController, defect) {
+        open: function (oView, oController, defect, fromTabAdditionalOperations, selectedAddOpt) {
             var that = this;
             that.ViewDefectModel = new JSONModel();
             that.MainPODcontroller = oController;
             that.defectSelected = defect;
+            that.selectedAddOpt = selectedAddOpt;
             that.defectSelected.system_status = that.defectSelected.system_status == null ? "" : that.defectSelected.system_status.replaceAll(",", "\n");
 
             if (that.defectSelected.type_order == "GRPF") that.defectSelected.type_order = "Purch. Doc.";
@@ -22,13 +23,17 @@ sap.ui.define([
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.defects.ViewDefectPopup", oView, that.ViewDefectModel);
             
             var infoModel = that.MainPODcontroller.getInfoModel();
-            const wbe = infoModel.getProperty("/selectedSFC/WBE") || "";
-            const sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
+            if (!fromTabAdditionalOperations) {
+                var wbe = infoModel.getProperty("/selectedSFC/WBE") || "";
+                var sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
+                that.ViewDefectModel.setProperty("/wbe", wbe);
+                that.ViewDefectModel.setProperty("/sfc", sfc);
+            }else{
+                that.getCustomOrder(that.selectedAddOpt.order);
+            }
             const wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
             
             that.ViewDefectModel.setProperty("/defect", that.defectSelected);
-            that.ViewDefectModel.setProperty("/wbe", wbe);
-            that.ViewDefectModel.setProperty("/sfc", sfc);
             that.ViewDefectModel.setProperty("/wc", wc);
             that.ViewDefectModel.setProperty("/defect/attachments", []);
 
@@ -41,6 +46,34 @@ sap.ui.define([
 
             that.openDialog();
             
+        },
+
+        getCustomOrder: function (order) {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+
+            var plant = infoModel.getProperty("/plant");
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/api/order/v1/orders";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+            url += "?plant=" + plant;
+            url += "&order=" + order;
+
+            let params = {
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                var wbe = response.orderResponse.customValues.filter(custom => custom.attribute == "WBE")[0].value || "";
+                that.ViewDefectModel.setProperty("/wbe", wbe);
+                that.ViewDefectModel.setProperty("/sfc", that.selectedAddOpt.sfc);
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata GET fallita: ", error);
+            };
+            CommonCallManager.callProxy("GET", url, params, true, successCallback, errorCallback, that);
         },
 
         downloadFile: function (idFile) {
