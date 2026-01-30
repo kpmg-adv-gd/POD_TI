@@ -26,6 +26,7 @@ sap.ui.define([
             let pathAPIFilter = "/api/getFilterSinotticoBom";
             let url = BaseProxyURL+pathAPIFilter;
             let plant = that.MainPODcontroller.getInfoModel().getProperty("/plant");
+            let infoModel = that.MainPODcontroller.getInfoModel();
 
             let params = {
                 "plant": plant
@@ -34,6 +35,7 @@ sap.ui.define([
             // Callback di successo
             var successCallback = function(response) {
                 that.SinotticoBomModel.setProperty("/filters", response);
+                that.MainPODcontroller.byId("projectInputSinotticoId").setValue(infoModel.getProperty("/selectedSFC/project"))
             };
 
             // Callback di errore
@@ -50,8 +52,12 @@ sap.ui.define([
             let url = BaseProxyURL+pathApi;
 
             let plant = that.MainPODcontroller.getInfoModel().getProperty("/plant");
-			let projectValue = that.getView().byId("projectInputSinotticoId").getValue();
-			let machineMaterialValue = that.getView().byId("machineMaterialInputId").getValue();
+			let projectValue = that.getView().byId("projectInputSinotticoId").getValue() || "";
+			let machineMaterialValue = that.getView().byId("machineMaterialInputId").getValue() || "";
+
+            if (machineMaterialValue == "") {
+                return;
+            }
 
             //treeTable.setBusy(true);
 			

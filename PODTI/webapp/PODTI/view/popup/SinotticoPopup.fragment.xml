@@ -93,7 +93,7 @@
                             <t:Column width="15%" hAlign="Center">
                                 <Label text="{i18n>SinotticoBomMultilivello.treeTable.progressStatus}"/>
                                 <t:template>
-                                    <ProgressIndicator percentValue="{ProgressStatus}" displayValue="{= ${ProgressStatus} + '%'}" state="Success" showValue="true" visible="{= (${OrderType} !== 'COMP' &amp;&amp; ${ParentAssembly} !== true ) ? true:false}" width="100%"/>
+                                    <ProgressIndicator percentValue="{ProgressStatus}" displayValue="{= ${ProgressStatus} + '%'}" state="Success" showValue="true" visible="{= (${OrderType} !== 'COMP' &amp;&amp; ${ParentAssembly} !== true &amp;&amp; ${OrderType} !== 'ZMGF' ) ? true:false}" width="100%"/>
                                 </t:template>
                             </t:Column>
                         </t:columns>

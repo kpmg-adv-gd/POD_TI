@@ -67,6 +67,12 @@
                                 width="15rem"/>
                         </HBox>
                         <HBox renderType="Bare" alignItems="Center">
+                            <Label text="Defects" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
+                            <Select id="defectsID" selectedKey="{/defectSelected}" width="50%" items="{/defects}" change="onChangeDefect">
+                                <core:Item key="{id}" text="{title}" />
+                            </Select>
+                        </HBox>
+                        <HBox renderType="Bare" alignItems="Center">
                             <Label text="Variance" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
                             <Label id="selectedVarianceText" class="markingReasonDesc"/>
                             <Button id="varianceButton" enabled="{/isMarkingEnabled}" press="onVarianceButtonPressed" icon="sap-icon://arrow-down" />
@@ -75,12 +81,6 @@
                             <Label text="Eng.Changes " class="markingMediumLabel markingMediumLabelWidth9Rem"/>
                             <Label id="selectedUpdateText" class="markingReasonDesc"/>
                             <Button id="updateButton" enabled="{/isMarkingEnabled}" press="onUpdateButtonPressed" icon="sap-icon://arrow-down" />
-                        </HBox>
-                        <HBox renderType="Bare" alignItems="Center">
-                            <Label text="Defects" class="markingMediumLabel markingMediumLabelWidth9Rem"/>
-                            <Select id="defectsID" selectedKey="{/defectSelected}" width="50%" items="{/defects}" change="onChangeDefect">
-                                <core:Item key="{id}" text="{title}" />
-                            </Select>
                         </HBox>
                     </VBox>
 
@@ -95,12 +95,16 @@
                             <Label text="{/markedLabor}" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
-                            <Label text="Remaining Labor" class="markingMediumLabel"/>
+                            <Label text="Delta Labor" class="markingMediumLabel"/>
                             <Label text="{/remainingLabor}" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
                             <Label text="Variance Labor" class="markingMediumLabel"/>
                             <Label text="{/varianceLabor}" class="markingMediumLabelValue"/>
+                        </HBox>
+                        <HBox class="markingHoursRow">
+                            <Label text="Total Labor" class="markingMediumLabel"/>
+                            <Label text="{/totalLabor}" class="markingMediumLabelValue"/>
                         </HBox>
                     </VBox>
                 </HBox>

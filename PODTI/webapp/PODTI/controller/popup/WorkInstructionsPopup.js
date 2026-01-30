@@ -8,12 +8,13 @@ sap.ui.define([
 
     return Dialog.extend("kpmg.custom.pod.PODTI.PODTI.controller.popup.WorkInstructionsPopup", {
 
-        open: function (oView, oController, primoLivello, terzoLivello) {
+        open: function (oView, oController, primoLivello, terzoLivello, operationSelected) {
             var that = this;
             that.MainPODview = oView;
             that.MainPODcontroller = oController;
             that.primoLivello = primoLivello;
             that.terzoLivello = terzoLivello;
+            that.operationSelected = operationSelected;
             that.WorkInstructionsModel = new JSONModel();
 
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.WorkInstructionsPopup", oView, that.WorkInstructionsModel);
@@ -32,14 +33,28 @@ sap.ui.define([
             let plant = infoModel.getProperty("/plant");
             let sfc = infoModel.getProperty("/selectedSFC/sfc");
 
-            let params = {
-                plant: plant, 
-                sfc: sfc,
-                operation: that.primoLivello.operation,
-                idLev1: that.primoLivello.id,
-                idLev2: that.terzoLivello.parent_id_lev_2,
-                idLev3: that.terzoLivello.id_lev_3
+            if (that.operationSelected) {
+                var params = {
+                    plant: plant, 
+                    sfc: sfc,
+                    operation: that.primoLivello.operation,
+                    idLev1: that.primoLivello.id,
+                    idLev2: that.terzoLivello.parent_id_lev_2,
+                    idLev3: that.terzoLivello.id_lev_3,
+                    operationSelected: true
+                }
+            }else{
+                var params = {
+                    plant: plant, 
+                    sfc: sfc,
+                    operation: null,
+                    idLev1: null,
+                    idLev2: null,
+                    idLev3: null,
+                    operationSelected: false
+                }
             }
+
 
             // Callback di successo
             var successCallback = function(response) {

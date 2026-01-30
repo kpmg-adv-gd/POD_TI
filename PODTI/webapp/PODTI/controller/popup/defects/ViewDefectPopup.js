@@ -24,8 +24,8 @@ sap.ui.define([
             
             var infoModel = that.MainPODcontroller.getInfoModel();
             if (!fromTabAdditionalOperations) {
-                var wbe = infoModel.getProperty("/selectedSFC/WBE") || "";
-                var sfc = infoModel.getProperty("/selectedSFC/sfc") || "";
+                var wbe = that.defectSelected.wbe || "";
+                var sfc = that.defectSelected.sfc || "";
                 that.ViewDefectModel.setProperty("/wbe", wbe);
                 that.ViewDefectModel.setProperty("/sfc", sfc);
             }else{

@@ -40,7 +40,7 @@ sap.ui.define([
                 assembly: "",
                 numDefect: 1,
                 title: "",
-                description: user,
+                description: that.isAdditionalOperation ? user : user + " - "+ that.selectedObject.parent_lev_2,
                 codeGroup: "",
                 defectType: "",
                 priority: "",
@@ -109,7 +109,7 @@ sap.ui.define([
                             that.OpenDefectModel.setProperty("/defect/prodOrder", response.orderResponse.customValues.filter(custom => custom.attribute == "PURCHASE_ORDER")[0].value);
                     } else if (response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE").length > 0
                             && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "ZMGF") {
-                        that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Prod. Order");
+                        that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "");
                         that.OpenDefectModel.setProperty("/defect/prodOrder", "");
                     } else{
                         that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Prod. Order");
@@ -130,25 +130,45 @@ sap.ui.define([
 
         getOrdersByMaterial: function (oEvent) {
             var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
             var material = that.OpenDefectModel.getProperty("/defect/material");
+            var plant = infoModel.getProperty("/plant");
+
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/db/getOrdersByMaterialTI";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+
+            let params = {
+                plant: plant,
+                material: material
+            };
+            that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "")
+            that.OpenDefectModel.setProperty("/defect/prodOrder", "")
 
             if (material.length == 0) {
                 that.OpenDefectModel.setProperty("/ordersByMaterial", []);
                 that.OpenDefectModel.setProperty("/defect/prodOrder", "");
                 return;
             }
-            var orders = that.OpenDefectModel.getProperty("/materials").filter(item => item.material == material)[0].orders;
 
-            // Se ho un solo ordine valorizzo in automatico il menu a tendina
-            if (orders.length == 1) {
-                that.OpenDefectModel.setProperty("/ordersByMaterial", orders);
-                that.OpenDefectModel.setProperty("/defect/prodOrder", orders[0].order);
-                that.OpenDefectModel.setProperty("/defect/typeOrder", orders[0].typeOrder);
-                that.OpenDefectModel.setProperty("/defect/typeOrderDesc", orders[0].typeOrderDesc);
-                that.getOrder(orders[0].originalOrder);
-            }else{
-                that.OpenDefectModel.setProperty("/ordersByMaterial", [...[{ order: "", typeOrder: "", typeOrderDesc: "" }], ...orders]);
-            }
+            // Callback di successo
+            var successCallback = function (orders) {
+                // Se ho un solo ordine valorizzo in automatico il menu a tendina
+                if (orders.length == 1) {
+                    that.OpenDefectModel.setProperty("/ordersByMaterial", orders);
+                    that.OpenDefectModel.setProperty("/defect/prodOrder", orders[0].order);
+                    that.OpenDefectModel.setProperty("/defect/typeOrder", orders[0].typeOrder);
+                    that.OpenDefectModel.setProperty("/defect/typeOrderDesc", orders[0].typeOrderDesc);
+                    that.getOrder(orders[0].originalOrder);
+                }else{
+                    that.OpenDefectModel.setProperty("/ordersByMaterial", [...[{ order: "", typeOrder: "", typeOrderDesc: "" }], ...orders]);
+                }
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata GET fallita: ", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
         getOrder: function (order) {
             var that = this;

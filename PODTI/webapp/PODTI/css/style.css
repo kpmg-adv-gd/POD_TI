@@ -591,3 +591,7 @@
 .containerAddOpts {
     margin-top:1rem
 }
+
+.buttonClassMedium {
+    padding-right: 1rem !important;
+}

@@ -15,6 +15,7 @@ sap.ui.define([
         oPODSfcModel: new JSONModel(),
         oPODOperationModel: new JSONModel(),
         SinotticoPopup: new SinotticoPopup(),
+        MachineTypeModel: new JSONModel(),
         DefectsPopup: new DefectsPopup(),
         AdditionalOperationsPopup: new AdditionalOperationsPopup(),
         EngChangesPopup: new EngChangesPopup(),
@@ -23,6 +24,7 @@ sap.ui.define([
         onInit: function () {
             this.getView().setModel(this.oPODSfcModel, "PODSfcModel");
             this.getView().setModel(this.oPODOperationModel, "PODOperationModel");
+            this.getView().setModel(this.MachineTypeModel, "MachineTypeModel");
             this.getInfoModel().setProperty("/selectedPrimoLivello", undefined);
             
             // Aggiornamento operazioni
@@ -36,7 +38,34 @@ sap.ui.define([
             var that=this;
             that.loadSFCModel();
             that.loadPODOperationsModel();
+            that.getAllMachineType();
             sap.ui.getCore().getEventBus().publish("SecondoLivello", "clearSecondoLivello", null);
+            ap.ui.getCore().getEventBus().publish("SecondoLivello", "clearMachineType", null);
+        },
+        // Ottengo lista Machine Type
+        getAllMachineType: function () {
+            var that=this;
+            let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
+            let pathOrderBomApi = "/db/getAllMachineType";
+            let url = BaseProxyURL+pathOrderBomApi; 
+            
+            var plant = that.getInfoModel().getProperty("/plant");
+
+            let params={
+                plant: plant,
+                sfc: that.getInfoModel().getProperty("/selectedSFC/sfc")
+            };
+
+            // Callback di successo
+            var successCallback = function(response) {
+                that.getView().getModel("MachineTypeModel").setProperty("/machineTypes", response)
+            };
+            // Callback di errore
+            var errorCallback = function(error) {
+                console.log("Chiamata POST fallita:", error);
+            };
+
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
         loadSFCModel: function(){
             var that=this;
@@ -220,11 +249,12 @@ sap.ui.define([
             var that=this;
             var terzoLivello = that.getInfoModel().getProperty("/selectedSecondoOrTerzoLivello");
             if (!terzoLivello || terzoLivello.level != 3) {
-                that.showErrorMessageBox("No operation has been selected.");
-                return;
+                sap.m.MessageToast.show("No operation has been selected.");
+                that.WorkInstructionsPopup.open(that.getView(), that, null, null, false);
+            }else{
+                var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello");
+                that.WorkInstructionsPopup.open(that.getView(), that, primoLivello, terzoLivello, true);
             }
-            var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello");
-            that.WorkInstructionsPopup.open(that.getView(), that, primoLivello, terzoLivello);
         }
     });
 });

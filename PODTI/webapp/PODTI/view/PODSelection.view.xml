@@ -28,8 +28,8 @@ xmlns:html="http://www.w3.org/1101010/xhtml" controllerName="kpmg.custom.pod.POD
                         </Input>     
                     </VBox>
                     <VBox width="20%" height="100%" renderType="Bare" class="filterBox" >
-                        <Label text="{i18n>podSelection.label.co}:" width="100%" textAlign="Left" vAlign="Middle" class="kpmgGDSmallLabel paddingLeft" />
-                        <Input id="coInputId" placeholder="Enter CO" showSuggestion="true" showValueHelp="false" suggestionItems="{FilterModel>/CO}"  class="GDInputField">
+                        <Label text="{i18n>podSelection.label.coPrev}:" width="100%" textAlign="Left" vAlign="Middle" class="kpmgGDSmallLabel paddingLeft" />
+                        <Input id="coInputId" placeholder="Enter CO Prev" showSuggestion="true" showValueHelp="false" suggestionItems="{FilterModel>/CO}"  class="GDInputField">
                             <suggestionItems>
                                 <core:Item text="{FilterModel>DATA_FIELD_VALUE}" />
                             </suggestionItems>

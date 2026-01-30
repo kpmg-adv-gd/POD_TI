@@ -11,19 +11,21 @@ sap.ui.define([
 
     return BaseController.extend("kpmg.custom.pod.PODTI.PODTI.controller.SecondoLivello", {
         SecondoLivello: new JSONModel(),
-        MachineTypeModel: new JSONModel(),
+        customDataWCModel: new JSONModel(),
         InfoTerzoLivelloPopup: new InfoTerzoLivelloPopup(),
         OpenDefectPopup: new OpenDefectPopup(),
         MarkingPopup: new MarkingPopup(),
         onInit: function () {
             this.getView().setModel(this.SecondoLivello, "SecondoLivelloModel");
-            this.getView().setModel(this.MachineTypeModel, "MachineTypeModel");
+            this.getView().setModel(this.customDataWCModel, "customDataWCModel");
             this.treeTable = this.getView().byId("treeTableSecondoLivello");
             
             // Pulizia secondo livello
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "clearSecondoLivello", this.clearSecondoLivello, this);
             // Aggiornamento secondo livello, chiamato al click su una operazione di primo livello
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "loadSecondoLivelloModel", this.loadSecondoLivelloModel, this);
+            // pulizia Machine Type
+            sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "clearMachineType", this.clearMachineType, this);
 
             // Start - Complete - Nonconformances
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "onStartOperationPress", this.onStartOperationPress, this);
@@ -41,36 +43,11 @@ sap.ui.define([
             }else{
                 that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
             }
-            // Aggiornamento menu a tendina machine type
-            that.getAllMachineType();
-			that.getView().byId("machineTypeId").setSelectedKey("");
+        },
+        clearMachineType: function () {
+			this.getView().byId("machineTypeId").setSelectedKey("");
         },
 
-        // Ottengo lista Machine Type
-        getAllMachineType: function () {
-            var that=this;
-            let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
-            let pathOrderBomApi = "/db/getAllMachineType";
-            let url = BaseProxyURL+pathOrderBomApi; 
-            
-            var plant = that.getInfoModel().getProperty("/plant");
-
-            let params={
-                plant: plant,
-                sfc: that.getInfoModel().getProperty("/selectedSFC/sfc")
-            };
-
-            // Callback di successo
-            var successCallback = function(response) {
-                that.getView().getModel("MachineTypeModel").setProperty("/machineTypes", response)
-            };
-            // Callback di errore
-            var errorCallback = function(error) {
-                console.log("Chiamata POST fallita:", error);
-            };
-
-            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
-        },
         // Gestisco cambio di Machine Type
         onChangeMachineType: function () {
             var that = this;
@@ -83,6 +60,7 @@ sap.ui.define([
         // Carico dati di secondo e terzo livello (genero treeTable)
         loadSecondoLivelloModel: function(sChannel, sEvent, jsonCollapse){
             var that=this;
+            that.getView().getModel("customDataWCModel").setProperty("/workcenter", that.getInfoModel().getProperty("/selectedSFC/workcenter_lev_2"));
             
             var primoLivello = that.getInfoModel().getProperty("/selectedPrimoLivello");
             if (primoLivello == undefined) {
@@ -178,7 +156,12 @@ sap.ui.define([
         onMarkPress: function (oEvent) {
             var that = this;
             var selectedObject = oEvent.getSource().getBindingContext("SecondoLivelloModel").getObject();
-            // todo: apertura popup di marking
+
+            if (selectedObject.workcenter != that.getView().getModel("customDataWCModel").getProperty("/workcenter")) {
+                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
+                return;
+            }
+
             that.getInfoModel().setProperty("/selectedOpMark",selectedObject);
             that.getMarkingEnabled(selectedObject);
         },
@@ -226,7 +209,7 @@ sap.ui.define([
                         that.MarkingPopup.open(that.getView(), that, markOperation, true, false);
                     } else {
                         that.MarkingPopup.open(that.getView(), that, markOperation, false, false);
-                        that.showToast(that.getI18n("mainPOD.errorMessage.operationNoMarking"));
+                        that.showToast(that.getI18n("mainPOD.warningMessage.operationNoMarking"));
                     }
                 }
                 that.getInfoModel().setProperty("/selectedOpMark",undefined);
@@ -250,17 +233,24 @@ sap.ui.define([
                 return;
             }
 
-            // Devo controllare se la riga di secondo livello precedente con stesso machine type è Safety
-            for (var index = 0; index < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").length; index++) {
+            // Estraggo indice del mio livello 2
+            var index = 0;
+            for (index = 0; index < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").filter(item => item.machine_type == selectedObject.machine_type).length; index++) {
                 var row = that.getView().getModel("SecondoLivelloModel").getProperty("/operations")[index];
                 if (row.level == 2 && row.id_lev_2 == selectedObject.parent_id_lev_2) {
                     break
                 }
-                if (row.level == 2 && row.machine_type == selectedObject.machineType) {
-                    lastLev2 = row;
+            }
+            // Estraggo indice primo livello 2 SAFETY non completato
+            var firstSafety = 0;
+            for (firstSafety = 0; index < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").filter(item => item.machine_type == selectedObject.machine_type).length; firstSafety++) {
+                var row = that.getView().getModel("SecondoLivelloModel").getProperty("/operations")[index];
+                if (row.level == 2 && row.safety == "Yes" && row.Children.filter(item => item.status != "Done").length > 0) {
+                    break
                 }
             }
-            if (lastLev2 && lastLev2.safety == "Yes" && lastLev2.Children.filter(item => item.status != "Done").length > 0) {
+            // Check safety
+            if (firstSafety < index) {
                 that.getIfUserCertificatedForWorkcenter(selectedObject, "start", true)
             } else {
                 that.getIfUserCertificatedForWorkcenter(selectedObject, "start", false)
@@ -428,6 +418,14 @@ sap.ui.define([
                 that.showErrorMessageBox("No operation has been selected.");
                 return;
             }
+            if (selectedObject.parent_workcenter != that.getView().getModel("customDataWCModel").getProperty("/workcenter")) {
+                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
+                return;
+            }
+            if (selectedObject.status != "In Work") {
+                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.terzoLivelloNotInWork"));
+                return;
+            }
             that.OpenDefectPopup.open(that.getView(), that, selectedObject, false);
         },
 
@@ -479,32 +477,14 @@ sap.ui.define([
             }
         },
         // check certification
-        getIfUserCertificatedForWorkcenter: function(selectedObject, typeOperation, check){
-            var that=this;
-            let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
-            let pathAPIUserCertificatedWorkcenter = "/api/checkUserWorkCenterCertification";
-            let url = BaseProxyURL+pathAPIUserCertificatedWorkcenter
-            
-            let params={
-                plant: that.getInfoModel().getProperty("/plant"),
-                userId: that.getInfoModel().getProperty("/user_id"),
-                workCenter: selectedObject.parent_workcenter
-            };
-
-            // Callback di successo
-            var successCallback = function(response) {
-                if(response){
-                    if (check) that.getCommentsVerbaleForApproval(selectedObject)
-                    else typeOperation == "start" ? that.startOperation(selectedObject) : that.completeOperation(selectedObject)
-                } else {
-                    that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
-                }
-            };
-            // Callback di errore
-            var errorCallback = function(error) {
-                console.log("Chiamata POST fallita:", error);
-            };
-            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+        getIfUserCertificatedForWorkcenter: function (selectedObject, typeOperation, check){
+           var that = this;
+           if (selectedObject.parent_workcenter == that.getView().getModel("customDataWCModel").getProperty("/workcenter")) {
+                if (check) that.getCommentsVerbaleForApproval(selectedObject)
+                else typeOperation == "start" ? that.startOperation(selectedObject) : that.completeOperation(selectedObject)
+            } else {
+                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
+            }
 
         },
         

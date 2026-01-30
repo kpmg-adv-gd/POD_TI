@@ -218,7 +218,7 @@ sap.ui.define([
                 "project": selectedObject.project,
                 "phase": selectedObject.phase,
                 "order": selectedObject.order,
-                "checkModificheLastOperation": checkModificheLastOperation,
+                "checkModificheLastOperation": false, // basta riattivare per accendere check
                 "valueModifica": ecoType
             };
 
@@ -275,6 +275,10 @@ sap.ui.define([
                 that.MainPODcontroller.showErrorMessageBox("The operation is completed, cannot open defect.");
                 return;
             }
+            if (selectedObject.status != "In Work") {
+                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.terzoLivelloNotInWork"));
+                return;
+            }
             that.OpenDefectPopup.open(that.MainPODview, that.MainPODcontroller, selectedObject, true);
         },
         // Pressione Machine BOM
@@ -294,18 +298,16 @@ sap.ui.define([
         },
         getMarkingEnabled: function(markOperation){
             var that=this;
-            var actualWC = markOperation.workcenter;
+            var actualWC = that.MainPODcontroller.getInfoModel().getProperty("/selectedSFC/workcenter_lev_2");
             var activeWCsString = that.MainPODcontroller.getInfoModel().getProperty("/MarkingWorkCentersListEnabled");
             var activeWCsArray = activeWCsString.split(";");
             if(!activeWCsArray.includes(actualWC)){
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
             }else{
                 if (markOperation.status == "In Queue"){
-                    that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
                     that.MainPODcontroller.showToast("The selected Operation Activity is not currently Completed or In Work. Please check the operations status before marking.");
-                } else {
-                    that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
                 }
+                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
             }
         },
 

@@ -10,54 +10,92 @@
                     </t:layoutData>
                     <t:extension>
                     <OverflowToolbar style="Clear">    
-                        <HBox width="70%" height="100%" renderType="Bare" class="leftButtonsPODOperation"></HBox>       
+                        <HBox width="60%" height="100%" renderType="Bare" class="leftButtonsPODOperation"></HBox>       
                         <ToolbarSpacer/>     
-                        <ComboBox id="machineTypeId" placeholder="{i18n>SecondoLivello.treeTable.placeholder.insertMachineType}" class="GDComboBoxField" items="{MachineTypeModel>/machineTypes}" showSecondaryValues="true" change="onChangeMachineType">
-                            <core:ListItem key="{MachineTypeModel>wbe}" text="{MachineTypeModel>wbe}" additionalText="{MachineTypeModel>machine_type}" />
-                        </ComboBox>    
+                        <HBox renderType="Bare" width="auto" height="100%" justifyContent="Center" alignItems="Center">
+                            <Label text="Machine Type: "></Label>
+                            <ComboBox id="machineTypeId" placeholder="{i18n>SecondoLivello.treeTable.placeholder.insertMachineType}" class="GDComboBoxField" items="{MachineTypeModel>/machineTypes}" showSecondaryValues="true" change="onChangeMachineType">
+                                <core:ListItem key="{MachineTypeModel>machine_type}" text="{MachineTypeModel>machine_type}" additionalText="{MachineTypeModel>wbe}" />
+                            </ComboBox>    
+                        </HBox>
                     </OverflowToolbar>
                     </t:extension>
                     <t:columns>
-                        <t:Column width="44%" hAlign="Left">
+                        <t:Column width="44%" hAlign="Left" sortProperty="macroAttivita" filterProperty="macroAttivita">
                             <Label text="{i18n>SecondoLivello.treeTable.macroAttivita}"/>
                             <t:template>
-                                <Link text="{SecondoLivelloModel>macroAttivita}" press="onCellDescriptionPress" wrapping="true" class="textMacroAttivita treeTextClickable"/>
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <Link text="{SecondoLivelloModel>macroAttivita}" press="onCellDescriptionPress" wrapping="true" class="textMacroAttivita treeTextClickable"/>
+                                </HBox>
                             </t:template>
                         </t:Column>
-                        <t:Column width="10%" hAlign="Center">
+                        <t:Column width="10%" hAlign="Center" sortProperty="workcenter" filterProperty="workcenter">
                             <Label text="{i18n>SecondoLivello.treeTable.wc}"/>
                             <t:template>
-                                <Text text="{SecondoLivelloModel>workcenter}"/>
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <Text text="{SecondoLivelloModel>workcenter}"/>
+                                </HBox>
                             </t:template>
                         </t:Column>
-                        <t:Column width="8%" hAlign="Center">
+                        <t:Column width="8%" hAlign="Center" sortProperty="nonconformances">
                             <Label text="{i18n>SecondoLivello.treeTable.nc}"/>
                             <t:template>
-                                <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{SecondoLivelloModel>nonconformances}" class="iconSecondoLivello" />
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{SecondoLivelloModel>nonconformances}" class="iconSecondoLivello" />
+                                </HBox>
                             </t:template>
                         </t:Column>
-                        <t:Column width="8%" hAlign="Center">
+                        <t:Column width="8%" hAlign="Center" sortProperty="status">
                             <Label text="{i18n>SecondoLivello.treeTable.status}"/>
                             <t:template>
-                                <core:Icon src="{path: 'SecondoLivelloModel>status',formatter: '.getStatusIconLev2and3'}" color="{path: 'SecondoLivelloModel>status', formatter: '.getStatusColorLev2and3' }" class="iconSecondoLivello" />
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <core:Icon src="{path: 'SecondoLivelloModel>status',formatter: '.getStatusIconLev2and3'}" color="{path: 'SecondoLivelloModel>status', formatter: '.getStatusColorLev2and3' }" class="iconSecondoLivello" />
+                                </HBox>
                             </t:template>
                         </t:Column>  
                         <t:Column width="10%" hAlign="Center">
                             <Label text="{i18n>SecondoLivello.treeTable.mark}"/>
                             <t:template>
-                                <Button text="{i18n>SecondoLivello.treeTable.mark}" width="100%" press="onMarkPress" visible="{SecondoLivelloModel>mark}" />
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <Button text="{i18n>SecondoLivello.treeTable.mark}" width="100%" press="onMarkPress" visible="{SecondoLivelloModel>mark}" />
+                                </HBox>
                             </t:template>
                         </t:Column>
-                        <t:Column width="10%" hAlign="Center">
+                        <t:Column width="10%" hAlign="Center" sortProperty="safety" filterProperty="safety">
                             <Label text="{i18n>SecondoLivello.treeTable.safety}"/>
                             <t:template>
-                                <Text text="{SecondoLivelloModel>safety}"/>
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <Text text="{SecondoLivelloModel>safety}"/>
+                                </HBox>
                             </t:template>
                         </t:Column>  
                         <t:Column width="8%" hAlign="Center">
                             <Label text="{i18n>SecondoLivello.treeTable.info}"/>
                             <t:template>
-                                <core:Icon src="sap-icon://hint" color="#d70a32" press="onInfoOperationPress" visible="{SecondoLivelloModel>info}" />
+                                <HBox renderType="Bare" justifyContent="Center" alignItems="Center">
+                                    <customData>
+                                        <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
+                                    </customData>
+                                    <core:Icon src="sap-icon://hint" color="#d70a32" press="onInfoOperationPress" visible="{SecondoLivelloModel>info}" />
+                                </HBox>
                             </t:template>
                         </t:Column>
                     </t:columns>

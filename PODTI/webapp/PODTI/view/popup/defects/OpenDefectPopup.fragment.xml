@@ -62,27 +62,27 @@
                         </HBox>
                     </HBox>
                     <HBox width="100%" height="50%" renderType="Bare" justifyContent="SpaceBetween">
-                        <HBox renderType="Bare" alignItems="Center" width="20%">
+                        <HBox renderType="Bare" alignItems="Center" width="25%">
                             <Label text="Material" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
-                            <Select selectedKey="{/defect/material}" width="70%" items="{/materials}" showSecondaryValues="true" change="getOrdersByMaterial" visible="{= ${/isAdditionalOperation} === false}">
-                                <core:ListItem key="{material}" text="{material}" />
-                            </Select>
+                            <ComboBox width="60%" class="GDComboBoxField" selectedKey="{/defect/material}" items="{/materials}" change="getOrdersByMaterial" showSecondaryValues="true" visible="{= ${/isAdditionalOperation} === false}">
+                                <core:ListItem key="{material}" text="{material}"/>
+                            </ComboBox>   
                             <Input id="materialId" width="auto" value="{/defect/material}" showSuggestion="true" class="markingMediumLabelValue" visible="{= ${/isAdditionalOperation} === true}"/>
                         </HBox>
-                        <HBox renderType="Bare" alignItems="Center" width="24%">
+                        <HBox renderType="Bare" alignItems="Center" width="22%">
                             <Label text="{/defect/typeOrderDesc}" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
-                            <Select selectedKey="{/defect/prodOrder}" width="auto" items="{/ordersByMaterial}" showSecondaryValues="true" change="changeOrder" visible="{= ${/isAdditionalOperation} === false}">
-                                <core:ListItem key="{order}" text="{order}" />
-                            </Select>
+                            <ComboBox width="60%" class="GDComboBoxField" selectedKey="{/defect/prodOrder}" items="{/ordersByMaterial}" change="changeOrder" showSecondaryValues="true" visible="{= ${/isAdditionalOperation} === false}">
+                                <core:ListItem key="{order}" text="{order}"/>
+                            </ComboBox>   
                             <Input id="prodOrderId" width="auto" value="{/defect/prodOrder}" showSuggestion="true" class="markingMediumLabelValue" visible="{= ${/isAdditionalOperation} === true}" />
                         </HBox>
                         <HBox renderType="Bare" alignItems="Center" width="40%">
                             <Label text="Assembly" width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
-                            <Select selectedKey="{/defect/assembly}" width="70%" items="{/assemblies}" showSecondaryValues="true">
+                            <ComboBox width="70%" class="GDComboBoxField" selectedKey="{/defect/assembly}" items="{/assemblies}" showSecondaryValues="true">
                                 <core:ListItem key="{material}" text="{material}" additionalText="{description}" />
-                            </Select>
+                            </ComboBox>   
                         </HBox>
-                        <HBox renderType="Bare" alignItems="Center" width="15%">
+                        <HBox renderType="Bare" alignItems="Center" width="13%">
                             <Label text="N° of Def." width="auto" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
                             <Input width="20%" type="Number" value="{/defect/numDefect}" class="markingMediumLabelValue"/>
                         </HBox>

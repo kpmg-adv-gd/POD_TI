@@ -22,7 +22,9 @@ sap.ui.define([
             that.openDialog();
             that.clearData();
             that.searchDefects();
-            that.getOrder(that.MarkingPopupModel.getProperty("/order"));
+            
+            if (!that.isAdditionalOperation) 
+                that.loadMarkingDataTesting();
         },
 
         clearData: function () {
@@ -51,14 +53,22 @@ sap.ui.define([
             const operation = (that.isAdditionalOperation ? that.markOperation.operation : primoLivello.operation) || "";
             const operationDescription = (that.isAdditionalOperation ? that.markOperation.description : primoLivello.description) || "";
 
-            that.MarkingPopupModel.setProperty("/sfc", sfc);
             that.MarkingPopupModel.setProperty("/order", order);
             that.MarkingPopupModel.setProperty("/operation", operation);
             that.MarkingPopupModel.setProperty("/operationDescription", operationDescription);
+            
+            if (!that.isAdditionalOperation) {
+                that.MarkingPopupModel.setProperty("/sfc", sfc);
+                that.MarkingPopupModel.setProperty("/wbe", that.markOperation.wbe);
+            }else{
+                that.getDataAddOpt(that.markOperation.order);
+            }
 
+            const d = new Date();
+            const dataOggi = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+            that.getView().byId("markingDatePicker").setValue(dataOggi)
         },
-        
-        getOrder: function (order) {
+        getDataAddOpt: function (order) {
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
 
@@ -75,10 +85,11 @@ sap.ui.define([
 
             // Callback di successo
             var successCallback = function (response) {
-                if (response.orderResponse.customValues.filter(custom => custom.attribute == "WBE").length > 0)
-                    that.MarkingPopupModel.setProperty("/wbe", response.orderResponse.customValues.filter(custom => custom.attribute == "WBE")[0].value);
-                if (that.isAdditionalOperation) that.loadMarkingData();
-                else that.loadMarkingDataTesting();
+                var wbe = response.orderResponse.customValues.filter(custom => custom.attribute == "WBE")[0].value;
+                var sfc = response.orderResponse.sfcs[0];
+                that.MarkingPopupModel.setProperty("/sfc", sfc);
+                that.MarkingPopupModel.setProperty("/wbe", wbe);
+                that.loadMarkingData();
             };
             // Callback di errore
             var errorCallback = function (error) {
@@ -125,7 +136,8 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
                     that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
-
+                    var totalLabor = Math.round(markedLabor) + Math.round(varianceLabor);
+                    that.MarkingPopupModel.setProperty("/totalLabor", Math.round(totalLabor));
                     
                 }
             };
@@ -151,7 +163,8 @@ sap.ui.define([
             let params = {
                 plant: plant,
                 wbs: project,
-                id_lev_1: infoModel.getProperty("/selectedPrimoLivello").id
+                id_lev_1: infoModel.getProperty("/selectedPrimoLivello").id,
+                order: infoModel.getProperty("/selectedSFC/order")
             };
 
             // Callback di successo

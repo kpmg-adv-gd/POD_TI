@@ -29,7 +29,8 @@ sap.ui.define([
 
         loadMarkingData: function () {
             var that = this;
-            that.getView().byId("markingDateModPicker").setValue(new Date().getDate() + "/" + (new Date().getMonth()+1) + "/" + new Date().getFullYear()); // data corrente
+            const dataOggi = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+            that.MainPODcontroller.getView().byId("markingDateModPicker").setValue(dataOggi); // data corrente
             that.onRetrievePersonnelNumber(); // PersonnelNumber
 
             let infoModel = that.MainPODcontroller.getInfoModel();
@@ -127,7 +128,7 @@ sap.ui.define([
             }
             if(parseInt(mmInputValue,10)<0 || parseInt(mmInputValue,10)>59) return false;
 
-            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmationNumber");
+            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmNumber");
             let personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
             if(!confirmation_number || !personnelNumber) return false;
 
@@ -140,7 +141,7 @@ sap.ui.define([
             if (that.validate()) {
                 const today = new Date();
                 const today00 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                if (that.MarkingPopupModel.getProperty("/day") < today00) {
+                if (that.MainPODcontroller.getView().byId("markingDateModPicker").getValue() < today00) {
                     sap.m.MessageBox.show(
                         "You're saving for a past date, continue?", // Messaggio da visualizzare
                         {
@@ -169,13 +170,16 @@ sap.ui.define([
             
             var personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
             let network = that.MarkingPopupModel.getProperty("/network");
-            var wbsActivity = that.MarkingPopupModel.getProperty("/wbsActivitySelected");
-            var day = that.MarkingPopupModel.getProperty("/day");
-            var rowSelectedWBS = that.wbsModel.getProperty("/wbs").filter(item => item.network == network && item.activity_id == wbsActivity)[0];
-            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmationNumber");
-
-            var hh = parseInt(that.getView().byId("hhInputId").getValue(),10);
-            var mm = parseInt(that.getView().byId("mmInputId").getValue(),10);
+            var day = that.MainPODcontroller.getView().byId("markingDateModPicker").getValue();
+            var rowSelectedWBS = {
+                wbe: that.MarkingPopupModel.getProperty("/wbe"),
+                wbs: infoModel.getProperty("/selectedSFC/project"),
+                wbs_description: that.MarkingPopupModel.getProperty("/activity")
+            }
+            
+            let confirmation_number = that.MarkingPopupModel.getProperty("/confirmNumber")
+            var hh = parseInt(that.getView().byId("hhInputModId").getValue(),10);
+            var mm = parseInt(that.getView().byId("mmInputModId").getValue(),10);
             if(!hh) hh=0;
             if(!mm) mm=0;
             var duration = Math.round( (hh + (mm/60)) * 100);
@@ -183,12 +187,12 @@ sap.ui.define([
             let params = {
                 plant: plant,
                 activityNumber: network,
-                activityNumberId: wbsActivity,
+                activityNumberId: that.MarkingPopupModel.getProperty("/activityID"),
                 cancellation: "",
                 confirmation: "",
                 confirmationCounter: "",
                 confirmationNumber: confirmation_number,
-                date: that.formatDate(day),
+                date: day,
                 duration: "" + duration,
                 durationUom: "HCN",
                 personalNumber: personnelNumber,

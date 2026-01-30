@@ -151,8 +151,8 @@ sap.ui.define([
             let params={
                 plant: plant,
                 wbe: wbe,
-                process_id: process_id,
-                prog_eco: prog_eco,
+                process_id: process_id == null ? null : process_id.toString().padStart(25, '0'),
+                prog_eco: prog_eco == null ? null : prog_eco.toString().padStart(9, '0'),
                 newStatus: status,
                 material: material,
                 order: order,
