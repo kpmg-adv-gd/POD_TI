@@ -50,7 +50,7 @@ sap.ui.define([
             if (!that.isAdditionalOperation) var sfc = modelSFC.sfc || ""; else var sfc = that.markOperation.sfc; 
             if (!that.isAdditionalOperation) var order = modelSFC.order || ""; else var order = that.markOperation.order;
 
-            const operation = (that.isAdditionalOperation ? that.markOperation.operation : primoLivello.operation) || "";
+            const operation = (that.isAdditionalOperation ? that.markOperation.operation : primoLivello.id) || "";
             const operationDescription = (that.isAdditionalOperation ? that.markOperation.description : primoLivello.description) || "";
 
             that.MarkingPopupModel.setProperty("/order", order);
@@ -123,11 +123,14 @@ sap.ui.define([
             var successCallback = function (response) {
                 if (response.length > 0) {
                     that.MarkingPopupModel.setProperty("/confirmNumber", response[0].confirmation_number || "");
-                    const plannedLabor = response[0]?.planned_labor ?? 0;
-                    const markedLabor = response[0]?.marked_labor ?? 0;
-                    const remainingLabor = response[0]?.remaining_labor ?? 0;
-                    const varianceLabor = response[0]?.variance_labor ?? 0;
-
+                    
+                    // Estrazione dati
+                    var plannedLabor = response[0]?.planned_labor ?? 0;
+                    var markedLabor = response[0]?.marked_labor ?? 0;
+                    var remainingLabor = response[0]?.remaining_labor ?? 0;
+                    var varianceLabor = response[0]?.variance_labor ?? 0;
+                    var totalLabor = Math.round(markedLabor) + Math.round(varianceLabor);
+        
                     that.MarkingPopupModel.setProperty("/plannedLabor", Math.round(plannedLabor));
                     that.MarkingPopupModel.setProperty("/uom_planned_labor", response[0].uom_planned_labor || "hcn");
                     that.MarkingPopupModel.setProperty("/markedLabor", Math.round(markedLabor));
@@ -136,7 +139,6 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
                     that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
-                    var totalLabor = Math.round(markedLabor) + Math.round(varianceLabor);
                     that.MarkingPopupModel.setProperty("/totalLabor", Math.round(totalLabor));
                     
                 }
@@ -171,10 +173,17 @@ sap.ui.define([
             var successCallback = function (response) {
                 if (response.length > 0) {
                     that.MarkingPopupModel.setProperty("/confirmNumber", response[0].confirmation_number || "");
-                    const plannedLabor = response[0]?.planned_labor ?? 0;
-                    const markedLabor = response[0]?.marked_labor ?? 0;
-                    const remainingLabor = response[0]?.remaining_labor ?? 0;
-                    const varianceLabor = response[0]?.variance_labor ?? 0;
+                    var plannedLabor = response[0]?.planned_labor ?? 0;
+                    var markedLabor = response[0]?.marked_labor ?? 0;
+                    var remainingLabor = response[0]?.remaining_labor ?? 0;
+                    var varianceLabor = response[0]?.variance_labor ?? 0;
+                    var totalLabor = Math.round(markedLabor) + Math.round(varianceLabor);
+                    // Trasformazione da HCN a ore
+                    plannedLabor /= 100;
+                    markedLabor /= 100;
+                    remainingLabor /= 100;
+                    varianceLabor /= 100;
+                    totalLabor /= 100;
 
                     that.MarkingPopupModel.setProperty("/plannedLabor", Math.round(plannedLabor));
                     that.MarkingPopupModel.setProperty("/uom_planned_labor", response[0].uom_planned_labor || "hcn");
@@ -185,6 +194,8 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
                     that.MarkingPopupModel.setProperty("/selectedMarkingTesting", response[0]);
+                    that.MarkingPopupModel.setProperty("/totalLabor", Math.round(totalLabor));
+
                 }
             };
             // Callback di errore
@@ -641,6 +652,7 @@ sap.ui.define([
                     wbe: selectedMarkingTesting.wbs,
                     wbe_description: null,
                 },
+                operation: that.MarkingPopupModel.getProperty("/operation"),
                 userId: user,
                 modification: modification == "" ? null : modification,
                 reasonForVariance: variance == "" ? null : that._selectedCause,

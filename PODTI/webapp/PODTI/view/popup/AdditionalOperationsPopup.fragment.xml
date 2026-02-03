@@ -107,6 +107,12 @@
                                         <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{nonconformances}" class="iconSecondoLivello" press="viewDefects" />
                                     </t:template>
                                 </t:Column>
+                                <t:Column visible="false" width="8%" hAlign="Center" sortProperty="mancanti">
+                                    <Label text="{i18n>additionalOperations.treeTable.mancanti}"  />
+                                    <t:template>
+                                        <core:Icon src="sap-icon://warning" color="#cab00bff" visible="{mancanti}" class="iconSecondoLivello" />
+                                    </t:template>
+                                </t:Column>
                                 <t:Column width="8%" hAlign="Center" sortProperty="status">
                                     <Label text="{i18n>additionalOperations.table.status}"/>
                                     <t:template>
@@ -180,6 +186,12 @@
                                             <Label text="{i18n>additionalOperations.treeTable.nc}"  />
                                             <t:template>
                                                 <core:Icon src="sap-icon://high-priority" color="#ca0b30" visible="{nonconformances}" class="iconSecondoLivello" press="viewDefects" />
+                                            </t:template>
+                                        </t:Column>
+                                        <t:Column visible="false"  width="8%" hAlign="Center" sortProperty="mancanti">
+                                            <Label text="{i18n>additionalOperations.treeTable.mancanti}"  />
+                                            <t:template>
+                                                <core:Icon src="sap-icon://warning" color="#cab00bff" visible="{mancanti}" class="iconSecondoLivello" />
                                             </t:template>
                                         </t:Column>
                                         <t:Column width="8%" hAlign="Center" sortProperty="status">

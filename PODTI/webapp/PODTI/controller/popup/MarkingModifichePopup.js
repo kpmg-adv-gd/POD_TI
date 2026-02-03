@@ -206,7 +206,8 @@ sap.ui.define([
                 userId: user,
                 sfc: dataModel.sfc,
                 order: dataModel.order,
-                modification: modification
+                modification: modification,
+                operation: that.MarkingPopupModel.getProperty("/activityID")
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");

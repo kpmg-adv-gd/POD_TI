@@ -32,7 +32,7 @@
                 <VBox width="90%" height="18%" renderType="Bare" justifyContent="SpaceBetween">
                     <HBox width="100%" renderType="Bare" alignItems="Center">
                         <Label text="Operation" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
-                        <Label text="{/operation}" class="markingMediumLabelValue" />
+                        <Label text="{/operationDescription}" class="markingMediumLabelValue" />
                     </HBox>
                     <HBox width="100%" renderType="Bare" alignItems="Center">
                         <Label text="Confirmation Number" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd"/>
