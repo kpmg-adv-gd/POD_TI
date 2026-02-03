@@ -68,14 +68,14 @@ sap.ui.define([
                 that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
                 return;
             }
-            var wbe = that.getView().byId("machineTypeId").getValue();
+            var machineType = that.getView().byId("machineTypeId").getValue();
 
             var SecondoLivelloList = [];
             primoLivello.SecondoLivello.forEach(item => {
                 try {
                     // Valorizzare "child" con i soli campi che voglio vedere nel terzo livello
                     var childFilter = false;
-                    if (item.id_lev_3 && (!wbe || item.wbe == wbe)) {
+                    if (item.id_lev_3 && (!machineType || item.machine_type_3 == machineType)) {
                         var child = {
                             level: 3, 
                             sfc: item.sfc,
@@ -97,7 +97,7 @@ sap.ui.define([
                     }
                     if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length > 0 && childFilter) {
                         SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2)[0].Children.push(child);
-                    } else if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length == 0 && (!wbe || item.wbe == wbe)) {
+                    } else if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length == 0 && (!machineType || item.machine_type_3 == machineType)) {
                         // Valorizzare fuori da "Children" i soli campi che voglio vedere nel secondo livello
                         SecondoLivelloList.push({
                                 level: 2,
@@ -242,15 +242,16 @@ sap.ui.define([
                 }
             }
             // Estraggo indice primo livello 2 SAFETY non completato
-            var firstSafety = 0;
-            for (firstSafety = 0; index < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").filter(item => item.machine_type == selectedObject.machine_type).length; firstSafety++) {
-                var row = that.getView().getModel("SecondoLivelloModel").getProperty("/operations")[index];
+            var firstSafety = 0, safetyCheck = false;
+            for (firstSafety = 0; firstSafety < that.getView().getModel("SecondoLivelloModel").getProperty("/operations").filter(item => item.machine_type == selectedObject.machine_type).length; firstSafety++) {
+                var row = that.getView().getModel("SecondoLivelloModel").getProperty("/operations")[firstSafety];
                 if (row.level == 2 && row.safety == "Yes" && row.Children.filter(item => item.status != "Done").length > 0) {
-                    break
+                    safetyCheck = true;
+                    break;
                 }
             }
             // Check safety
-            if (firstSafety < index) {
+            if (firstSafety < index && safetyCheck) {
                 that.getIfUserCertificatedForWorkcenter(selectedObject, "start", true)
             } else {
                 that.getIfUserCertificatedForWorkcenter(selectedObject, "start", false)

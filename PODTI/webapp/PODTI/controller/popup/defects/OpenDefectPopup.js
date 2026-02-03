@@ -948,14 +948,14 @@ sap.ui.define([
                 "notiftype": defect.notificationType,
                 "shortText": defect.title,
                 "priority": "" + defect.priority,
-                "codeGroup": defect.codeGroup,
-                "code" : defect.defectType,
+                "codeGroup": codingMap[0].coding_group,
+                "code" : codingMap[0].coding,
                 "material" : defect.material,
                 "poNumber" : poNumber,
                 "prodOrder" : prodOrder,
                 "descript" : defect.defectNote,
-                "dCodegrp" : codingMap[0].coding_group,
-                "dCode" : codingMap[0].coding,
+                "dCodegrp" : defect.codeGroup,
+                "dCode" : defect.defectType,
                 "assembly" : defect.assembly,
                 "quantDefects" : "" + defect.numDefect,
                 "partner" : defect.responsible,
@@ -1001,7 +1001,6 @@ sap.ui.define([
             };
             // Callback di errore
             var errorCallback = function(error) {
-                that.showErrorMessageBox(that.getI18n("defect.approve.error.message"));
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that, true, true);
 

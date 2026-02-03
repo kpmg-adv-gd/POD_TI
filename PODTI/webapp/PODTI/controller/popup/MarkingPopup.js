@@ -644,7 +644,7 @@ sap.ui.define([
                 userId: user,
                 modification: modification == "" ? null : modification,
                 reasonForVariance: variance == "" ? null : that._selectedCause,
-                defect: defect == "" ? null : defect
+                defect: defect == "" ? null : defect,
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");

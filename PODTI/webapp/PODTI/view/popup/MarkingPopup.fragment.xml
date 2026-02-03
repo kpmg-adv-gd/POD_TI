@@ -77,7 +77,7 @@
                             <Label id="selectedVarianceText" class="markingReasonDesc"/>
                             <Button id="varianceButton" enabled="{/isMarkingEnabled}" press="onVarianceButtonPressed" icon="sap-icon://arrow-down" />
                         </HBox>
-                        <HBox renderType="Bare" alignItems="Center">
+                        <HBox renderType="Bare" alignItems="Center" visible="false">
                             <Label text="Eng.Changes " class="markingMediumLabel markingMediumLabelWidth9Rem"/>
                             <Label id="selectedUpdateText" class="markingReasonDesc"/>
                             <Button id="updateButton" enabled="{/isMarkingEnabled}" press="onUpdateButtonPressed" icon="sap-icon://arrow-down" />

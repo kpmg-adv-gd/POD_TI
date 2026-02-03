@@ -29,6 +29,7 @@ sap.ui.define([
 
         loadMarkingData: function () {
             var that = this;
+            const d = new Date();
             const dataOggi = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
             that.MainPODcontroller.getView().byId("markingDateModPicker").setValue(dataOggi); // data corrente
             that.onRetrievePersonnelNumber(); // PersonnelNumber
@@ -130,7 +131,8 @@ sap.ui.define([
 
             let confirmation_number = that.MarkingPopupModel.getProperty("/confirmNumber");
             let personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
-            if(!confirmation_number || !personnelNumber) return false;
+            let variance = that.getView().byId("selectedVarianceModText").getText() || "";
+            if(!confirmation_number || !personnelNumber || variance == "") return false;
 
             return true;
         },
@@ -183,10 +185,11 @@ sap.ui.define([
             if(!hh) hh=0;
             if(!mm) mm=0;
             var duration = Math.round( (hh + (mm/60)) * 100);
-
+            var modification = that.selectedLevel1.progEco || that.selectedLevel1.processId;
+            
             let params = {
                 plant: plant,
-                activityNumber: network,
+                activityNumber: network == null ? null : network.toString().padStart(12, '0'),
                 activityNumberId: that.MarkingPopupModel.getProperty("/activityID"),
                 cancellation: "",
                 confirmation: "",
@@ -196,13 +199,14 @@ sap.ui.define([
                 duration: "" + duration,
                 durationUom: "HCN",
                 personalNumber: personnelNumber,
-                reasonForVariance: "",
+                reasonForVariance: that._selectedCause,
                 unCancellation: "",
                 unConfirmation: "X",
                 rowSelectedWBS: rowSelectedWBS,
                 userId: user,
                 sfc: dataModel.sfc,
-                order: dataModel.order
+                order: dataModel.order,
+                modification: modification
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");

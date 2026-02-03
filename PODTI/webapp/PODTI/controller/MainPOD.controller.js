@@ -40,7 +40,7 @@ sap.ui.define([
             that.loadPODOperationsModel();
             that.getAllMachineType();
             sap.ui.getCore().getEventBus().publish("SecondoLivello", "clearSecondoLivello", null);
-            ap.ui.getCore().getEventBus().publish("SecondoLivello", "clearMachineType", null);
+            sap.ui.getCore().getEventBus().publish("SecondoLivello", "clearMachineType", null);
         },
         // Ottengo lista Machine Type
         getAllMachineType: function () {
