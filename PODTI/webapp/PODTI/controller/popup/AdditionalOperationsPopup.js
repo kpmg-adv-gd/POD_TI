@@ -276,7 +276,7 @@ sap.ui.define([
                 return;
             }
             if (selectedObject.status != "In Work") {
-                that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.terzoLivelloNotInWork"));
+                that.MainPODcontroller.showErrorMessageBox("The selected Operation is not currently in work");
                 return;
             }
             that.OpenDefectPopup.open(that.MainPODview, that.MainPODcontroller, selectedObject, true);
@@ -304,10 +304,10 @@ sap.ui.define([
             if(!activeWCsArray.includes(actualWC)){
                 that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
             }else{
+                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
                 if (markOperation.status == "In Queue"){
                     that.MainPODcontroller.showToast("The selected Operation Activity is not currently Completed or In Work. Please check the operations status before marking.");
                 }
-                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
             }
         },
 

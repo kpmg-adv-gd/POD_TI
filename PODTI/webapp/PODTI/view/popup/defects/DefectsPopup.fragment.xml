@@ -56,6 +56,12 @@
                                     <Text text="{groupOrCode}" wrapping="false"/>
                                 </t:template>
                             </t:Column>
+                            <t:Column width="15%" hAlign="Left">
+                                <Label text="{i18n>defect.treeTable.title}"/>
+                                <t:template>
+                                    <Text text="{title}" wrapping="false"/>
+                                </t:template>
+                            </t:Column>
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>defect.treeTable.material}"/>
                                 <t:template>

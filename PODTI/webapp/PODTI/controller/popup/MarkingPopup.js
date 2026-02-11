@@ -51,7 +51,7 @@ sap.ui.define([
             if (!that.isAdditionalOperation) var order = modelSFC.order || ""; else var order = that.markOperation.order;
 
             const operation = (that.isAdditionalOperation ? that.markOperation.operation : primoLivello.id) || "";
-            const operationDescription = (that.isAdditionalOperation ? that.markOperation.description : primoLivello.description) || "";
+            const operationDescription = (that.isAdditionalOperation ? that.markOperation.operation_description : primoLivello.description) || "";
 
             that.MarkingPopupModel.setProperty("/order", order);
             that.MarkingPopupModel.setProperty("/operation", operation);

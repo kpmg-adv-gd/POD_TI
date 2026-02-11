@@ -83,31 +83,25 @@
                                     <FlexItemData growFactor="1" baseSize="0%"/>
                                 </t:layoutData>
                                     <t:columns>
-                                        <t:Column sortProperty="ID" width="9%"  hAlign="Center">
-                                            <Label text="{i18n>mainPOD.table.ID}"  />
-                                            <t:template>
-                                                <Text text="{PODOperationModel>id}"></Text>
-                                            </t:template>
-                                        </t:Column>
-                                        <t:Column sortProperty="description" width="42%"  hAlign="Left">
+                                        <t:Column sortProperty="description" width="50%"  hAlign="Left">
                                             <Label text="{i18n>mainPOD.table.description}"  />
                                             <t:template>
                                                 <Text text="{PODOperationModel>description}"></Text>
                                             </t:template>
                                         </t:Column>
-                                        <t:Column sortProperty="QUANTITY/quantityInWork" width="9%"  hAlign="Center">
+                                        <t:Column sortProperty="QUANTITY/quantityInWork" width="10%"  hAlign="Center">
                                             <Label text="{i18n>mainPOD.table.status}"  />
                                             <t:template>
                                                 <core:Icon src="{path: 'PODOperationModel>status',formatter: '.getStatusIcon'}"  color="{path: 'PODOperationModel>status', formatter: '.getStatusColor' }" class="statusIcon" />
                                             </t:template>
                                         </t:Column>       
-                                        <t:Column sortProperty="percent" width="10%"  hAlign="Center">
+                                        <t:Column sortProperty="percent" width="15%"  hAlign="Center">
                                             <Label text="{i18n>mainPOD.table.percent}"  />
                                             <t:template>
                                                 <Text text="{PODOperationModel>percent}"></Text>
                                             </t:template>
                                         </t:Column>
-                                        <t:Column sortProperty="datetime" width="20%"  hAlign="Center">
+                                        <t:Column sortProperty="datetime" width="25%"  hAlign="Center">
                                             <Label text="{i18n>mainPOD.table.datetime}"  />
                                             <t:template>
                                                 <Text text="{PODOperationModel>datetime}"></Text>
