@@ -271,12 +271,8 @@ sap.ui.define([
                 that.MainPODcontroller.showErrorMessageBox("No operation has been selected.");
                 return;
             }
-            if (selectedObject.status == "Done") {
-                that.MainPODcontroller.showErrorMessageBox("The operation is completed, cannot open defect.");
-                return;
-            }
-            if (selectedObject.status != "In Work") {
-                that.MainPODcontroller.showErrorMessageBox("The selected Operation is not currently in work");
+            if (selectedObject.status != "In Work" && selectedObject.status != "Done") {
+                that.MainPODcontroller.showErrorMessageBox("The selected Operation is not currently In Work or Done");
                 return;
             }
             that.OpenDefectPopup.open(that.MainPODview, that.MainPODcontroller, selectedObject, true);

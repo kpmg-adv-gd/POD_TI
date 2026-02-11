@@ -98,7 +98,7 @@
                                         <t:Column sortProperty="percent" width="15%"  hAlign="Center">
                                             <Label text="{i18n>mainPOD.table.percent}"  />
                                             <t:template>
-                                                <Text text="{PODOperationModel>percent}"></Text>
+                                                <Text text="{PODOperationModel>percent}%"></Text>
                                             </t:template>
                                         </t:Column>
                                         <t:Column sortProperty="datetime" width="25%"  hAlign="Center">
