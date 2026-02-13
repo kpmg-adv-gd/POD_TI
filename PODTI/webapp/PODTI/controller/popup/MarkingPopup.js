@@ -23,6 +23,8 @@ sap.ui.define([
             that.clearData();
             that.searchDefects();
             
+            that.MarkingPopupModel.setProperty("/isAdditionalOperation", isAdditionalOperation);
+
             if (!that.isAdditionalOperation) 
                 that.loadMarkingDataTesting();
         },

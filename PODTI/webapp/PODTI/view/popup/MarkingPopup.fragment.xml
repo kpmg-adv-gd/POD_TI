@@ -88,23 +88,23 @@
                     <VBox width="30%" class="markingHoursContainer" renderType="Bare">
                         <HBox class="markingHoursRow">
                             <Label text="Planned Labor" class="markingMediumLabel"/>
-                            <Label text="{/plannedLabor}" class="markingMediumLabelValue"/>
+                            <Label text="{/plannedLabor} {= ${/isAdditionalOperation} === true ? 'HCN' : '' }" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
                             <Label text="Marked Labor" class="markingMediumLabel"/>
-                            <Label text="{/markedLabor}" class="markingMediumLabelValue"/>
+                            <Label text="{/markedLabor} {= ${/isAdditionalOperation} === true ? 'HCN' : '' }" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
                             <Label text="Delta Labor" class="markingMediumLabel"/>
-                            <Label text="{/remainingLabor}" class="markingMediumLabelValue"/>
+                            <Label text="{/remainingLabor} {= ${/isAdditionalOperation} === true ? 'HCN' : '' }" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
                             <Label text="Variance Labor" class="markingMediumLabel"/>
-                            <Label text="{/varianceLabor}" class="markingMediumLabelValue"/>
+                            <Label text="{/varianceLabor} {= ${/isAdditionalOperation} === true ? 'HCN' : '' }" class="markingMediumLabelValue"/>
                         </HBox>
                         <HBox class="markingHoursRow">
                             <Label text="Total Labor" class="markingMediumLabel"/>
-                            <Label text="{/totalLabor}" class="markingMediumLabelValue"/>
+                            <Label text="{/totalLabor} {= ${/isAdditionalOperation} === true ? 'HCN' : '' }" class="markingMediumLabelValue"/>
                         </HBox>
                     </VBox>
                 </HBox>

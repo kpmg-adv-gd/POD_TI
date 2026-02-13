@@ -413,6 +413,9 @@
 [data-opacityExternalOp=Mismatch] {
     opacity: 0.5 !important;
 }
+[data-boldDescriptioTask=Bold] {
+    font-weight: bold !important;
+}
 
 .highlightRow{
     opacity: 0.9 !important;

@@ -169,6 +169,7 @@ sap.ui.define([
                 sfc: sfc,
                 order: order,
                 qnCode: defect.qn_code == "" ? null : defect.qn_code,
+                isTesting: !that.fromTabAdditionalOperations && defect.phase == "Testing"
             };
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
@@ -181,7 +182,10 @@ sap.ui.define([
                 if (that.fromTabAdditionalOperations) {
                     that.loadDefectsFromAdditionalOperations(that.selectedObject);
                     sap.ui.getCore().getEventBus().publish("AdditionalOperations", "loadAdditionalOperations", null);
-                } else that.loadDefects();
+                } else {
+                    that.loadDefects();
+                    sap.ui.getCore().getEventBus().publish("PrimoLivello", "loadPODOperationsModel", {collapse: false});  
+                }
             };
             // Callback di errore
             var errorCallback = function(error) {

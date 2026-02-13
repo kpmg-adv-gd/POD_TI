@@ -91,12 +91,16 @@ sap.ui.define([
                             mark: false,
                             info: true,
                             status: item.status_lev_3,
-                            machine_type: item.machine_type_3
+                            machine_type: item.machine_type_3,
+                            has_comments: item.has_comments > 0
                         };
                         childFilter = true;
                     }
                     if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length > 0 && childFilter) {
                         SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2)[0].Children.push(child);
+                        if (item.nonconformances & !SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2)[0].nonconformances) {
+                            SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2)[0].nonconformances = true;
+                        }
                     } else if (SecondoLivelloList.filter(lev => item.id_lev_2 == lev.id_lev_2).length == 0 && (!machineType || item.machine_type_3 == machineType)) {
                         // Valorizzare fuori da "Children" i soli campi che voglio vedere nel secondo livello
                         SecondoLivelloList.push({
@@ -109,9 +113,10 @@ sap.ui.define([
                                 wbe: item.wbe,
                                 machine_type: item.machine_type_2,
                                 safety: item.safety ? "Yes" : "No",
-                                nonconformances: false,
+                                nonconformances: item.nonconformances,
                                 mark: true,
                                 info: false,
+                                has_comments: false,
                                 Children: childFilter ? [child] : []
                         })
                     }
@@ -423,7 +428,7 @@ sap.ui.define([
                 that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.noCertificationWorkcenter"));
                 return;
             }
-            if (selectedObject.status != "In Work") {
+            if (selectedObject.status != "In Work" && selectedObject.status != "Done") {
                 that.showErrorMessageBox(that.getI18n("podSelection.errorMessage.terzoLivelloNotInWork"));
                 return;
             }
@@ -548,6 +553,7 @@ sap.ui.define([
         },
 
         onCellDescriptionPress: function (oEvent) {
+
             var oText = oEvent.getSource().getText();   // testo completo della cella
             var oSource = oEvent.getSource();           // elemento cliccato
 

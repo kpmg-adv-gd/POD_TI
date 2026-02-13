@@ -28,6 +28,9 @@
                                     <customData>
                                         <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
                                     </customData>
+                                    <customData>
+                                        <core:CustomData key="boldDescriptioTask" value="{= ${SecondoLivelloModel>mark} ? 'Bold' : 'NoBold' }"  writeToDom="true"/>
+                                    </customData>
                                     <Link text="{SecondoLivelloModel>macroAttivita}" press="onCellDescriptionPress" wrapping="true" class="textMacroAttivita treeTextClickable"/>
                                 </HBox>
                             </t:template>
@@ -94,7 +97,11 @@
                                     <customData>
                                         <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
                                     </customData>
-                                    <core:Icon src="sap-icon://hint" color="#d70a32" press="onInfoOperationPress" visible="{SecondoLivelloModel>info}" />
+									<Button
+										text="Info" width="100%"
+                                        visible="{SecondoLivelloModel>info}"
+										type="{= ${SecondoLivelloModel>has_comments} ? 'Emphasized' : 'Transparent' }"
+										press="onInfoOperationPress"/>
                                 </HBox>
                             </t:template>
                         </t:Column>

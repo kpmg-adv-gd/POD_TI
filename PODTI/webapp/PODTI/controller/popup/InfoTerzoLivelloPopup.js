@@ -83,6 +83,14 @@ sap.ui.define([
                 var successCallback = function(response) {
                     that.infoTerzoLivelloModel.setProperty("/newComment", "")
                     that.loadInfoTerzoLivello(rowSelected);
+                    try {
+                        that.MainPODcontroller.getView().getModel("SecondoLivelloModel").getProperty("/operations")
+                            .filter(item => item.id_lev_2 == rowSelected.parent_id_lev_2)[0].Children
+                            .filter(item => item.id_lev_3 == rowSelected.id_lev_3)[0].has_comments = true;
+                        that.MainPODcontroller.getView().getModel("SecondoLivelloModel").refresh();
+                    }catch(e) {
+                        console.log("Errore aggiornamento modello tasto info")
+                    }
                 };
 
                 // Callback di errore
