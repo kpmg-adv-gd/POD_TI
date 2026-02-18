@@ -53,6 +53,7 @@ sap.ui.define([
                 defectNote: "",
                 responsible: "",
                 attachments: [],
+                cause: "GD"
             });
             that.OpenDefectModel.setProperty("/responsiblesVis2", false);
             that.OpenDefectModel.setProperty("/responsiblesVis3", false);
@@ -133,6 +134,7 @@ sap.ui.define([
             var infoModel = that.MainPODcontroller.getInfoModel();
             var material = that.OpenDefectModel.getProperty("/defect/material");
             var plant = infoModel.getProperty("/plant");
+            var project = that.MainPODcontroller.getView().getModel("PODSfcModel").getProperty("/project");
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathGetMarkingDataApi = "/db/getOrdersByMaterialTI";
@@ -140,7 +142,8 @@ sap.ui.define([
 
             let params = {
                 plant: plant,
-                material: material
+                material: material,
+                project: project
             };
             that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "")
             that.OpenDefectModel.setProperty("/defect/prodOrder", "")
