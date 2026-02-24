@@ -33,7 +33,9 @@ sap.ui.define([
             let pathApi = "/db/getFiltersDefectsTI";
             let url = BaseProxyURL+pathApi;
 
+            var plant = infoModel.getProperty("/plant");
             let params = {
+                plant: plant
             }
 
             // Callback di successo
