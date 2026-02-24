@@ -15,6 +15,8 @@ sap.ui.define([
             that.selectedObject = selectedObject;
             that.isAdditionalOperation = isAdditionalOperation;
 
+            that.OpenDefectModel.setSizeLimit(1000)
+
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.defects.OpenDefectPopup", oView, that.OpenDefectModel);
 
             that.clearData();
