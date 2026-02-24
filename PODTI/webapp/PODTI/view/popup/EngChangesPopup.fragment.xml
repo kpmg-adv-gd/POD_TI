@@ -50,6 +50,12 @@
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
+                                <Label text="{i18n>engChanges.treeTable.materialDescription}"/>
+                                <t:template>
+                                    <Text text="{materialDescription}" wrapping="false"/>
+                                </t:template>
+                            </t:Column>
+                            <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.order}"/>
                                 <t:template>
                                     <Text text="{order}" wrapping="false"/>
