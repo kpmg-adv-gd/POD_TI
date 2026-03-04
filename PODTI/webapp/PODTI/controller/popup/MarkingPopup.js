@@ -143,6 +143,10 @@ sap.ui.define([
                     that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
                     that.MarkingPopupModel.setProperty("/totalLabor", Math.round(totalLabor));
                     
+                }else{
+                    if (that.isAdditionalOperation) {
+                        that.getMarkingDataForAddOpt();
+                    }
                 }
             };
             // Callback di errore
@@ -151,6 +155,57 @@ sap.ui.define([
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
+
+        getMarkingDataForAddOpt: function () {
+            var that = this;
+            var infoModel = that.MainPODcontroller.getInfoModel();
+
+            var plant = infoModel.getProperty("/plant");
+            let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
+            let pathGetMarkingDataApi = "/db/getMarkingDataForAddOpt";
+            let url = BaseProxyURL + pathGetMarkingDataApi;
+
+            let wbe_machine = that.MarkingPopupModel.getProperty("/wbe");
+            var mes_order = that.markOperation.order;
+
+            let params = {
+                plant: plant,
+                markOperation: that.markOperation,
+                order: mes_order,
+                wbe: wbe_machine
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                if (response.length > 0) {
+                    that.MarkingPopupModel.setProperty("/confirmNumber", response[0].confirmation_number || "");
+                    
+                    // Estrazione dati
+                    var plannedLabor = response[0]?.planned_labor ?? 0;
+                    var markedLabor = response[0]?.marked_labor ?? 0;
+                    var remainingLabor = response[0]?.remaining_labor ?? 0;
+                    var varianceLabor = response[0]?.variance_labor ?? 0;
+                    var totalLabor = Math.round(markedLabor) + Math.round(varianceLabor);
+        
+                    that.MarkingPopupModel.setProperty("/plannedLabor", Math.round(plannedLabor));
+                    that.MarkingPopupModel.setProperty("/uom_planned_labor", response[0].uom_planned_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/markedLabor", Math.round(markedLabor));
+                    that.MarkingPopupModel.setProperty("/uom_marked_labor", response[0].uom_marked_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/remainingLabor", Math.round(remainingLabor));
+                    that.MarkingPopupModel.setProperty("/uom_remaining_labor", response[0].uom_remaining_labor || "hcn");
+                    that.MarkingPopupModel.setProperty("/varianceLabor", Math.round(varianceLabor));
+                    that.MarkingPopupModel.setProperty("/uom_variance", response[0].uom_variance || "hcn");
+                    that.MarkingPopupModel.setProperty("/totalLabor", Math.round(totalLabor));
+                    
+                }
+            };
+            // Callback di errore
+            var errorCallback = function (error) {
+                console.log("Chiamata POST fallita: ", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
+        },
+        
         
         // Recupero dati per tab operazioni
         loadMarkingDataTesting: function () {
