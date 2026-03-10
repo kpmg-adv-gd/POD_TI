@@ -27,6 +27,9 @@ sap.ui.define([
             sap.ui.getCore().getEventBus().subscribe("AdditionalOperations", "loadAdditionalOperations", this.loadOperations, this);
 
             that.loadOperations();
+            that.AdditionalOperationsModel.setProperty("/certificationMarcatura", 
+                that.MainPODcontroller.getInfoModel().getProperty("/certificationMarcatura")
+            );
             that.openDialog();
         },
         loadFilters: function(operations){

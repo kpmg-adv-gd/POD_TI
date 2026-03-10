@@ -19,6 +19,9 @@ sap.ui.define([
             that._initDialog("kpmg.custom.pod.PODTI.PODTI.view.popup.EngChangesPopup", oView, that.EngChangesModel);
 
             that.loadStatusCollection();
+            that.EngChangesModel.setProperty("/certificationMarcatura", 
+                that.MainPODcontroller.getInfoModel().getProperty("/certificationMarcatura")
+            );
             that.openDialog();
         },
    

@@ -32,6 +32,7 @@ sap.ui.define([
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "onCompleteOperationPress", this.onCompleteOperationPress, this);
             sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "onNonconformancePress", this.onNonconformancePress, this);
 
+            sap.ui.getCore().getEventBus().subscribe("SecondoLivello", "certificationMarcatura", this.certificationMarcatura, this);
         },
         onNavigateTo: function(){
             var that = this;
@@ -43,6 +44,13 @@ sap.ui.define([
             }else{
                 that.getView().getModel("SecondoLivelloModel").setProperty("/operations", []);
             }
+           
+        },
+        certificationMarcatura: function () {
+            var that = this;
+            that.getView().getModel("SecondoLivelloModel").setProperty("/certificationMarcatura", 
+                that.getInfoModel().getProperty("/certificationMarcatura")
+            );
         },
         clearMachineType: function () {
 			this.getView().byId("machineTypeId").setSelectedKey("");

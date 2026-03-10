@@ -104,7 +104,7 @@
                             <t:Column width="10%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.mark}"/>
                                 <t:template>
-                                    <Button text="{i18n>engChanges.treeTable.mark}" width="100%" press="onMarkPress" visible="{mark}" />
+                                    <Button text="{i18n>engChanges.treeTable.mark}" width="100%" press="onMarkPress" visible="{mark}" enabled="{/certificationMarcatura}"  />
                                 </t:template>
                             </t:Column>
                         </t:columns>

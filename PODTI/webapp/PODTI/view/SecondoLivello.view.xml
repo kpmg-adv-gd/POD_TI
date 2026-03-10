@@ -75,7 +75,7 @@
                                     <customData>
                                         <core:CustomData key="opacityExternalOp" value="{= ${SecondoLivelloModel>workcenter} !== ${customDataWCModel>/workcenter} &amp;&amp; ${SecondoLivelloModel>parent_workcenter} !== ${customDataWCModel>/workcenter} ? 'Mismatch' : 'Match' }"  writeToDom="true"/>
                                     </customData>
-                                    <Button text="{i18n>SecondoLivello.treeTable.mark}" width="100%" press="onMarkPress" visible="{SecondoLivelloModel>mark}" />
+                                    <Button text="{i18n>SecondoLivello.treeTable.mark}" width="100%" press="onMarkPress" visible="{SecondoLivelloModel>mark}" enabled="{SecondoLivelloModel>/certificationMarcatura}" />
                                 </HBox>
                             </t:template>
                         </t:Column>

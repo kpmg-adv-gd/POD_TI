@@ -29,6 +29,8 @@ sap.ui.define([
             
             // Aggiornamento operazioni
             sap.ui.getCore().getEventBus().subscribe("PrimoLivello", "loadPODOperationsModel", this.loadPODOperationsModelAndLev2, this);
+
+            this.getUserCertificationMark();
         },
 
         onAfterRendering: function(){
@@ -41,6 +43,34 @@ sap.ui.define([
             that.getAllMachineType();
             sap.ui.getCore().getEventBus().publish("SecondoLivello", "clearSecondoLivello", null);
             sap.ui.getCore().getEventBus().publish("SecondoLivello", "clearMachineType", null);
+        },
+        getUserCertificationMark: function () {
+            var that=this;
+            let BaseProxyURL = that.getInfoModel().getProperty("/BaseProxyURL");
+            let pathOrderBomApi = "/api/checkUserCertification";
+            let url = BaseProxyURL+pathOrderBomApi; 
+            
+            var plant = that.getInfoModel().getProperty("/plant");
+            let userId = that.getInfoModel().getProperty("/user_id");
+
+            let params={
+                plant: plant,
+                userId: userId,
+                certification: "MARCATURA",
+            };
+
+            // Callback di successo
+            var successCallback = function(response) {
+                that.getInfoModel().setProperty("/certificationMarcatura", response);
+                sap.ui.getCore().getEventBus().publish("SecondoLivello", "certificationMarcatura", null);
+            };
+            // Callback di errore
+            var errorCallback = function(error) {
+                that.getInfoModel().setProperty("/certificationMarcatura", false);
+                sap.ui.getCore().getEventBus().publish("SecondoLivello", "certificationMarcatura", null);
+            };
+
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
         // Ottengo lista Machine Type
         getAllMachineType: function () {

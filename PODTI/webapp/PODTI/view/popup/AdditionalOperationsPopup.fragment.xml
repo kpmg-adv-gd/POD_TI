@@ -122,7 +122,7 @@
                                 <t:Column width="8%" hAlign="Center">
                                     <Label text="{i18n>additionalOperations.table.mark}"/>
                                     <t:template>
-                                        <Button text="{i18n>additionalOperations.table.mark}" width="100%" press="onMarkPress" />
+                                        <Button text="{i18n>additionalOperations.table.mark}" width="100%" press="onMarkPress" enabled="{/certificationMarcatura}"  />
                                     </t:template>
                                 </t:Column>
                             </t:columns>
@@ -203,7 +203,7 @@
                                         <t:Column width="8%" hAlign="Center">
                                             <Label text="{i18n>additionalOperations.table.mark}"/>
                                             <t:template>
-                                                <Button text="{i18n>additionalOperations.table.mark}" width="100%" press="onMarkPress" />
+                                                <Button text="{i18n>additionalOperations.table.mark}" width="100%" press="onMarkPress" enabled="{/certificationMarcatura}"  />
                                             </t:template>
                                         </t:Column>
                                     </t:columns>
