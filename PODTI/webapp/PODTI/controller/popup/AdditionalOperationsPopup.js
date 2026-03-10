@@ -294,16 +294,9 @@ sap.ui.define([
         },
         getMarkingEnabled: function(markOperation){
             var that=this;
-            var actualWC = that.MainPODcontroller.getInfoModel().getProperty("/selectedSFC/workcenter_lev_2");
-            var activeWCsString = that.MainPODcontroller.getInfoModel().getProperty("/MarkingWorkCentersListEnabled");
-            var activeWCsArray = activeWCsString.split(";");
-            if(!activeWCsArray.includes(actualWC)){
-                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, false, true);
-            }else{
-                that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
-                if (markOperation.status == "In Queue"){
-                    that.MainPODcontroller.showToast("The selected Operation Activity is not currently Completed or In Work. Please check the operations status before marking.");
-                }
+            that.MarkingPopup.open(that.MainPODview, that.MainPODcontroller, markOperation, true, true);
+            if (markOperation.status == "In Queue"){
+                that.MainPODcontroller.showToast("The selected Operation Activity is not currently Completed or In Work. Please check the operations status before marking.");
             }
         },
 
