@@ -32,11 +32,13 @@ sap.ui.define([
             let url = BaseProxyURL+pathAPIWorkInstructionFile;
             let plant = infoModel.getProperty("/plant");
             let sfc = infoModel.getProperty("/selectedSFC/sfc");
+            let wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
 
             if (that.operationSelected) {
                 var params = {
                     plant: plant, 
                     sfc: sfc,
+                    workcenter: wc,
                     operation: that.primoLivello.operation,
                     idLev1: that.primoLivello.id,
                     idLev2: that.terzoLivello.parent_id_lev_2,
@@ -47,6 +49,7 @@ sap.ui.define([
                 var params = {
                     plant: plant, 
                     sfc: sfc,
+                    workcenter: wc,
                     operation: null,
                     idLev1: null,
                     idLev2: null,
