@@ -42,7 +42,7 @@ sap.ui.define([
                 assembly: "",
                 numDefect: 1,
                 title: "",
-                description: that.isAdditionalOperation ? user : user + " - "+ that.selectedObject.parent_lev_2,
+                description: that.isAdditionalOperation ? user : user + " - " + that.selectedObject.parent_lev_2,
                 codeGroup: "",
                 defectType: "",
                 priority: "",
@@ -69,7 +69,7 @@ sap.ui.define([
 
             var wbe = infoModel.getProperty("/selectedSFC/WBE") || "";
             if (!that.isAdditionalOperation) var wbe = that.selectedObject.wbe
-            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc;
             const wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
 
             that.OpenDefectModel.setProperty("/wbe", wbe);
@@ -108,13 +108,13 @@ sap.ui.define([
                 if (response.orderResponse && response.orderResponse.bom) {
                     if (response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE").length > 0
                         && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "GRPF") {
-                            that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Purchase Doc.");
-                            that.OpenDefectModel.setProperty("/defect/prodOrder", response.orderResponse.customValues.filter(custom => custom.attribute == "PURCHASE_ORDER")[0].value);
+                        that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Purchase Doc.");
+                        that.OpenDefectModel.setProperty("/defect/prodOrder", response.orderResponse.customValues.filter(custom => custom.attribute == "PURCHASE_ORDER")[0].value);
                     } else if (response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE").length > 0
-                            && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "ZMGF") {
+                        && response.orderResponse.customValues.filter(custom => custom.attribute == "ORDER_TYPE")[0].value == "ZMGF") {
                         that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "");
                         that.OpenDefectModel.setProperty("/defect/prodOrder", "");
-                    } else{
+                    } else {
                         that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "Prod. Order");
                         that.OpenDefectModel.setProperty("/defect/prodOrder", order);
                     }
@@ -165,7 +165,7 @@ sap.ui.define([
                     that.OpenDefectModel.setProperty("/defect/typeOrder", orders[0].typeOrder);
                     that.OpenDefectModel.setProperty("/defect/typeOrderDesc", orders[0].typeOrderDesc);
                     that.getOrder(orders[0].originalOrder);
-                }else{
+                } else {
                     that.OpenDefectModel.setProperty("/ordersByMaterial", [...[{ order: "", typeOrder: "", typeOrderDesc: "" }], ...orders]);
                 }
             };
@@ -224,7 +224,7 @@ sap.ui.define([
                     var material = item.material.material;
                     if (item.customValues.filter(cf => cf.attribute == "DESCRIZIONE COMPONENTE").length > 0) {
                         var description = item.customValues.filter(cf => cf.attribute == "DESCRIZIONE COMPONENTE")[0].value;
-                    }else{
+                    } else {
                         var description = "";
                     }
                     assemblies.push({
@@ -232,7 +232,7 @@ sap.ui.define([
                         description: description
                     })
                 });
-                this.OpenDefectModel.setProperty("/assemblies", [...[ { material: "", description: "" }], ...assemblies]);
+                this.OpenDefectModel.setProperty("/assemblies", [...[{ material: "", description: "" }], ...assemblies]);
             };
             // Callback di errore
             var errorCallback = function (error) {
@@ -249,7 +249,7 @@ sap.ui.define([
                 that.OpenDefectModel.setProperty("/defect/typeOrder", "");
                 that.OpenDefectModel.setProperty("/defect/typeOrderDesc", "");
                 that.OpenDefectModel.setProperty("/assemblies", []);
-            }else{
+            } else {
                 that.OpenDefectModel.setProperty("/defect/typeOrder", selected[0].typeOrder);
                 that.OpenDefectModel.setProperty("/defect/typeOrderDesc", selected[0].typeOrderDesc);
                 that.getOrder(selected[0].originalOrder);
@@ -443,7 +443,7 @@ sap.ui.define([
 
             // Callback di successo
             var successCallback = function (response) {
-                that.OpenDefectModel.setProperty("/materials", [...[{ material: "" }], ...response]);
+                that.OpenDefectModel.setProperty("/materials", [...[{ material: "", isFake: false }], ...response]);
             };
 
             // Callback di errore
@@ -496,9 +496,9 @@ sap.ui.define([
                 allResponsible.forEach(item => {
                     if (item.org_level_1 == responsible1 && responsibles2.filter(r => r.description == item.org_level_2).length == 0 && item.org_level_2 != null) {
                         responsibles2.push({
-                                id: item.id,
-                                description: item.org_level_2
-                            })
+                            id: item.id,
+                            description: item.org_level_2
+                        })
                     }
                 })
             }
@@ -506,7 +506,7 @@ sap.ui.define([
             if (responsibles2.length == 0) {
                 that.OpenDefectModel.setProperty("/responsibles2", []);
                 that.OpenDefectModel.setProperty("/responsiblesVis2", false);
-            }else{
+            } else {
                 that.OpenDefectModel.setProperty("/responsibles2", [...[{ id: "" }], ...responsibles2]);
                 that.OpenDefectModel.setProperty("/responsiblesVis2", true);
             }
@@ -522,7 +522,7 @@ sap.ui.define([
             var that = this;
             var allResponsible = that.OpenDefectModel.getProperty("/responsibles");
             var responsibles3 = [];
-            
+
             if (that.OpenDefectModel.getProperty("/defect/responsible2") != "") {
                 var responsible1 = allResponsible.filter(item => item.id == that.OpenDefectModel.getProperty("/defect/responsible1"))[0].org_level_1;
                 var responsible2 = allResponsible.filter(item => item.id == that.OpenDefectModel.getProperty("/defect/responsible2"))[0].org_level_2;
@@ -530,16 +530,16 @@ sap.ui.define([
                     if (item.org_level_1 == responsible1 && item.org_level_2 == responsible2 && responsibles3.filter(r => r.description == item.org_level_3).length == 0
                         && item.org_level_3 != null) {
                         responsibles3.push({
-                                id: item.id,
-                                description: item.org_level_3
-                            })
+                            id: item.id,
+                            description: item.org_level_3
+                        })
                     }
                 })
             }
             if (responsibles3.length == 0) {
                 that.OpenDefectModel.setProperty("/responsibles3", []);
                 that.OpenDefectModel.setProperty("/responsiblesVis3", false);
-            }else{
+            } else {
                 that.OpenDefectModel.setProperty("/responsibles3", [...[{ id: "" }], ...responsibles3]);
                 that.OpenDefectModel.setProperty("/responsiblesVis3", true);
             }
@@ -552,25 +552,25 @@ sap.ui.define([
             var that = this;
             var allResponsible = that.OpenDefectModel.getProperty("/responsibles");
             var responsibles4 = [];
-            
+
             if (that.OpenDefectModel.getProperty("/defect/responsible2") != "") {
                 var responsible1 = allResponsible.filter(item => item.id == that.OpenDefectModel.getProperty("/defect/responsible1"))[0].org_level_1;
                 var responsible2 = allResponsible.filter(item => item.id == that.OpenDefectModel.getProperty("/defect/responsible2"))[0].org_level_2;
                 var responsible3 = allResponsible.filter(item => item.id == that.OpenDefectModel.getProperty("/defect/responsible3"))[0].org_level_3;
                 allResponsible.forEach(item => {
-                    if (item.org_level_1 == responsible1 && item.org_level_2 == responsible2 && item.org_level_3 == responsible3 
+                    if (item.org_level_1 == responsible1 && item.org_level_2 == responsible2 && item.org_level_3 == responsible3
                         && responsibles4.filter(r => r.description == item.org_level_4).length == 0 && item.org_level_4 != null) {
                         responsibles4.push({
-                                id: item.id,
-                                description: item.org_level_4
-                            })
+                            id: item.id,
+                            description: item.org_level_4
+                        })
                     }
                 })
             }
             if (responsibles4.length == 0) {
                 that.OpenDefectModel.setProperty("/responsibles4", []);
                 that.OpenDefectModel.setProperty("/responsiblesVis4", false);
-            }else{
+            } else {
                 that.OpenDefectModel.setProperty("/responsibles4", [...[{ id: "" }], ...responsibles4]);
                 that.OpenDefectModel.setProperty("/responsiblesVis4", true);
             }
@@ -678,7 +678,7 @@ sap.ui.define([
                     defect.responsible = defect.responsible1
                     level--;
                 }
-                if (!defect.responsible || defect.responsible == "" || (level < 4 && that.OpenDefectModel.getProperty("/responsibles" + (level+1)) != undefined && that.OpenDefectModel.getProperty("/responsibles" + (level+1)).length > 0 )) {
+                if (!defect.responsible || defect.responsible == "" || (level < 4 && that.OpenDefectModel.getProperty("/responsibles" + (level + 1)) != undefined && that.OpenDefectModel.getProperty("/responsibles" + (level + 1)).length > 0)) {
                     that.MainPODcontroller.showErrorMessageBox(that.MainPODcontroller.getI18n("defect.error.message"));
                     return false;
                 }
@@ -699,19 +699,22 @@ sap.ui.define([
                 console.log("errore nel parsing json Priority");
             }
             // Check su Costraint della Notification Type
-            if (defect.createQN) {
-                try {
-                    var notificationTypeScript = JSON.parse(that.OpenDefectModel.getProperty("/notificationTypies").filter(item => item.notification_type == defect.notificationType)[0].costraints);
-                    for (let chiave in notificationTypeScript) {
-                        for (let key in notificationTypeScript[chiave]) {
-                            if ((notificationTypeScript[chiave][key] == true && defect[key] == "") || (notificationTypeScript[chiave][key].length > 0 && defect[key] != notificationTypeScript[chiave][key])) {
-                                that.MainPODcontroller.showErrorMessageBox("Error Notification Type to field " + key);
-                                return false;
+            var materialSelected = that.OpenDefectModel.getProperty("/materials").filter(item => item.material == defect.material);
+            if (materialSelected.length == 0 || !materialSelected[0].isFake) {
+                if (defect.createQN) {
+                    try {
+                        var notificationTypeScript = JSON.parse(that.OpenDefectModel.getProperty("/notificationTypies").filter(item => item.notification_type == defect.notificationType)[0].costraints);
+                        for (let chiave in notificationTypeScript) {
+                            for (let key in notificationTypeScript[chiave]) {
+                                if ((notificationTypeScript[chiave][key] == true && defect[key] == "") || (notificationTypeScript[chiave][key].length > 0 && defect[key] != notificationTypeScript[chiave][key])) {
+                                    that.MainPODcontroller.showErrorMessageBox("Error Notification Type to field " + key);
+                                    return false;
+                                }
                             }
                         }
+                    } catch (e) {
+                        console.log("errore nel parsing json Notification Type");
                     }
-                } catch (e) {
-                    console.log("errore nel parsing json Notification Type");
                 }
             }
 
@@ -730,7 +733,7 @@ sap.ui.define([
             var defect = that.OpenDefectModel.getProperty("/defect");
 
             var plant = infoModel.getProperty("/plant");
-            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc;
             if (!that.isAdditionalOperation) var order = infoModel.getProperty("/selectedSFC/order"); else var order = that.selectedObject.order;
             var wc = infoModel.getProperty("/selectedSFC/workcenter_lev_2") || "";
             var stepId = that.isAdditionalOperation ? that.selectedObject.step_id : infoModel.getProperty("/selectedPrimoLivello").id;
@@ -786,7 +789,7 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             var defect = that.OpenDefectModel.getProperty("/defect");
-            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc;
             var user = infoModel.getProperty("/user_id");
             var plant = infoModel.getProperty("/plant");
             if (!that.isAdditionalOperation) var order = infoModel.getProperty("/selectedSFC/order"); else var order = that.selectedObject.order;
@@ -861,7 +864,7 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             var plant = infoModel.getProperty("/plant");
-            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc; 
+            if (!that.isAdditionalOperation) var sfc = infoModel.getProperty("/selectedSFC/sfc"); else var sfc = that.selectedObject.sfc;
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathReasonForVarianceApi = "/db/updateNonConformanceLevel3";
@@ -878,7 +881,7 @@ sap.ui.define([
 
             // Callback di successo
             var successCallback = function (response) {
-                sap.ui.getCore().getEventBus().publish("PrimoLivello", "loadPODOperationsModel", {collapse: false});
+                sap.ui.getCore().getEventBus().publish("PrimoLivello", "loadPODOperationsModel", { collapse: false });
             };
 
             // Callback di errore
@@ -891,7 +894,7 @@ sap.ui.define([
         onClosePopup: function () {
             var that = this;
             that.closeDialog();
-            that.destroy(); 
+            that.destroy();
         },
         toggleBusyIndicator: function () {
             var that = this;
@@ -904,7 +907,7 @@ sap.ui.define([
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
             let plant = infoModel.getProperty("/plant");
-            
+
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathGetMarkingDataApi = "/api/getUserGroup";
             let url = BaseProxyURL + pathGetMarkingDataApi;
@@ -926,7 +929,7 @@ sap.ui.define([
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that);
         },
-        
+
         // Approvazione del QN
         onApproveQN: function (defect, idDefect) {
             var that = this;
@@ -935,14 +938,14 @@ sap.ui.define([
             let plant = infoModel.getProperty("/plant");
             var wbeSplit = that.OpenDefectModel.getProperty("/wbe").split(".");
             var wbs = "";
-            for (var i=0; i < wbeSplit.length - 1; i++) {
+            for (var i = 0; i < wbeSplit.length - 1; i++) {
                 if (wbs == "") {
                     wbs = wbeSplit[i];
-                }else{
+                } else {
                     wbs = wbs + "." + wbeSplit[i];
                 }
             }
-            
+
             var poNumber = "";
             var prodOrder = "";
             if (defect.typeOrder == "GRPF") {
@@ -957,24 +960,24 @@ sap.ui.define([
                 "shortText": defect.title,
                 "priority": "" + defect.priority,
                 "codeGroup": codingMap[0].coding_group,
-                "code" : codingMap[0].coding,
-                "material" : defect.material,
-                "poNumber" : poNumber,
-                "prodOrder" : prodOrder,
-                "descript" : defect.defectNote,
-                "dCodegrp" : defect.codeGroup,
-                "dCode" : defect.defectType,
-                "assembly" : defect.assembly,
-                "quantDefects" : "" + defect.numDefect,
-                "partner" : defect.responsible,
-                "textline" : defect.description,
-                "wbeAssembly" : that.OpenDefectModel.getProperty("/wbe").replaceAll(" ", ""),         
-                "zqmGrund" : defect.variance,
-                "zqmInit" : defect.replaceInAssembly == 0 ? "YES" : defect.replaceInAssembly == 1 ? "NO" : "",
-                "pspNr" : wbs.replaceAll(" ", ""),
-                "zqmNplnr" : "",
-                "zqmEqtyp" : "",
-                "attach" : []                                      
+                "code": codingMap[0].coding,
+                "material": defect.material,
+                "poNumber": poNumber,
+                "prodOrder": prodOrder,
+                "descript": defect.defectNote,
+                "dCodegrp": defect.codeGroup,
+                "dCode": defect.defectType,
+                "assembly": defect.assembly,
+                "quantDefects": "" + defect.numDefect,
+                "partner": defect.responsible,
+                "textline": defect.description,
+                "wbeAssembly": that.OpenDefectModel.getProperty("/wbe").replaceAll(" ", ""),
+                "zqmGrund": defect.variance,
+                "zqmInit": defect.replaceInAssembly == 0 ? "YES" : defect.replaceInAssembly == 1 ? "NO" : "",
+                "pspNr": wbs.replaceAll(" ", ""),
+                "zqmNplnr": "",
+                "zqmEqtyp": "",
+                "attach": []
             }
 
             if (defect.attachments.length > 0) {
@@ -1002,18 +1005,18 @@ sap.ui.define([
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathOrderBomApi = "/db/autoApproveDefectQN";
-            let url = BaseProxyURL+pathOrderBomApi; 
-            
+            let url = BaseProxyURL + pathOrderBomApi;
+
             // Callback di successo
-            var successCallback = function(response) {
+            var successCallback = function (response) {
             };
             // Callback di errore
-            var errorCallback = function(error) {
+            var errorCallback = function (error) {
             };
             CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that, true, true);
 
         },
-        
+
     })
 }
 )
