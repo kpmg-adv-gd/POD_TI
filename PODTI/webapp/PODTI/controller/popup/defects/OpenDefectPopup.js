@@ -699,7 +699,12 @@ sap.ui.define([
                 console.log("errore nel parsing json Priority");
             }
             // Check su Costraint della Notification Type
-            var materialSelected = that.OpenDefectModel.getProperty("/materials").filter(item => item.material == defect.material);
+            try {
+                if (!that.isAdditionalOperation) var materialSelected = that.OpenDefectModel.getProperty("/materials").filter(item => item.material == defect.material);
+                else var materialSelected = [];
+            } catch (e) { 
+                var materialSelected = [];
+            }
             if (materialSelected.length == 0 || !materialSelected[0].isFake) {
                 if (defect.createQN) {
                     try {
