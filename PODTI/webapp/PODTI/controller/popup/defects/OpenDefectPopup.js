@@ -825,7 +825,8 @@ sap.ui.define([
                 phase: "Testing",
                 idLev1: that.selectedObject.level ? infoModel.getProperty("/selectedPrimoLivello").id : null,
                 idLev2: that.selectedObject.level ? that.selectedObject.parent_id_lev_2 : null,
-                idLev3: that.selectedObject.level ? that.selectedObject.id_lev_3 : null
+                idLev3: that.selectedObject.level ? that.selectedObject.id_lev_3 : null,
+                sfcOrder: infoModel.getProperty("/selectedSFC/order")
             }
             if (defect.createQN) {
                 params.notificationType = defect.notificationType;
