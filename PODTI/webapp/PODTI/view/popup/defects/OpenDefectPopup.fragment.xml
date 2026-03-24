@@ -113,7 +113,7 @@
                         </HBox>
                         <HBox width="100%" renderType="Bare" alignItems="Center">
                             <Label text="Priority" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
-                            <Select selectedKey="{/defect/priority}" width="50%" items="{/priorities}">
+                            <Select selectedKey="{/defect/priority}" width="50%" items="{/priorities}" tooltip="Level of priority to be assigned to the defect">
                                 <core:Item key="{priority}" text="{description}" />
                             </Select>
                         </HBox>
@@ -145,7 +145,7 @@
                         </HBox>
                         <HBox width="100%" renderType="Bare" alignItems="Center" visible="{/defect/createQN}">
                             <Label text="Notification Type" width="50%" class="markingMediumLabel markingMediumLabelWidth13Rem sapUiSmallMarginEnd" required="true"/>
-                            <Select selectedKey="{/defect/notificationType}" width="50%" items="{/notificationTypies}">
+                            <Select selectedKey="{/defect/notificationType}" width="50%" items="{/notificationTypies}" tooltip="Distinguishes between Notification type XA and XB">
                                 <core:Item key="{notification_type}" text="{description}" />
                             </Select>
                         </HBox>
