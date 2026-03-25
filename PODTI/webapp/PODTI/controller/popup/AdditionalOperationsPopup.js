@@ -6,15 +6,15 @@ sap.ui.define([
     "./defects/OpenDefectPopup",
     "./MarkingPopup",
     "./SinotticoPopup",
-    "./defects/DefectsPopup",
-], function (JSONModel, BaseController, CommonCallManager, Dialog, OpenDefectPopup, MarkingPopup, SinotticoPopup,DefectsPopup) {
+    "./defects/DefectsPopupAddOpts",
+], function (JSONModel, BaseController, CommonCallManager, Dialog, OpenDefectPopup, MarkingPopup, SinotticoPopup,DefectsPopupAddOpts) {
     "use strict";
 
     return Dialog.extend("kpmg.custom.pod.PODTI.PODTI.controller.popup.AdditionalOperationsPopup", {
         OpenDefectPopup: new OpenDefectPopup(),
         MarkingPopup: new MarkingPopup(),
         SinotticoPopup: new SinotticoPopup(),
-        DefectsPopup: new DefectsPopup(),
+        DefectsPopupAddOpts: new DefectsPopupAddOpts(),
 
         open: function (oView, oController) {
             var that = this;
@@ -103,7 +103,7 @@ sap.ui.define([
         viewDefects: function (oEvent) {
             var that = this;
             var selectedObject = oEvent.getSource().getBindingContext().getObject();
-            that.DefectsPopup.open(that.MainPODview, that.MainPODcontroller, true, selectedObject);
+            that.DefectsPopupAddOpts.open(that.MainPODview, that.MainPODcontroller, true, selectedObject);
         },
 
         onStartOperationPress: function (oEvent) {
