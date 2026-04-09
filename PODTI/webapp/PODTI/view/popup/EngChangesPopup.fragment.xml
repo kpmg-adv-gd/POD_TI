@@ -46,7 +46,10 @@
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.material}"/>
                                 <t:template>
-                                    <Text text="{material}" wrapping="false"/>
+                                    <HBox renderType="Bare" width="100%">
+                                        <Text text="{material}" wrapping="false" visible="{= ${type} !== 'MK' }"/>
+                                        <Link wrapping="false" width="50%" href="{link}" text="{material}" target="_blank"  class="markingMediumLabelValue" visible="{= ${type} === 'MK' }" />
+                                    </HBox>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">

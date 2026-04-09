@@ -598,3 +598,13 @@
 .buttonClassMedium {
     padding-right: 1rem !important;
 }
+
+.sapMLnk {
+    color: var(--sapLinkColor);
+    text-decoration: var(--sapLink_TextDecoration);
+    display: inline-block;
+    font-family: var(--sapFontFamily);
+    font-size: 104%;
+    cursor: pointer;
+    width: 100% !important;
+}
