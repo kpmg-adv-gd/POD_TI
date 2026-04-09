@@ -110,7 +110,10 @@
                                 <t:Column width="8%" hAlign="Center" sortProperty="mancanti">
                                     <Label text="{i18n>additionalOperations.treeTable.mancanti}"  />
                                     <t:template>
-                                        <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{mancanti}" class="iconSecondoLivello" />
+                                        <HBox width="100%" height="100%" renderType="Bare" justifyContent="Center" alignItems="Center" >
+                                            <core:Icon src="sap-icon://cancel-maintenance" color="#E75E25" visible="{= ${ordiniMancanti} &amp;&amp; !${componentiMancanti} }" tooltip="{i18n>additionalOperations.tooltip.missingOrder}" class="iconSecondoLivello" />
+                                            <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{componentiMancanti}" tooltip="{i18n>additionalOperations.tooltip.missingComponents}" class="iconSecondoLivello" />
+                                        </HBox>
                                     </t:template>
                                 </t:Column>
                                 <t:Column width="8%" hAlign="Center" sortProperty="status">
@@ -191,7 +194,10 @@
                                         <t:Column width="8%" hAlign="Center" sortProperty="mancanti">
                                             <Label text="{i18n>additionalOperations.treeTable.mancanti}"  />
                                             <t:template>
-                                                <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{mancanti}" class="iconSecondoLivello" />
+                                                <HBox width="100%" height="100%" renderType="Bare" justifyContent="Center" alignItems="Center" >
+                                                    <core:Icon src="sap-icon://cancel-maintenance" color="#E75E25" visible="{= ${ordiniMancanti} &amp;&amp; !${componentiMancanti} }" tooltip="{i18n>additionalOperations.tooltip.missingOrder}" class="iconSecondoLivello" />
+                                                    <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{componentiMancanti}" tooltip="{i18n>additionalOperations.tooltip.missingComponents}" class="iconSecondoLivello" />
+                                                </HBox>
                                             </t:template>
                                         </t:Column>
                                         <t:Column width="8%" hAlign="Center" sortProperty="status">
