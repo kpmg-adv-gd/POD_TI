@@ -46,8 +46,13 @@
                             <OverflowToolbar style="Clear" height="auto">
                                 <!-- <Title text="{i18n>SinotticoBomMultilivello.title}" class="boldClass" /> -->
                                 <ToolbarSpacer/>
-                                <Button text="{i18n>SinotticoBomMultilivello.treeTable.button.collpaseAll}" press="onCollapseAll"/>
-                                <Button text="{i18n>SinotticoBomMultilivello.treeTable.button.expandAll}" press="onExpandAll"/>
+                                <!-- Espansione livelli -->
+                                    <Button  icon="sap-icon://add" tooltip="{i18n>SinotticoBomMultilivello.treeTable.button.expandOneLevel}"  press="onExpandOneLevel" type="Transparent" />
+                                    <Button icon="sap-icon://less" tooltip="{i18n>SinotticoBomMultilivello.treeTable.button.collapseOneLevel}" press="onCollapseOneLevel" type="Transparent"/>
+                                <ToolbarSeparator/>
+                                <!-- Espansione totale -->
+                                    <Button icon="sap-icon://expand-group" tooltip="{i18n>SinotticoBomMultilivello.treeTable.button.expandAll}" press="onExpandAll" type="Transparent" />
+                                    <Button icon="sap-icon://collapse-group" tooltip="{i18n>SinotticoBomMultilivello.treeTable.button.collpaseAll}" press="onCollapseAll" type="Transparent" />
                             </OverflowToolbar>
                         </t:extension>
                         <t:rowSettingsTemplate>

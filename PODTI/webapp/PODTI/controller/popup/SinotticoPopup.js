@@ -131,6 +131,63 @@ sap.ui.define([
 			var oTreeTable = that.getView().byId("SinotticoTreeTable");
 			oTreeTable.collapseAll();
 		},
+        onExpandOneLevel: function () {
+            const oTable = this.getView().byId("SinotticoTreeTable");
+            const oBinding = oTable.getBinding("rows");
+            const aContexts = oBinding.getContexts(0, oBinding.getLength());
+
+            let minNotExpandedLevel = null;
+
+            const getLevelFromPath = (sPath) => {
+                return (sPath.match(/Children/g) || []).length;
+            };
+
+            // Step 1: trova il primo nodo NON espanso
+            for (let i = 0; i < aContexts.length; i++) {
+                if (!oTable.isExpanded(i)) {
+                    const level = getLevelFromPath(aContexts[i].sPath);
+                    minNotExpandedLevel = level;
+                    break;
+                }
+            }
+
+            if (minNotExpandedLevel === null) return;
+
+            // Step 2: espandi fino al livello successivo
+            oTable.expandToLevel(minNotExpandedLevel + 1);
+        },
+        onCollapseOneLevel: function () {
+            const oTable = this.getView().byId("SinotticoTreeTable");
+            const oBinding = oTable.getBinding("rows");
+            const aContexts = oBinding.getContexts(0, oBinding.getLength());
+
+            const getLevelFromPath = (sPath) => {
+                return (sPath.match(/Children/g) || []).length;
+            };
+
+            let maxExpandableLevel = -1;
+
+            // Step 1: trova il livello massimo che ha nodi espandibili
+            for (let i = 0; i < aContexts.length; i++) {
+                if (oTable.isExpanded(i)) {
+                    const level = getLevelFromPath(aContexts[i].sPath);
+                    if (level > maxExpandableLevel) {
+                        maxExpandableLevel = level;
+                    }
+                }
+            }
+
+            if (maxExpandableLevel === -1) return;
+
+            // Step 2: collassa tutti i nodi di quel livello
+            for (let i = aContexts.length - 1; i >= 0; i--) {
+                const level = getLevelFromPath(aContexts[i].sPath);
+
+                if (level === maxExpandableLevel && oTable.isExpanded(i)) {
+                    oTable.collapse(i);
+                }
+            }
+        },
         onClosePopup: function () {
             var that = this;
             that.closeDialog();
