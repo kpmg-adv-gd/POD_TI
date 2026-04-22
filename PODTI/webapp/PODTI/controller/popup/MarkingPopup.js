@@ -824,6 +824,7 @@ sap.ui.define([
                 listDefect: listDefect,
                 plant: plant
             };
+            if (!that.isAdditionalOperation) params.id_lev_2 = that.markOperation.id_lev_2;
 
             // Callback di successo
             var successCallback = function(response) {
