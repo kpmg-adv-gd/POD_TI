@@ -227,7 +227,85 @@ sap.ui.define([
                 that.MarkingModifichePopup.open(that.MainPODview, that.MainPODcontroller, selectedObject, null);
             }
         },
+        onOpenDettaglioModifica: function (oEvent) {
+            var that=this;
+            var oTreeTable = oEvent.getSource();
+            var oPath =  oTreeTable.getBindingContext().getPath();
+            var oObject = oTreeTable.getModel().getProperty(oPath);
 
+            let BaseProxyURL = that.MainPODcontroller.getInfoModel().getProperty("/BaseProxyURL");
+            let pathModificheDetail = "/db/getModificaDetail";
+            let url = BaseProxyURL+pathModificheDetail;
+
+            let plant = that.MainPODcontroller.getInfoModel().getProperty("/plant") || "";
+            let process_id =  oObject.parentProcessId;
+            let material = oObject.parentMaterial;
+
+            let params= {
+                plant: plant,
+                process_id: String(process_id).padStart(25, '0'),
+                material: material
+            };
+
+            // Callback di successo
+            var successCallback = function (response) {
+                let headerObj = response[0] || oObject;
+                var mappa = {};
+
+                if (Array.isArray(response)) {
+                    response.forEach(function (item) {
+
+                        var prog = item.progressive;
+
+                        if (!mappa[prog]) {
+                            mappa[prog] = {
+                                progressive: prog,
+                                left: null,
+                                right: null
+                            };
+                        }
+
+                        if (item.flux_type === "D") {
+                            mappa[prog].left = item;
+                        }
+
+                        if (item.flux_type === "I") {
+                            mappa[prog].right = item;
+                        }
+
+                    });
+                }
+
+                var aRows = Object.values(mappa).sort(function(a,b){
+                    return a.progressive - b.progressive;
+                });
+
+                var oDetailModel = new sap.ui.model.json.JSONModel({
+                    header: headerObj,
+                    rows: aRows
+                });
+
+                if (!that._oDialog) {
+                    that._oDialog = sap.ui.xmlfragment(
+                        "kpmg.custom.pod.PODTI.PODTI.view.popup.ModificaDetailPopup",
+                        that
+                    );
+                    that.getView().addDependent(that._oDialog);
+                }
+
+                that._oDialog.setModel(oDetailModel, "detailModificaModel");
+                that._oDialog.open();
+            };
+            // Callback di errore
+            var errorCallback = function(error) {
+                console.log("Chiamata POST fallita:", error);
+            };
+            CommonCallManager.callProxy("POST", url, params, true, successCallback, errorCallback, that, false,true);
+
+        },
+        onCloseDettaglio: function () {
+            this._oDialog.close();
+        },
         onExpandAll: function () {
             const oTable = this.MainPODcontroller.byId("treeTableEngChangesPopup");
             oTable.expandToLevel(99);   // livello alto per essere sicuri
@@ -236,7 +314,6 @@ sap.ui.define([
             const oTable = this.MainPODcontroller.byId("treeTableEngChangesPopup");
             oTable.collapseAll();
         },
-
         onClosePopup: function () {
             var that = this;
             that.closeDialog();

@@ -1,0 +1,114 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:t="sap.ui.table">
+    <Dialog title="Dettaglio Modifica" contentWidth="60%" contentHeight="50%" draggable="true" resizable="true">
+
+        <VBox class="sapUiMediumMargin">
+
+            <!-- HEADER INFO -->
+            <Panel expandable="false" class="sapUiResponsiveMargin">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Dettaglio Modifica" level="H2" class="detailTableTitle"/>
+                    </Toolbar>
+                </headerToolbar>
+
+                <l:Grid defaultSpan="L3 M6 S12" hSpacing="2" vSpacing="1">
+
+                    <VBox>
+                        <Label text="Project" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/project}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="WBE" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/wbe}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Machine Section" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/machine_section}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Material" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/material}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Type" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/type}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Process Id" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/process_id}" class="detailHeaderValue"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Variance" class="detailHeaderLabel"/>
+                        <Text text="{detailModificaModel>/header/variance}" class="detailHeaderValue"/>
+                    </VBox>
+
+                </l:Grid>
+            </Panel>
+
+            <!-- TABELLE AFFIANCATE -->
+            <HBox width="100%" class="sapUiMediumMarginTop" renderType="Bare">
+
+                <!-- DA ANNULLARE -->
+                <VBox width="50%" class="sapUiSmallMarginEnd">
+                    <Title text="Delete Changes" level="H3" class="detailTableTitle"/>
+
+                    <Table items="{detailModificaModel>/rows}">
+                        <columns>
+                            <Column><Text text="Progressive"/></Column>
+                            <Column><Text text="Child Material"/></Column>
+                            <Column><Text text="Description"/></Column>
+                            <Column><Text text="Qty"/></Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{detailModificaModel>progressive}" class="detailTableText"/>
+                                    <Text text="{detailModificaModel>left/child_material}" class="detailTableText"/>
+                                    <Text text="{detailModificaModel>left/child_material_description}" class="detailTableText"/>
+                                    <Text text="{detailModificaModel>left/qty}" class="detailTableText"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+                <!-- DA INSERIRE -->
+                <VBox width="50%" class="sapUiSmallMarginBegin">
+                    <Title text="Insert Changes" level="H3" class="detailTableTitle"/>
+
+                    <Table items="{detailModificaModel>/rows}">
+                        <columns>
+                            <Column><Text text="Child Material"/></Column>
+                            <Column><Text text="Description"/></Column>
+                            <Column><Text text="Qty"/></Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{detailModificaModel>right/child_material}" class="detailTableText"/>
+                                    <Text text="{detailModificaModel>right/child_material_description}" class="detailTableText"/>
+                                    <Text text="{detailModificaModel>right/qty}" class="detailTableText"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+        <beginButton>
+            <Button text="Close" press="onCloseDettaglio"/>
+        </beginButton>
+
+    </Dialog>
+</core:FragmentDefinition>
