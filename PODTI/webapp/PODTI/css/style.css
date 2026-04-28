@@ -608,3 +608,30 @@
     cursor: pointer;
     width: 100% !important;
 }
+
+
+/* Fragment modifiche details */
+/* HEADER LABEL ROSSE */
+.detailHeaderLabel {
+    color: #bb0000 !important;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+/* HEADER VALUE NERE */
+.detailHeaderValue {
+    color: #000000 !important;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* TITOLI TABELLE */
+.detailTableTitle {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* TESTI TABELLE */
+.detailTableText {
+    font-size: 1.05rem;
+}
