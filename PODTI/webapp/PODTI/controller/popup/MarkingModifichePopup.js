@@ -26,7 +26,6 @@ sap.ui.define([
             that.getView().byId("hhInputModId").setValue("");
             that.getView().byId("mmInputModId").setValue("");
         },
-
         loadMarkingData: function () {
             var that = this;
             const d = new Date();
@@ -40,7 +39,10 @@ sap.ui.define([
             that.MarkingPopupModel.setProperty("/wbe", that.selectedLevel1.wbe);
             that.MarkingPopupModel.setProperty("/machineSection", that.selectedLevel1.machineSection);
             that.MarkingPopupModel.setProperty("/selectedLevel1", that.selectedLevel1);
+            let varianceDescription = that.selectedLevel1.varianceDescription || "";
             that.MarkingPopupModel.setProperty("/selectedLevel2", that.selectedLevel2);
+
+            that.getView().byId("selectedVarianceModText").setText(varianceDescription);
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathPersonnelNumberApi = "/db/getMarkingTesting";
@@ -464,12 +466,15 @@ sap.ui.define([
         onGetReasonsForVariance: function () {
             var that = this;
             var infoModel = that.MainPODcontroller.getInfoModel();
+            let plant = infoModel.getProperty("/plant") || "";
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
             let pathReasonForVarianceApi = "/db/getReasonsForVariance";
             let url = BaseProxyURL + pathReasonForVarianceApi;
 
-            let params = {};
+            let params = {
+                plant: plant
+            };
 
             // Callback di successo
             var successCallback = function (response) {

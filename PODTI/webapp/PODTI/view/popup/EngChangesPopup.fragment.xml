@@ -110,7 +110,7 @@
                             <t:Column width="6%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.detail}" />
                                 <t:template>
-                                    <Button icon="sap-icon://detail-view"  type="Emphasized" press="onOpenDettaglioModifica" visible="{= ${level} === 2 &amp;&amp; ( ${parentType} === 'MA' || ${parentType} === 'MT' )  }"  />
+                                    <Button icon="sap-icon://detail-view"  type="Emphasized" press="onOpenDettaglioModifica" visible="{= ${level} === 1 &amp;&amp; ( ${type} === 'MA' || ${type} === 'MT' )  }"  />
                                 </t:template>
                             </t:Column>   
                         </t:columns>

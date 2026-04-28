@@ -238,8 +238,8 @@ sap.ui.define([
             let url = BaseProxyURL+pathModificheDetail;
 
             let plant = that.MainPODcontroller.getInfoModel().getProperty("/plant") || "";
-            let process_id =  oObject.parentProcessId;
-            let material = oObject.parentMaterial;
+            let process_id =  oObject.processId;
+            let material = oObject.material;
 
             let params= {
                 plant: plant,
@@ -261,7 +261,8 @@ sap.ui.define([
                             mappa[prog] = {
                                 progressive: prog,
                                 left: null,
-                                right: null
+                                right: null,
+                                m: null
                             };
                         }
 
@@ -271,6 +272,10 @@ sap.ui.define([
 
                         if (item.flux_type === "I") {
                             mappa[prog].right = item;
+                        }
+
+                        if (item.flux_type === "M") {
+                            mappa[prog].m = item;
                         }
 
                     });
