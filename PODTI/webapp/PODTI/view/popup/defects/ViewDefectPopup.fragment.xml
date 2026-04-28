@@ -202,6 +202,7 @@
                 </HBox>
                 
                 <HBox width="95%" height="10%"  renderType="Bare" alignItems="Center" justifyContent="End">
+                    <Button text="Download Info" type="Emphasized" press="onDownloadInfo" class="sapUiSmallMarginEnd"/>
                     <Button text="Cancel" type="Emphasized" press="onClosePopup" class="sapUiSmallMarginEnd" />
                 </HBox> 
             </VBox>

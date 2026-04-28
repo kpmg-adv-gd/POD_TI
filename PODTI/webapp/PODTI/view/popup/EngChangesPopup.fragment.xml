@@ -46,7 +46,7 @@
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.material}"/>
                                 <t:template>
-                                    <Text text="{material}" wrapping="false"/>
+                                    <Text text="{material}" wrapping="false" />
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
@@ -64,7 +64,10 @@
                             <t:Column width="12%" hAlign="Center">
                                 <Label text="{i18n>engChanges.treeTable.childMaterial}"/>
                                 <t:template>
-                                    <Text text="{childMaterial}" wrapping="false"/>
+                                    <HBox renderType="Bare" width="100%">
+                                        <Text text="{childMaterial}" wrapping="false" visible="{= ${parentType} !== 'MK' }"/>
+                                        <Link wrapping="false" width="50%" href="{link}" text="{childMaterial}" target="_blank"  class="markingMediumLabelValue" visible="{= ${parentType} === 'MK' }" />
+                                    </HBox>
                                 </t:template>
                             </t:Column>
                             <t:Column width="12%" hAlign="Center">
