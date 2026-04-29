@@ -103,7 +103,7 @@
 
             <VBox width="100%" class="sapUiMediumMarginTop sapUiSmallMarginBegin sapUiSmallMarginEnd" renderType="Bare">
                 <Title text="Quantity to Change" level="H3" class="detailTableTitle"/>
-                <Table items="{detailModificaModel>/rows}">
+                <Table items="{detailModificaModel>/mRows}">
                     <columns>
                         <Column><Text text="Child Material"/></Column>
                         <Column><Text text="Description"/></Column>
@@ -113,9 +113,9 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <Text text="{detailModificaModel>m/child_material}" class="detailTableText"/>
-                                <Text text="{detailModificaModel>m/child_material_description}" class="detailTableText"/>
-                                <Text text="{detailModificaModel>m/qty}" class="detailTableText"/>
+                                <Text text="{detailModificaModel>child_material}" class="detailTableText"/>
+                                <Text text="{detailModificaModel>child_material_description}" class="detailTableText"/>
+                                <Text text="{detailModificaModel>qty}" class="detailTableText"/>
                             </cells>
                         </ColumnListItem>
                     </items>

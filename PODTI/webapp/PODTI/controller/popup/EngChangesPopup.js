@@ -251,18 +251,23 @@ sap.ui.define([
             var successCallback = function (response) {
                 let headerObj = response[0] || oObject;
                 var mappa = {};
+                var aMRows = [];
 
                 if (Array.isArray(response)) {
                     response.forEach(function (item) {
 
                         var prog = item.progressive;
 
+                        if (item.flux_type === "M") {
+                            aMRows.push(item);
+                            return;
+                        }
+
                         if (!mappa[prog]) {
                             mappa[prog] = {
                                 progressive: prog,
                                 left: null,
-                                right: null,
-                                m: null
+                                right: null
                             };
                         }
 
@@ -274,10 +279,6 @@ sap.ui.define([
                             mappa[prog].right = item;
                         }
 
-                        if (item.flux_type === "M") {
-                            mappa[prog].m = item;
-                        }
-
                     });
                 }
 
@@ -287,7 +288,8 @@ sap.ui.define([
 
                 var oDetailModel = new sap.ui.model.json.JSONModel({
                     header: headerObj,
-                    rows: aRows
+                    rows: aRows,
+                    mRows: aMRows 
                 });
 
                 if (!that._oDialog) {
