@@ -75,7 +75,10 @@
                             <t:Column width="7%" sortProperty="MissingParts" hAlign="Center">
                                 <Label text="{i18n>SinotticoBomMultilivello.treeTable.missingComponents}"/>
                                 <t:template>
-                                    <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{= (${MissingParts} === 'true') ? true:false}" class="largeIcon" />
+                                    <HBox width="100%" height="100%" renderType="Bare" justifyContent="Center" alignItems="Center">
+                                        <core:Icon src="sap-icon://cancel-maintenance" color="#E75E25" visible="{= ${MissingOrders} === 'true' &amp;&amp; ${MissingComponents} === 'false' }" tooltip="{i18n>SinotticoBomMultilivello.tooltip.missingOrder}" class="largeIcon" />
+                                        <core:Icon src="sap-icon://alert" color="#E5BE01" visible="{= ${MissingComponents} === 'true' }"  tooltip="{i18n>SinotticoBomMultilivello.tooltip.missingComponents}" class="largeIcon" />
+                                    </HBox>
                                 </t:template>
                             </t:Column>
                             <t:Column width="7%" sortProperty="EngChanges" hAlign="Center">
