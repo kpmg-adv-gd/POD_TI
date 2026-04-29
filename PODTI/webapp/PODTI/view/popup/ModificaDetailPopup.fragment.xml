@@ -54,7 +54,7 @@
             <!-- TABELLE AFFIANCATE -->
             <HBox width="100%" class="sapUiMediumMarginTop" renderType="Bare">
             <!-- DA INSERIRE -->
-                <VBox width="50%" class="sapUiSmallMarginBegin">
+                <VBox width="50%" class="sapUiSmallMarginBegin sapUiSmallMarginEnd">
                     <Title text="Material To Insert" level="H3" class="detailTableTitle"/>
 
                     <Table items="{detailModificaModel>/rows}">
@@ -78,7 +78,7 @@
                     </Table>
                 </VBox>
                 <!-- DA ANNULLARE -->
-                <VBox width="50%" class="sapUiSmallMarginEnd">
+                <VBox width="50%" class="sapUiSmallMarginBegin sapUiSmallMarginEnd">
                     <Title text="Material to Delete" level="H3" class="detailTableTitle"/>
 
                     <Table items="{detailModificaModel>/rows}">
