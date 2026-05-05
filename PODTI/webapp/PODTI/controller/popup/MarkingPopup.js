@@ -612,6 +612,7 @@ sap.ui.define([
             var hh = parseInt(that.getView().byId("hhInputId").getValue(),10);
             var mm = parseInt(that.getView().byId("mmInputId").getValue(),10);
             var defectId = that.MarkingPopupModel.getProperty("/defectSelected");
+            var phase = infoModel.getProperty("/selectedSFC/phase");
             if(!hh) hh=0;
             if(!mm) mm=0;
 
@@ -646,7 +647,8 @@ sap.ui.define([
                 modification: modification,
                 cancellationFlag: false,
                 cancelled_confirmation: null,
-                defectId: defectId != "" ? defectId : null
+                defectId: defectId != "" ? defectId : null,
+                phase: phase
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
