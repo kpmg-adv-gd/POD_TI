@@ -298,7 +298,10 @@ sap.ui.define([
             let pathReasonForVarianceApi = "/db/getReasonsForVariance";
             let url = BaseProxyURL + pathReasonForVarianceApi;
 
-            let params = {};
+            var plant = infoModel.getProperty("/plant");
+            let params = {
+                plant: plant
+            };
 
             // Callback di successo
             var successCallback = function (response) {
