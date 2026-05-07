@@ -693,6 +693,7 @@ sap.ui.define([
                 plant: plant,
                 activityNumber: selectedMarkingTesting.network,
                 activityNumberId: selectedMarkingTesting.activity_id,
+                wbe: that.MarkingPopupModel.getProperty("/wbe"),
                 cancellation: "",
                 confirmation: "",
                 confirmationCounter: "",
@@ -705,17 +706,14 @@ sap.ui.define([
                 personalNumber: personnelNumber,
                 unCancellation: "",
                 unConfirmation: "X",
-                rowSelectedWBS: {
-                    wbs: selectedMarkingTesting.wbs,
-                    wbs_description:  that.MarkingPopupModel.getProperty("/operation"),
-                    wbe: selectedMarkingTesting.wbs,
-                    wbe_description: null,
-                },
+                wbs: selectedMarkingTesting.wbs,
                 operation: that.MarkingPopupModel.getProperty("/operation"),
+                operation_description: that.MarkingPopupModel.getProperty("/operationDescription"),
                 userId: user,
                 modification: modification == "" ? null : modification,
                 reasonForVariance: variance == "" ? null : that._selectedCause,
                 defect: defect == "" ? null : defect,
+                phase: "Testing"
             }
 
             let BaseProxyURL = infoModel.getProperty("/BaseProxyURL");
