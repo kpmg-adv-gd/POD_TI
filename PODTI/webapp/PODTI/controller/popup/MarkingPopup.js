@@ -674,7 +674,8 @@ sap.ui.define([
             var infoModel = that.MainPODcontroller.getInfoModel();
             var plant = infoModel.getProperty("/plant");
             let user = infoModel.getProperty("/user_id");
-            var selectedMarkingTesting = that.MarkingPopupModel.getProperty("/selectedMarkingTesting")
+            var selectedMarkingTesting = that.MarkingPopupModel.getProperty("/selectedMarkingTesting");
+            var workCenter = infoModel.getProperty("/selectedSFC/workcenter_lev_2");
             
             var personnelNumber = that.MarkingPopupModel.getProperty("/personnelNumber");
             let confirmation_number = that.MarkingPopupModel.getProperty("/confirmNumber");
@@ -694,6 +695,7 @@ sap.ui.define([
                 activityNumber: selectedMarkingTesting.network,
                 activityNumberId: selectedMarkingTesting.activity_id,
                 wbe: that.MarkingPopupModel.getProperty("/wbe"),
+                workCenter: workCenter,
                 cancellation: "",
                 confirmation: "",
                 confirmationCounter: "",
