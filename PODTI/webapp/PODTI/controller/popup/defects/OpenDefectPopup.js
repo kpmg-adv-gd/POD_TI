@@ -971,7 +971,7 @@ sap.ui.define([
                 "prodOrder": prodOrder,
                 "descript": defect.defectNote,
                 "dCodegrp": defect.codeGroup,
-                "dCode": defect.defectType,
+                "dCode": defect.sap_code,
                 "assembly": defect.assembly,
                 "quantDefects": "" + defect.numDefect,
                 "partner": defect.responsible,
